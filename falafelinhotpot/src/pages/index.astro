@@ -35,15 +35,15 @@ const videos = [
   <section class="hero">
     <div class="container hero__inner">
 
-      <!-- Image LEFT (like aliabdaal.com) -->
       <div class="hero__visual">
         <img
-          src="https://aliabdaal.com/wp-content/uploads/2024/09/hero-ali.png"
-          alt="Falafel in Hotpot — brand portrait (placeholder)"
+          src="/images/falafel.jpeg"
+          alt="Falafel — founder of Falafel in Hotpot"
           class="hero__img"
-          width="600"
-          height="750"
+          width="1200"
+          height="1600"
           loading="eager"
+          fetchpriority="high"
           decoding="async"
         />
       </div>
@@ -175,11 +175,20 @@ const videos = [
 
   <!-- ③ BRAND MANIFESTO — Magazine Split ─────────────────────── -->
   <section class="manifesto-section">
+    <img
+      src="/brand/logo-light-no-text.png"
+      alt=""
+      class="manifesto-ghost-logo"
+      width="907"
+      height="907"
+      loading="lazy"
+      decoding="async"
+      aria-hidden="true"
+    />
     <div class="manifesto-inner">
       <div class="manifesto-grid">
-
         <div class="manifesto-copy">
-          <div class="manifesto-eyebrow">WHERE EAST MEETS EAST</div>
+          <span class="eyebrow">Where East Meets East</span>
           <h2 class="manifesto-headline">Falafel<br />in Hotpot.</h2>
           <p class="manifesto-body manifesto-body--lead">
             Falafel in Hotpot is a China-Arab cultural intelligence brand based in Riyadh.
@@ -194,19 +203,6 @@ const videos = [
             connection, all in one place.
           </p>
         </div>
-
-        <div class="manifesto-logo">
-          <img
-            src="/brand/logo-light-no-text.png"
-            alt=""
-            class="manifesto-logo__img"
-            width="907"
-            height="907"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-
       </div>
     </div>
   </section>
@@ -362,22 +358,24 @@ const videos = [
     align-items: center;
   }
 
-  /* Image column */
+  /* Image column — full portrait visible, no crop */
   .hero__visual {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 4 / 5;
-    /* No dark background — parchment fills behind the image */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: min(100%, 28rem);
+    margin-inline: auto;
     background: var(--color-parchment, #fbf7ed);
   }
 
   .hero__img {
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-    /* Isolate from the ParchmentGrain multiply overlay */
+    height: auto;
+    max-height: min(72vh, 42rem);
+    object-fit: contain;
+    object-position: center;
     mix-blend-mode: normal;
   }
 
@@ -597,24 +595,42 @@ const videos = [
     }
   }
 
-  /* ── ③ Brand Manifesto — Magazine Split ─────────────────────── */
+  /* ── ③ Brand Manifesto — editorial panel with ghost mark ─────── */
   .manifesto-section {
-    background-color: #eedbb6;
-    border-top: 1px solid #e3d1b8;
-    border-bottom: 1px solid #e3d1b8;
-    padding: clamp(4rem, 7vw, 6rem) 0;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-clay, #eddcc6);
+    border-top: 1px solid rgba(44, 44, 42, 0.12);
+    border-bottom: 1px solid rgba(44, 44, 42, 0.12);
+    padding: clamp(5rem, 9vw, 7.5rem) 0;
+  }
+
+  .manifesto-ghost-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: min(78vh, 34rem);
+    max-width: 110vw;
+    opacity: 0.12;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    object-fit: contain;
   }
 
   .manifesto-inner {
+    position: relative;
+    z-index: 1;
     max-width: 80rem;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 clamp(1.25rem, 4vw, 2rem);
   }
 
   .manifesto-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.5rem;
     align-items: center;
   }
 
@@ -622,86 +638,69 @@ const videos = [
     display: flex;
     flex-direction: column;
     gap: 0;
-    max-width: 38rem;
+    min-width: 0;
+    max-width: 40rem;
     text-align: left;
   }
 
-  .manifesto-eyebrow {
-    font-family: var(--font-body);
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #9b1b15;
-    margin-bottom: 0.85rem;
+  .manifesto-copy .eyebrow {
+    margin-bottom: 1rem;
   }
 
   .manifesto-headline {
-    margin: 0 0 1.5rem;
+    margin: 0 0 1.75rem;
     font-family: var(--font-display);
-    font-size: clamp(2.25rem, 4.2vw, 3.5rem);
+    font-size: clamp(2.75rem, 6vw, 4.25rem);
     font-weight: 600;
-    line-height: 1.08;
-    color: #2c2c2a;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: var(--color-ink, #2c2c2a);
+    mix-blend-mode: multiply;
+    text-wrap: balance;
   }
 
   .manifesto-body {
     margin: 0;
     text-align: left;
-    max-width: 34rem;
+    max-width: 38rem;
   }
 
   .manifesto-body--lead {
-    font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
-    line-height: 1.65;
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2vw, 1.45rem);
+    line-height: 1.55;
     font-weight: 500;
-    color: #2c2c2a;
+    color: var(--color-ink, #2c2c2a);
+    mix-blend-mode: multiply;
+    text-wrap: pretty;
   }
 
   .manifesto-rule {
-    width: 3rem;
+    width: 3.5rem;
     height: 1px;
-    background: rgba(155, 27, 21, 0.35);
-    margin: 1.35rem 0;
+    background: rgba(155, 27, 21, 0.4);
+    margin: 1.5rem 0;
   }
 
   .manifesto-body--secondary {
-    font-size: clamp(0.9375rem, 1.1vw, 1rem);
-    line-height: 1.75;
-    color: #5c534f;
-  }
-
-  .manifesto-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .manifesto-logo__img {
-    display: block;
-    width: clamp(6.5rem, 30vw, 9rem);
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
+    font-size: clamp(0.975rem, 1.15vw, 1.0625rem);
+    line-height: 1.8;
+    color: var(--color-text-muted, #4f4744);
+    mix-blend-mode: multiply;
+    text-wrap: pretty;
   }
 
   @media (min-width: 900px) {
-    .manifesto-grid {
-      grid-template-columns: minmax(0, 32rem) auto;
-      justify-content: center;
-      gap: clamp(2.5rem, 4vw, 3.75rem);
+    .manifesto-ghost-logo {
+      left: auto;
+      right: clamp(-3rem, -2vw, -1rem);
+      height: min(88vh, 46rem);
+      max-width: min(72vw, 52rem);
+      transform: translateY(-50%);
     }
 
     .manifesto-copy {
-      max-width: none;
-    }
-
-    .manifesto-logo {
-      justify-content: flex-start;
-    }
-
-    .manifesto-logo__img {
-      width: clamp(8rem, 12vw, 11rem);
+      max-width: min(36rem, 52%);
     }
   }
 
@@ -846,11 +845,13 @@ const videos = [
       grid-template-columns: 1fr;
     }
 
-    /* Image above text on mobile */
     .hero__visual {
       order: -1;
-      aspect-ratio: 3 / 2;
-      max-height: 260px;
+      max-width: min(100%, 20rem);
+    }
+
+    .hero__img {
+      max-height: min(58vh, 24rem);
     }
 
     .course-card {
