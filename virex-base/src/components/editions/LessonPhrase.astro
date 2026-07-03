@@ -1,0 +1,114 @@
+---
+export interface Props {
+  character?: string;
+  pinyin?: string;
+  tone?: string;
+  meaning?: string;
+  variant?: 'phrase' | 'glyph';
+}
+
+const { character, pinyin, tone, meaning, variant = 'phrase' } = Astro.props;
+
+const isGlyph = variant === 'glyph';
+---
+
+<div class:list={['lesson-phrase', isGlyph && 'lesson-phrase--glyph']}>
+  {
+    isGlyph ? (
+      <>
+        {character && <span class="lesson-phrase__glyph zh">{character}</span>}
+        <div class="lesson-phrase__meta">
+          {pinyin && <span class="lesson-phrase__py">{pinyin}</span>}
+          {tone && <span class="lesson-phrase__tone">{tone}</span>}
+          {meaning && <span class="lesson-phrase__en">“{meaning}”</span>}
+        </div>
+      </>
+    ) : (
+      <>
+        {character && <p class="lesson-phrase__zh zh">{character}</p>}
+        {pinyin && <p class="lesson-phrase__py">{pinyin}</p>}
+        {meaning && <p class="lesson-phrase__en">“{meaning}”</p>}
+      </>
+    )
+  }
+</div>
+
+<style>
+  .lesson-phrase {
+    margin: 0 0 1.5rem;
+    padding: 0.875rem 0 0.875rem 1.125rem;
+    border-left: 3px solid var(--color-accent);
+    background: color-mix(in srgb, var(--color-gold) 6%, transparent);
+  }
+
+  .lesson-phrase--glyph {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+  }
+
+  .lesson-phrase__zh {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-chinese);
+    font-size: clamp(1.5rem, 3.5vw, 1.875rem);
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--color-accent);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .lesson-phrase__glyph {
+    font-family: var(--font-chinese);
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--color-accent);
+  }
+
+  .lesson-phrase__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .lesson-phrase__py {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .lesson-phrase--glyph .lesson-phrase__py {
+    margin: 0;
+    font-size: 1.0625rem;
+  }
+
+  .lesson-phrase__tone {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .lesson-phrase__en {
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--color-accent);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+</style>

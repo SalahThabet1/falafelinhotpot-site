@@ -1,0 +1,89 @@
+---
+import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
+import { blogCategoryRobots, getStaticPathsBlogCategory } from '~/utils/blog';
+
+import FihLayout from '~/layouts/FihLayout.astro';
+import EditionsArchiveHeader from '~/components/blog/EditionsArchiveHeader.astro';
+import EditionFilter from '~/components/blog/EditionFilter.astro';
+import EditionsList from '~/components/blog/List.astro';
+import FihPagination from '~/components/blog/FihPagination.astro';
+import GeoLattice from '~/components/brand/GeoLattice.astro';
+import LearnCourseCTA from '~/components/editions/LearnCourseCTA.astro';
+
+export const prerender = true;
+
+export const getStaticPaths = (async ({ paginate }) => {
+  return await getStaticPathsBlogCategory({ paginate });
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths> & {
+  category: { slug: string; title: string };
+};
+
+const { page, category } = Astro.props as Props;
+
+const currentPage = page.currentPage ?? 1;
+const track = category.title as 'Bridge' | 'Learn';
+const trackDescription =
+  track === 'Bridge'
+    ? 'Cultural editions — stories, history, and the bridge between Arab and Chinese worlds.'
+    : 'Learn editions — language, characters, and practical Chinese for Arabic speakers.';
+
+const metadata = {
+  title: `${track} editions${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
+  description: trackDescription,
+  robots: {
+    index: blogCategoryRobots.index,
+    follow: blogCategoryRobots.follow,
+  },
+};
+---
+
+<FihLayout metadata={metadata}>
+  <section class="section editions-archive">
+    <div class="container" style="position: relative; z-index: 2">
+      <EditionsArchiveHeader
+        title="Editions"
+        description="A cultural journal at the confluence of the Arab world and China. Language, food, poetry, business, history — explored as equals."
+      />
+      <EditionFilter active={track} />
+      <EditionsList posts={page.data} />
+      <FihPagination
+        prevUrl={page.url.prev}
+        nextUrl={page.url.next}
+        prevText="Newer editions"
+        nextText="Older editions"
+      />
+      {track === 'Learn' && (
+        <div class="learn-archive-cta">
+          <LearnCourseCTA />
+        </div>
+      )}
+    </div>
+  </section>
+</FihLayout>
+
+<style>
+  .editions-archive {
+    position: relative;
+    background-color: var(--color-xuan-200, #eedbb6);
+  }
+  .editions-archive::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-image: url('/texture.webp');
+    background-repeat: repeat;
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  .learn-archive-cta {
+    position: relative;
+    z-index: 2;
+    max-width: 42rem;
+    margin: 2.5rem auto 0;
+    padding-top: 0.5rem;
+  }
+</style>

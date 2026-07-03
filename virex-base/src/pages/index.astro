@@ -1,0 +1,871 @@
+---
+import FihLayout from '~/layouts/FihLayout.astro';
+import InkDivider from '~/components/brand/InkDivider.astro';
+import VideoCard from '~/components/fih/VideoCard.astro';
+
+const metadata = {
+  title: 'Falafel in Hotpot — A bridge between worlds',
+  description:
+    'A cultural journal at the confluence of the Arab world and China. Language, food, poetry, business, history — explored as equals.',
+};
+
+// Sorted by views desc — update periodically
+const videos = [
+  {
+    id: '7jnaLsLiFOI',
+    title: "Arabic speakers are built for Chinese. Here's the proof",
+    views: '133K views',
+  },
+  {
+    id: 'ESPibG7cHkY',
+    title: '5 Ways Arabs and Chinese Are More Similar Than You Think',
+    views: '36K views',
+  },
+  {
+    id: 'XfaS25MzHEg',
+    title: 'Growing up Chinese and Arab is literally the same thing',
+    views: '20K views',
+  },
+];
+---
+
+<FihLayout metadata={metadata}>
+
+  <!-- ① HERO ──────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container hero__inner">
+
+      <!-- Image LEFT (like aliabdaal.com) -->
+      <div class="hero__visual">
+        <img
+          src="https://aliabdaal.com/wp-content/uploads/2024/09/hero-ali.png"
+          alt="Falafel in Hotpot — brand portrait (placeholder)"
+          class="hero__img"
+          width="600"
+          height="750"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Text RIGHT -->
+      <div class="hero__copy reveal">
+        <h1 class="hero__h1">
+          <span class="hero__greeting-ar" lang="ar">أهلاً</span>
+          <span class="hero__greeting-sep"> &amp; </span>
+          <span class="hero__greeting-zh" lang="zh">你好</span>
+        </h1>
+        <p class="hero__intro">
+          I'm Falafel — a polyglot, content creator, and entrepreneur bridging
+          China and the Arab world.
+        </p>
+        <p class="hero__tagline">
+          I built Falafel in Hotpot — the only China-Arab cultural intelligence
+          brand in the Arab world. We teach Mandarin to Arabs, help Gulf
+          businesses navigate China, and create content that connects two
+          civilisations most people never thought had anything in common.
+        </p>
+        <div class="hero__ctas">
+          <a href="/editions" class="btn btn--primary">Read the latest →</a>
+          <a href="#subscribe" class="btn btn--ghost">Subscribe ↓</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <InkDivider />
+
+  <!-- ② NEWSLETTER ────────────────────────────────────────────── -->
+  <section id="subscribe" class="nl-section">
+    <div class="nl-container">
+      <div class="nl-box">
+        <div class="nl-cols">
+
+          <!-- LEFT 40%: Brand title + social proof (Ali Abdaal pattern) -->
+          <div class="nl-col nl-col--left">
+            <div class="nl-brand">
+              <p class="nl-brand__sub">Subscribe to</p>
+              <p class="nl-brand__name">Falafel<br />in Hotpot</p>
+            </div>
+            <p class="nl-social-text">
+              Join a growing community of <strong>10,000+ readers</strong><br />
+              bridging 阿拉伯 × 中国.
+            </p>
+          </div>
+
+          <!-- RIGHT 60%: Description + inline form + disclaimer -->
+          <div class="nl-col nl-col--right">
+            <p class="nl-desc">
+              Each week, one story from the intersection of the Arab world and China —
+              language, food, business, history. One tradition is not the exotic other.
+              It's free to join, and always will be.
+            </p>
+
+            <form id="dispatch-form" class="flex w-full items-stretch mt-6 mb-4" novalidate>
+              <!--
+                flex-1: Tells input to take remaining space.
+                min-w-0: CRITICAL FIX to prevent the input from blowing out flex bounds.
+              -->
+              <input
+                id="dispatch-email"
+                type="email"
+                placeholder="Your email"
+                class="flex-1 min-w-0 bg-transparent border border-[#E3D1B8] border-r-0 px-4 py-3 text-[#2C2C2A] focus:outline-none focus:border-[#9B1B15] focus:ring-1 focus:ring-[#9B1B15] transition-all"
+                name="email"
+                required
+                autocomplete="email"
+              />
+              <!--
+                shrink-0: Protects the button from being squished or causing overflow.
+              -->
+              <button
+                type="submit"
+                class="shrink-0 bg-[#9B1B15] text-white font-medium px-6 py-3 hover:bg-[#7A1510] transition-colors shadow-sm"
+              >
+                Subscribe
+              </button>
+            </form>
+            <p id="dispatch-status" class="nl-form__status" aria-live="polite" hidden></p>
+
+            <p class="nl-disclaimer">
+              By subscribing you'll receive weekly dispatches from the bridge.
+              No spam. Unsubscribe anytime.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('dispatch-form') as HTMLFormElement | null;
+    const status = document.getElementById('dispatch-status') as HTMLElement | null;
+    const btn = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
+      if (!email) return;
+
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      if (status) { status.hidden = true; }
+
+      try {
+        await fetch('https://falafelinhotpot.activehosted.com/proc.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            u: '6A149D8923A83', f: '9', s: '', c: '0', m: '0',
+            act: 'sub', v: '2', or: 'b7a553f1-5419-4666-9786-87adb9281338',
+            email,
+          }),
+          mode: 'no-cors',
+        });
+      } catch { /* no-cors swallows errors — treat any response as success */ }
+
+      if (status) { status.textContent = "You're on the list. Welcome to the bridge."; status.hidden = false; }
+      if (btn) { btn.disabled = false; btn.textContent = 'Subscribe'; }
+      form.reset();
+    });
+  </script>
+
+  <InkDivider />
+
+  <!-- ③ BRAND MANIFESTO — Magazine Split ─────────────────────── -->
+  <section class="manifesto-section">
+    <div class="manifesto-inner">
+      <div class="manifesto-grid">
+
+        <div class="manifesto-copy">
+          <div class="manifesto-eyebrow">WHERE EAST MEETS EAST</div>
+          <h2 class="manifesto-headline">Falafel<br />in Hotpot.</h2>
+          <p class="manifesto-body manifesto-body--lead">
+            Falafel in Hotpot is a China-Arab cultural intelligence brand based in Riyadh.
+            We sit at the intersection of two of the world's oldest civilisations, and we
+            make that intersection useful.
+          </p>
+          <div class="manifesto-rule" aria-hidden="true"></div>
+          <p class="manifesto-body manifesto-body--secondary">
+            Whether you're a Gulf business navigating a Chinese partnership, a professional
+            learning Mandarin for the first time, or simply someone curious about what these
+            two worlds have in common, we built this for you. Language, culture, and
+            connection, all in one place.
+          </p>
+        </div>
+
+        <div class="manifesto-logo">
+          <img
+            src="/brand/logo-light-no-text.png"
+            alt=""
+            class="manifesto-logo__img"
+            width="907"
+            height="907"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <InkDivider />
+
+  <!-- ④ COURSE CALLOUT ────────────────────────────────────────── -->
+  <section class="course-section">
+    <div class="container">
+      <div class="course-card">
+        <div class="course-card__media">
+          <img
+            src="/course-chinese-foundation.jpg"
+            alt="The Mandarin Starter Kit"
+            class="course-card__img"
+            width="1600"
+            height="893"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <div class="course-card__content">
+          <span class="course-badge">Mandarin Starter Kit</span>
+
+          <h3 class="course-card__h3">Chinese that finally makes sense.</h3>
+
+          <p class="course-card__body">
+            Learn the Mandarin people actually use, with pronunciation, pinyin,
+            everyday phrases, worksheets, and cultural context explained clearly for
+            Arabic speakers. Not a course you finish. A resource you keep.
+          </p>
+
+          <a href="/mandarin-starterkit-course/#pricing" class="btn btn--primary">
+            Choose your spot →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <InkDivider />
+
+  <!-- ⑤ VIDEO GRID ────────────────────────────────────────────── -->
+  <section class="videos-section">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="eyebrow">On YouTube</span>
+        <h2 class="videos-section__h2">Watch our most popular videos</h2>
+      </div>
+
+      <ul class="video-grid" role="list">
+        {videos.map((v, i) => (
+          <li class="video-grid__item">
+            <VideoCard id={v.id} title={v.title} views={v.views} index={i} />
+          </li>
+        ))}
+      </ul>
+
+      <div class="videos-section__footer reveal" style="--stagger: 3">
+        <a
+          href="https://www.youtube.com/@falafelinhotpot"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn--ghost"
+        >
+          See all videos on YouTube →
+        </a>
+      </div>
+    </div>
+  </section>
+
+</FihLayout>
+
+<style>
+  /* ── Shared animations ───────────────────────────────────────── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal { opacity: 0; }
+
+  .reveal.visible {
+    animation: fadeInUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: calc(var(--stagger, 0) * 90ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; }
+    .reveal.visible { animation: none; }
+  }
+
+  /* ── Shared tokens ───────────────────────────────────────────── */
+  .eyebrow {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-cinnabar, #9b1b15);
+    mix-blend-mode: multiply;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.75rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+  }
+
+  .btn--primary {
+    background: var(--color-cinnabar, #9b1b15);
+    color: var(--color-parchment, #fbf7ed);
+    border-color: var(--color-cinnabar, #9b1b15);
+  }
+
+  .btn--primary:hover { background: #7a1510; border-color: #7a1510; }
+
+  .btn--ghost {
+    background: transparent;
+    color: var(--color-ink, #2c2c2a);
+    border-color: rgba(44, 44, 42, 0.3);
+  }
+
+  .btn--ghost:hover {
+    border-color: var(--color-cinnabar, #9b1b15);
+    color: var(--color-cinnabar, #9b1b15);
+  }
+
+  /* ── ① Hero ─────────────────────────────────────────────────── */
+  .hero {
+    background-color: var(--color-parchment, #fbf7ed);
+    padding: clamp(7rem, 10vw, 9rem) 0 clamp(4rem, 7vw, 6rem);
+    overflow: hidden;
+  }
+
+  .hero__inner {
+    display: grid;
+    /* image LEFT, text RIGHT — matching aliabdaal.com */
+    grid-template-columns: 42fr 58fr;
+    gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: center;
+  }
+
+  /* Image column */
+  .hero__visual {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    /* No dark background — parchment fills behind the image */
+    background: var(--color-parchment, #fbf7ed);
+  }
+
+  .hero__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    /* Isolate from the ParchmentGrain multiply overlay */
+    mix-blend-mode: normal;
+  }
+
+  /* Text column */
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero__h1 {
+    margin: 0 0 1.25rem;
+    font-size: clamp(3rem, 6vw, 5.2rem);
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--color-ink, #2c2c2a);
+    mix-blend-mode: multiply;
+  }
+
+  /* Arabic half — Cairo, right-to-left shaping but inline LTR flow */
+  .hero__greeting-ar {
+    font-family: 'Cairo', sans-serif;
+    font-weight: 700;
+    unicode-bidi: embed;
+    direction: rtl;
+  }
+
+  .hero__greeting-sep {
+    font-family: var(--font-display);
+    font-weight: 400;
+    color: var(--color-cinnabar, #9b1b15);
+    margin: 0 0.15em;
+  }
+
+  /* Chinese half — Noto Sans SC */
+  .hero__greeting-zh {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-weight: 700;
+  }
+
+  /* "I'm Falafel" — prominent single line */
+  .hero__intro {
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--color-ink, #2c2c2a);
+    mix-blend-mode: multiply;
+  }
+
+  .hero__tagline {
+    margin: 0 0 2.25rem;
+    max-width: 54ch;
+    font-size: clamp(0.9rem, 1.2vw, 1rem);
+    line-height: 1.8;
+    color: var(--color-text-muted, #4f4744);
+    mix-blend-mode: multiply;
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+  }
+
+  /* ── ② Newsletter (Ali Abdaal 40/60 pattern) ────────────────── */
+  .nl-section {
+    background-color: var(--color-parchment, #fbf7ed);
+    padding: clamp(3.5rem, 6vw, 5rem) 0;
+  }
+
+  .nl-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* The cta-box — sharp editorial panel */
+  .nl-box {
+    background-color: #eedbb6;
+    border: 1px solid #e3d1b8;
+    border-radius: 0;
+    overflow: hidden;
+    padding: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3.5rem);
+  }
+
+  /* Editorial split-card: left anchor, right action zone */
+  .nl-cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .nl-col--left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+  }
+
+  /* LEFT — brand stacked title (Ali's life-notes-plane) */
+  .nl-brand {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+  }
+
+  .nl-brand__sub {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    font-weight: 400;
+    color: #2c2c2a;
+    line-height: 1.1;
+  }
+
+  .nl-brand__name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+    font-weight: 700;
+    color: #9b1b15;
+    line-height: 1.05;
+  }
+
+  .nl-social-text {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: #4a4a48;
+  }
+
+  /* RIGHT — description + form + disclaimer */
+  .nl-col--right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .nl-desc {
+    margin: 0;
+    max-width: 44rem;
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    line-height: 1.7;
+    color: #2c2c2a;
+    text-wrap: pretty;
+  }
+
+  /* Inline form row: [input ──────────────────] [Submit] */
+  #dispatch-form {
+    width: min(100%, 32rem);
+    max-width: 100%;
+    min-width: 0;
+    min-height: 2.875rem;
+    overflow: hidden;
+  }
+
+  #dispatch-form input {
+    flex: 1 1 0%;
+    width: 0;
+    height: 2.875rem;
+    min-width: 0;
+    background-color: #f4ebe1;
+    border-radius: 0;
+    color: #2c2c2a;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    padding-block: 0;
+    padding-inline: 0.95rem;
+  }
+
+  #dispatch-form input::placeholder {
+    color: rgba(44, 44, 42, 0.72);
+  }
+
+  #dispatch-form button {
+    flex: 0 0 auto;
+    height: 2.875rem;
+    min-width: max-content;
+    background-color: #9b1b15 !important;
+    border: 1px solid #9b1b15;
+    border-radius: 0;
+    color: #fbf7ed !important;
+    font-size: 0.9rem;
+    line-height: 1;
+    padding-block: 0;
+    padding-inline: clamp(1.25rem, 2vw, 1.75rem);
+    white-space: nowrap;
+  }
+
+  #dispatch-form button:hover {
+    background-color: #7a1510 !important;
+    border-color: #7a1510;
+  }
+
+  .nl-form__status {
+    margin: 0.75rem 0 0;
+    font-size: 0.85rem;
+    color: #4a4a48;
+  }
+
+  .nl-disclaimer {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: #4a4a48;
+  }
+
+  /* Keep the editorial split until the card genuinely needs to stack. */
+  @media (min-width: 700px) {
+    .nl-cols {
+      grid-template-columns: minmax(0, 0.4fr) minmax(0, 0.6fr);
+      column-gap: clamp(2rem, 4vw, 4rem);
+    }
+  }
+
+  /* ── ③ Brand Manifesto — Magazine Split ─────────────────────── */
+  .manifesto-section {
+    background-color: #eedbb6;
+    border-top: 1px solid #e3d1b8;
+    border-bottom: 1px solid #e3d1b8;
+    padding: clamp(4rem, 7vw, 6rem) 0;
+  }
+
+  .manifesto-inner {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .manifesto-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .manifesto-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 38rem;
+    text-align: left;
+  }
+
+  .manifesto-eyebrow {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #9b1b15;
+    margin-bottom: 0.85rem;
+  }
+
+  .manifesto-headline {
+    margin: 0 0 1.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 4.2vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1.08;
+    color: #2c2c2a;
+  }
+
+  .manifesto-body {
+    margin: 0;
+    text-align: left;
+    max-width: 34rem;
+  }
+
+  .manifesto-body--lead {
+    font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
+    line-height: 1.65;
+    font-weight: 500;
+    color: #2c2c2a;
+  }
+
+  .manifesto-rule {
+    width: 3rem;
+    height: 1px;
+    background: rgba(155, 27, 21, 0.35);
+    margin: 1.35rem 0;
+  }
+
+  .manifesto-body--secondary {
+    font-size: clamp(0.9375rem, 1.1vw, 1rem);
+    line-height: 1.75;
+    color: #5c534f;
+  }
+
+  .manifesto-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .manifesto-logo__img {
+    display: block;
+    width: clamp(6.5rem, 30vw, 9rem);
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  @media (min-width: 900px) {
+    .manifesto-grid {
+      grid-template-columns: minmax(0, 32rem) auto;
+      justify-content: center;
+      gap: clamp(2.5rem, 4vw, 3.75rem);
+    }
+
+    .manifesto-copy {
+      max-width: none;
+    }
+
+    .manifesto-logo {
+      justify-content: flex-start;
+    }
+
+    .manifesto-logo__img {
+      width: clamp(8rem, 12vw, 11rem);
+    }
+  }
+
+  /* ── ④ Course ────────────────────────────────────────────────── */
+  .course-section {
+    background-color: var(--color-parchment, #fbf7ed);
+    padding: clamp(3.5rem, 6vw, 5rem) 0;
+  }
+
+  .course-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: var(--color-card, #fdf9f1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .course-card__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #3d1714;
+    aspect-ratio: 1600 / 893;
+  }
+
+  .course-card__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .course-card__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding: clamp(1.75rem, 3.5vw, 2.75rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .course-badge {
+    display: inline-block;
+    margin-bottom: 0.875rem;
+    padding: 0.25rem 0.625rem;
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-cinnabar, #9b1b15);
+    border: 1px solid var(--color-cinnabar, #9b1b15);
+    width: fit-content;
+  }
+
+  .course-card__h3 {
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.05;
+    color: var(--color-ink, #2c2c2a);
+    mix-blend-mode: multiply;
+  }
+
+  .course-card__body {
+    margin: 0 0 1.75rem;
+    max-width: 34rem;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--color-text-muted, #4f4744);
+    mix-blend-mode: multiply;
+  }
+
+  @media (min-width: 769px) {
+    .course-card {
+      grid-template-columns: minmax(0, 58%) minmax(0, 42%);
+      align-items: center;
+    }
+
+  }
+
+  /* ── ⑤ Video Grid ────────────────────────────────────────────── */
+  .videos-section {
+    background-color: var(--color-clay, #eddcc6);
+    position: relative;
+    padding: clamp(3.5rem, 6vw, 5rem) 0;
+  }
+
+  .videos-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/texture.webp');
+    background-repeat: repeat;
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  .videos-section .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-heading { margin-bottom: 2.5rem; }
+
+  .videos-section__h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--color-ink, #2c2c2a);
+    mix-blend-mode: multiply;
+  }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0 0 2.5rem;
+    padding: 0;
+  }
+
+  .video-grid__item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .videos-section__footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ── Mobile ─────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+    }
+
+    /* Image above text on mobile */
+    .hero__visual {
+      order: -1;
+      aspect-ratio: 3 / 2;
+      max-height: 260px;
+    }
+
+    .course-card {
+      grid-template-columns: 1fr;
+    }
+
+    .video-grid {
+      grid-template-columns: 1fr;
+    }
+
+  }
+
+  @media (min-width: 480px) and (max-width: 768px) {
+    .video-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

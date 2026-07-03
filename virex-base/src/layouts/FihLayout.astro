@@ -1,0 +1,88 @@
+---
+import '../styles/global.css';
+import SEO from '~/components/common/SEO.astro';
+import Nav from '~/components/fih/Nav.astro';
+import Footer from '~/components/fih/Footer.astro';
+import ParchmentGrain from '~/components/brand/ParchmentGrain.astro';
+import AppToaster from '~/components/islands/AppToaster';
+
+import type { MetaData } from '~/types';
+
+export interface Props {
+  metadata?: MetaData;
+  hideFooter?: boolean;
+}
+
+const { metadata = {}, hideFooter = false } = Astro.props;
+const title = metadata.title ?? 'Falafel in Hotpot';
+const description =
+  metadata.description ??
+  'A cultural journal at the confluence of the Arab world and China. Language, food, poetry, business, history — explored as equals.';
+const image = metadata.openGraph?.images?.[0]?.url;
+const type = metadata.openGraph?.type === 'article' ? 'article' : 'website';
+---
+
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Force light mode for public site — Virex dashboard may persist .dark in localStorage -->
+    <script is:inline>document.documentElement.classList.remove('dark');localStorage.removeItem('theme');</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Noto+Kufi+Arabic:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/open-design/landing.css" />
+    <SEO title={title} description={description} image={image} type={type} />
+    {metadata.canonical && <link rel="canonical" href={metadata.canonical} />}
+    {metadata.robots?.index === false && <meta name="robots" content="noindex,follow" />}
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <ParchmentGrain />
+    <Nav />
+    <main id="main-content">
+      <slot />
+    </main>
+    {!hideFooter && <Footer />}
+    <AppToaster client:idle />
+
+    <script>
+      const initReveal = () => {
+        const animated = document.querySelectorAll('.reveal, .sr-fade, .sr-left, .sr-scale');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          animated.forEach((el) => {
+            el.classList.add('visible');
+            el.classList.add('sr-visible');
+          });
+          return;
+        }
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                entry.target.classList.add('sr-visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+        );
+        animated.forEach((el) => observer.observe(el));
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initReveal);
+      } else {
+        initReveal();
+      }
+      document.addEventListener('astro:page-load', initReveal);
+    </script>
+  </body>
+</html>

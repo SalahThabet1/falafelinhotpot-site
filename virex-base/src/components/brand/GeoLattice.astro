@@ -1,0 +1,34 @@
+---
+interface Props {
+  opacity?: number;
+  class?: string;
+}
+
+const { opacity = 0.35, class: className = '' } = Astro.props;
+---
+
+<div class:list={['geo-lattice', className]} aria-hidden="true" style={`opacity:${opacity}`}></div>
+
+<style>
+  .geo-lattice {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .geo-lattice::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-conic-gradient(
+      from 0deg at 50% 50%,
+      transparent 0deg,
+      rgba(28, 28, 28, 0.025) 15deg,
+      transparent 30deg,
+      rgba(195, 154, 60, 0.015) 45deg,
+      transparent 60deg
+    );
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 70%);
+  }
+</style>

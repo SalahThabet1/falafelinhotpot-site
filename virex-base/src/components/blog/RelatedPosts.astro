@@ -1,0 +1,86 @@
+---
+import { getRelatedPosts } from '~/utils/blog';
+import EditionsList from '~/components/blog/List.astro';
+import type { Post } from '~/types';
+import { getBlogPermalink } from '~/utils/permalinks';
+
+export interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+
+const relatedPosts = post.tags ? await getRelatedPosts(post, 4) : [];
+---
+
+{
+  relatedPosts.length > 0 && (
+    <section class="related-editions" aria-labelledby="related-editions-heading">
+      <div class="related-editions__inner">
+        <header class="related-editions__header">
+          <span class="related-editions__label">More to read</span>
+          <h2 id="related-editions-heading" class="related-editions__title">
+            Related editions
+          </h2>
+          <a href={getBlogPermalink()} class="related-editions__all">
+            View all editions →
+          </a>
+        </header>
+        <EditionsList posts={relatedPosts} />
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .related-editions {
+    padding: clamp(3rem, 7vw, 4.5rem) var(--container-x, 1.25rem)
+      clamp(4rem, 8vw, 5rem);
+    background: #fbf7ed;
+    border-top: 1px solid #eaeaea;
+  }
+
+  .related-editions__inner {
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+
+  .related-editions__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .related-editions__label {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent, #c0392b);
+  }
+
+  .related-editions__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1.15;
+    color: #1c1c1c;
+  }
+
+  .related-editions__all {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-accent, #c0392b);
+    text-decoration: none;
+  }
+
+  .related-editions__all:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,322 @@
+---
+import LessonPhrase from '~/components/editions/LessonPhrase.astro';
+
+export interface Example {
+  zh: string;
+  py: string;
+  en: string;
+}
+
+export interface Props {
+  heading: string;
+  character?: string;
+  pinyin?: string;
+  tone?: string;
+  meaning?: string;
+  label?: string;
+  description: string;
+  badge?: string;
+  examples?: Example[];
+  image?: string;
+  hidePhrase?: boolean;
+  layout?: 'default' | 'pictograph';
+}
+
+const {
+  heading,
+  character,
+  pinyin,
+  tone,
+  meaning,
+  label,
+  description,
+  badge,
+  examples = [],
+  image,
+  hidePhrase = false,
+  layout = 'default',
+} = Astro.props;
+
+const isPictograph = layout === 'pictograph' && Boolean(image && character);
+
+const isPhrase =
+  Boolean(character) &&
+  (character.length > 2 || /[，。？！、？]/.test(character));
+
+const showPhrase =
+  !hidePhrase && Boolean(character || pinyin || tone || meaning);
+
+const imageAlt = meaning || character || label || heading;
+
+// The eyebrow tag often repeats the heading verbatim (e.g. heading "Snake" +
+// label "SNAKE — SLY · TWO-FACED · NOT TO BE TRUSTED"). Strip the redundant
+// leading segment so the same words don't render twice on screen, while
+// keeping any additional descriptive text the label carries.
+function normalize(s: string) {
+  return s
+    .replace(/[·–—-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+let eyebrow = label;
+if (label && heading) {
+  const [first, ...rest] = label.split(/\s*[—–]\s*/);
+  if (rest.length > 0) {
+    if (normalize(first) === normalize(heading)) {
+      eyebrow = rest.join(' — ').trim() || undefined;
+    }
+  } else if (normalize(label) === normalize(heading)) {
+    eyebrow = undefined;
+  }
+}
+---
+
+<section class="lesson-entry">
+  <h2 class="lesson-entry__heading">{heading}</h2>
+
+  {(eyebrow || badge) && (
+    <div class="lesson-entry__eyebrows">
+      {eyebrow && <p class="lesson-entry__eyebrow">{eyebrow}</p>}
+      {badge && <p class="lesson-entry__badge">{badge}</p>}
+    </div>
+  )}
+
+  {
+    isPictograph ? (
+      <div class="lesson-entry__pictograph">
+        <figure class="lesson-entry__pictograph-cell lesson-entry__pictograph-photo">
+          <img
+            src={image}
+            alt={imageAlt}
+            loading="lazy"
+            decoding="async"
+            width="480"
+            height="480"
+          />
+        </figure>
+        <div class="lesson-entry__pictograph-cell lesson-entry__pictograph-glyph">
+          <span class="zh">{character}</span>
+        </div>
+      </div>
+    ) : (
+      image && (
+        <figure class="lesson-entry__figure">
+          <img
+            src={image}
+            alt={imageAlt}
+            loading="lazy"
+            decoding="async"
+            width="720"
+            height="405"
+          />
+        </figure>
+      )
+    )
+  }
+
+  {
+    !isPictograph && showPhrase && (
+      <LessonPhrase
+        character={character}
+        pinyin={pinyin}
+        tone={tone}
+        meaning={meaning}
+        variant={isPhrase ? 'phrase' : 'glyph'}
+      />
+    )
+  }
+
+  {description && <p class="lesson-entry__body" set:html={description} />}
+
+  {
+    examples.length > 0 && (
+      <aside class="lesson-entry__examples" aria-label="Examples">
+        {examples.map((ex) => (
+          <div class="lesson-entry__example">
+            {ex.zh && (
+              <p class="lesson-entry__example-zh">
+                <span class="zh">{ex.zh}</span>
+              </p>
+            )}
+            {ex.py && <p class="lesson-entry__example-py">{ex.py}</p>}
+            {ex.en && <p class="lesson-entry__example-en">{ex.en}</p>}
+          </div>
+        ))}
+      </aside>
+    )
+  }
+</section>
+
+<style>
+  .lesson-entry {
+    margin: 3rem 0;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
+  }
+
+  .lesson-entry:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .lesson-entry__heading {
+    margin: 0 0 0.75rem;
+    padding: 0;
+    border: none;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 1.875rem);
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.2;
+    padding-bottom: 8px;
+    border-bottom: 2px solid color-mix(in srgb, var(--color-gold) 50%, transparent);
+  }
+
+  .lesson-entry__eyebrows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .lesson-entry__eyebrow {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8b6b4a;
+    line-height: 1.5;
+  }
+
+  .lesson-entry__badge {
+    margin: 0;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .lesson-entry__figure {
+    margin: 0 0 1.5rem;
+    line-height: 0;
+  }
+
+  .lesson-entry__figure img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .lesson-entry__pictograph {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .lesson-entry__pictograph-cell {
+    aspect-ratio: 1 / 1;
+    margin: 0;
+  }
+
+  .lesson-entry__pictograph-photo {
+    overflow: hidden;
+  }
+
+  .lesson-entry__pictograph-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .lesson-entry__pictograph-glyph {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--color-gold) 10%, var(--color-parchment));
+    border: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
+  }
+
+  .lesson-entry__pictograph-glyph span {
+    font-family: var(--font-chinese);
+    font-size: clamp(4rem, 16vw, 8rem);
+    line-height: 1;
+    font-weight: 300;
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 480px) {
+    .lesson-entry__pictograph {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .lesson-entry__body {
+    margin: 0 0 1.5rem;
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--color-text-muted);
+  }
+
+  .lesson-entry__body:last-child {
+    margin-bottom: 0;
+  }
+
+  .lesson-entry__examples {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+  }
+
+  .lesson-entry__example {
+    padding-left: 1rem;
+    border-left: 2px solid var(--color-gold);
+    min-width: 0;
+  }
+
+  .lesson-entry__example-zh {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-chinese);
+    font-size: 1.1875rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--color-accent);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .lesson-entry__example-py {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .lesson-entry__example-en {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--color-text);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+</style>

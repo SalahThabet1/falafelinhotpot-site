@@ -1,0 +1,83 @@
+---
+interface Props {
+  washes?: number;
+  opacity?: number;
+}
+
+const { washes = 4, opacity = 1 } = Astro.props;
+---
+
+<div
+  class="ink-atmosphere"
+  aria-hidden="true"
+  style={opacity !== 1 ? `opacity:${opacity}` : undefined}
+>
+  {washes >= 1 && <div class="wash wash--1" />}
+  {washes >= 2 && <div class="wash wash--2" />}
+  {washes >= 3 && <div class="wash wash--3" />}
+  {washes >= 4 && <div class="wash wash--4" />}
+</div>
+
+<style>
+  .ink-atmosphere {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .ink-atmosphere .wash {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    will-change: transform;
+  }
+  .wash--1 {
+    width: 60vw;
+    height: 60vw;
+    top: -10%;
+    left: -15%;
+    background: radial-gradient(circle, rgba(192, 57, 43, 0.1) 0%, transparent 60%);
+    animation: inkDrift 18s var(--ease-ink) infinite alternate;
+  }
+  .wash--2 {
+    width: 50vw;
+    height: 50vw;
+    bottom: -5%;
+    right: -10%;
+    background: radial-gradient(circle, rgba(28, 28, 28, 0.08) 0%, transparent 60%);
+    animation: inkDrift 22s var(--ease-ink) infinite alternate-reverse;
+  }
+  .wash--3 {
+    width: 40vw;
+    height: 40vw;
+    top: 40%;
+    left: 50%;
+    background: radial-gradient(circle, rgba(195, 154, 60, 0.06) 0%, transparent 60%);
+    animation: inkDrift 15s var(--ease-ink) infinite alternate;
+  }
+  .wash--4 {
+    width: 35vw;
+    height: 35vw;
+    top: 15%;
+    right: 20%;
+    background: radial-gradient(circle, rgba(192, 57, 43, 0.06) 0%, transparent 60%);
+    animation: inkDrift 20s var(--ease-ink) infinite alternate-reverse;
+  }
+  @keyframes inkDrift {
+    0% {
+      transform: translate(0, 0) scale(1);
+    }
+    100% {
+      transform: translate(30px, -20px) scale(1.08);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wash--1,
+    .wash--2,
+    .wash--3,
+    .wash--4 {
+      animation: none;
+    }
+  }
+</style>

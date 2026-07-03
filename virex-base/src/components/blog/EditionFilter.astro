@@ -1,0 +1,102 @@
+---
+type Track = 'All' | 'Bridge' | 'Learn';
+
+export interface Props {
+  active?: Track;
+}
+
+const { active = 'All' } = Astro.props;
+
+const tracks: { label: Track; href: string }[] = [
+  { label: 'All', href: '/editions' },
+  { label: 'Bridge', href: '/category/bridge' },
+  { label: 'Learn', href: '/category/learn' },
+];
+---
+
+<div class="edition-filter">
+  <nav aria-label="Edition tracks" class="edition-filter__nav" role="group">
+    {
+      tracks.map((track) => {
+        const isActive = active === track.label;
+        return (
+          <a
+            href={track.href}
+            class:list={['edition-filter__segment', { 'is-active': isActive }]}
+            aria-current={isActive ? 'page' : undefined}
+          >
+            {track.label}
+          </a>
+        );
+      })
+    }
+  </nav>
+</div>
+
+<style>
+  .edition-filter {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .edition-filter__nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    max-width: 100%;
+    padding: 0.25rem;
+    border-radius: 0;
+    border: 1px solid rgba(213, 194, 165, 0.6);
+    background: rgba(253, 251, 247, 0.65);
+  }
+
+  .edition-filter__segment {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    min-width: 6.5rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-ink-light);
+    border: 1px solid transparent;
+    transition:
+      color 180ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .edition-filter__segment:hover:not(.is-active) {
+    color: #1c1c1c;
+  }
+
+  .edition-filter__segment:focus-visible {
+    outline: 2px solid var(--color-gold, #c39a3c);
+    outline-offset: 2px;
+  }
+
+  .edition-filter__segment.is-active {
+    background: var(--color-xuan-50, #fbf9f6);
+    color: var(--color-cinnabar, #9b1b15);
+    border: 1px solid rgba(213, 194, 165, 0.8);
+  }
+
+  @media (max-width: 480px) {
+    .edition-filter__nav {
+      width: 100%;
+    }
+
+    .edition-filter__segment {
+      flex: 1 1 0;
+      min-width: 0;
+      padding-inline: 0.75rem;
+    }
+  }
+</style>
