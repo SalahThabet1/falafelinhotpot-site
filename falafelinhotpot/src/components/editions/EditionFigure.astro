@@ -1,0 +1,28 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+}
+
+const { src, alt } = Astro.props;
+---
+
+<figure class="edition-figure">
+  <img src={src} alt={alt} loading="lazy" decoding="async" width="720" height="405" />
+</figure>
+
+<style>
+  .edition-figure {
+    margin: 2.5rem 0;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+  .edition-figure img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    vertical-align: middle;
+  }
+</style>

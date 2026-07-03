@@ -1,0 +1,122 @@
+---
+export interface Props {
+  text?: string;
+  subtext?: string;
+  href?: string;
+  buttonLabel?: string;
+}
+
+const {
+  text = "Don't miss future episodes.",
+  subtext = 'One new edition drops every week. Join the list before the next letter goes out.',
+  href = '/subscribe',
+  buttonLabel = 'Subscribe free',
+} = Astro.props;
+---
+
+<aside class="edition-cta" aria-label="Subscribe to the journal">
+  <div class="edition-cta__inner">
+    <p class="edition-cta__text">{text}</p>
+    {subtext && <p class="edition-cta__subtext">{subtext}</p>}
+    <a href={href} class="edition-cta__button">{buttonLabel}</a>
+  </div>
+</aside>
+
+<style>
+  .edition-cta {
+    margin: 3rem 0 0;
+    padding: 2rem 1.75rem;
+    border: 1px solid #eaeaea;
+    border-radius: 0;
+    background: #fbf7ed;
+    box-shadow:
+      0 1px 2px rgba(28, 28, 28, 0.04),
+      0 8px 24px rgba(28, 28, 28, 0.06);
+  }
+
+  .edition-cta__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0;
+  }
+
+  .edition-cta__text {
+    margin: 0 0 0.75rem;
+    max-width: 36ch;
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    font-weight: 600;
+    line-height: 1.45;
+    color: #1c1c1c;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .edition-cta__subtext {
+    margin: 0 0 1.25rem;
+    max-width: 42ch;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #5c534f;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .edition-cta__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.625rem 1.5rem;
+    border: none;
+    border-radius: 0;
+    background: var(--color-accent, #c0392b);
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #fbf7ed;
+    transition:
+      background-color 180ms ease,
+      transform 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .edition-cta__button:hover {
+    background: #a93226;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(192, 57, 43, 0.22);
+  }
+
+  .edition-cta__button:focus-visible {
+    outline: 2px solid var(--color-gold, #c39a3c);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 640px) {
+    .edition-cta {
+      padding: 1.25rem 1rem;
+    }
+
+    .edition-cta__text {
+      max-width: 100%;
+      font-size: clamp(1.0625rem, 4.5vw, 1.125rem);
+    }
+
+    .edition-cta__subtext {
+      max-width: 100%;
+      font-size: 0.875rem;
+    }
+
+    .edition-cta__button {
+      width: 100%;
+      max-width: 18rem;
+    }
+  }
+</style>

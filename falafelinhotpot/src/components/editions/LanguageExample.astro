@@ -1,0 +1,86 @@
+---
+export interface Props {
+  lang: 'chinese' | 'arabic';
+  phrase: string;
+  transliteration?: string;
+  gloss?: string;
+}
+
+const { lang, phrase, transliteration, gloss } = Astro.props;
+const langClass = lang === 'chinese' ? 'zh' : 'ar';
+---
+
+<aside class="language-example" dir={lang === 'arabic' ? 'auto' : 'ltr'}>
+  <p class={`language-example__phrase ${langClass}`} dir={lang === 'arabic' ? 'rtl' : 'ltr'}>
+    {phrase}
+  </p>
+  {(transliteration || gloss) && (
+    <div class="language-example__meta">
+      {transliteration && <p class="language-example__translit">{transliteration}</p>}
+      {gloss && <p class="language-example__gloss">{gloss}</p>}
+    </div>
+  )}
+</aside>
+
+<style>
+  .language-example {
+    margin: 1rem 0 1.25rem;
+    padding: 0.625rem 0.875rem 0.625rem 1rem;
+    background: color-mix(in srgb, var(--color-gold) 8%, var(--color-surface));
+    border: 1px solid color-mix(in srgb, var(--color-gold) 28%, transparent);
+    border-left: 3px solid var(--color-accent, #8b1a1a);
+    text-align: left;
+  }
+
+  .language-example__phrase {
+    margin: 0;
+    font-size: 1.1875rem;
+    line-height: 1.35;
+    color: var(--color-text);
+  }
+
+  .language-example__phrase.zh {
+    font-family: var(--font-chinese);
+    font-weight: 500;
+    color: var(--color-accent);
+  }
+
+  .language-example__phrase.ar {
+    font-family: var(--font-arabic);
+    color: var(--color-gold);
+  }
+
+  .language-example__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: 0.35rem;
+  }
+
+  .language-example__translit {
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+  }
+
+  .language-example__gloss {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .language-example {
+      padding: 0.5625rem 0.75rem 0.5625rem 0.875rem;
+    }
+
+    .language-example__phrase {
+      font-size: 1.0625rem;
+    }
+  }
+</style>

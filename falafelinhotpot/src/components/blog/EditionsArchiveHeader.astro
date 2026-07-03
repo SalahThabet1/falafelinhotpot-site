@@ -1,0 +1,64 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  label?: string;
+}
+
+const {
+  title = 'Journal editions',
+  description = 'A living archive of essays tracing encounters between Arab and Chinese worlds, with each issue edited for depth, clarity, and cultural context.',
+  label = 'Archive',
+} = Astro.props;
+---
+
+<div class="editions-header reveal">
+  <span class="watermark-hanzi" aria-hidden="true">桥</span>
+  <span class="label">{label}</span>
+  <h1>{title}</h1>
+  <p>{description}</p>
+  <div class="brush-divider" aria-hidden="true"></div>
+</div>
+
+<style>
+  .editions-header {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: 48px;
+    padding: 0 1rem 1rem;
+  }
+  .editions-header .label {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+  .editions-header h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.45rem + 2vw, 3rem);
+    line-height: 1.05;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .editions-header p {
+    margin: 1rem auto 1.5rem;
+    max-width: 65ch;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--color-text-muted);
+  }
+  .editions-header .brush-divider {
+    margin: 0 auto;
+    max-width: 420px;
+  }
+  .editions-header .watermark-hanzi {
+    right: clamp(-1rem, 2vw, 1rem);
+    top: -2.2rem;
+    opacity: 0.045;
+  }
+</style>

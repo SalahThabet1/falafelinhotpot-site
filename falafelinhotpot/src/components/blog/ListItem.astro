@@ -1,0 +1,307 @@
+---
+import type { ImageMetadata } from 'astro';
+import Image from '~/components/common/Image.astro';
+import type { Post } from '~/types';
+import { getPermalink } from '~/utils/permalinks';
+import { findImage } from '~/utils/images';
+import { getFormattedDate } from '~/utils/utils';
+
+export interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const image = (await findImage(post.image)) as ImageMetadata | string | undefined;
+const link = getPermalink(post.permalink, 'post');
+const track = post.category?.title === 'Learn' ? 'Learn' : 'Bridge';
+const isLearn = track === 'Learn';
+const issueLabel =
+  post.issueNumber != null ? `Issue ${String(post.issueNumber).padStart(2, '0')}` : undefined;
+const eyebrow = [track, issueLabel].filter(Boolean).join(' • ');
+const footerDate = getFormattedDate(post.publishDate).toUpperCase();
+const footerMeta =
+  post.readingTime != null ? `${post.readingTime} min read`.toUpperCase() : undefined;
+---
+
+<article class="edition-card" data-category={post.category?.title}>
+  {
+    link ? (
+      <a href={link} class="edition-card__surface" aria-label={`Read ${post.title}`}>
+        <div class="edition-card__media">
+          {image ? (
+            <Image
+              src={image}
+              class="edition-card__image"
+              widths={[280, 560]}
+              width={560}
+              height={350}
+              sizes="(max-width: 640px) 100vw, 280px"
+              alt={post.title}
+              format="webp"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div class="edition-card__placeholder" aria-hidden="true">
+              <span>{isLearn ? '学' : '桥'}</span>
+            </div>
+          )}
+        </div>
+
+        <div class="edition-card__content">
+          <p class="edition-card__eyebrow">{eyebrow}</p>
+
+          <h2 class="edition-card__title">{post.title}</h2>
+
+          {
+            (post.excerpt || post.titleAr) && (
+              <div class="edition-card__subtitle">
+                {post.excerpt && <p class="edition-card__excerpt" dir="auto">{post.excerpt}</p>}
+                {post.titleAr && (
+                  <p class="edition-card__title-ar" dir="rtl" lang="ar">
+                    {post.titleAr}
+                  </p>
+                )}
+              </div>
+            )
+          }
+
+          <footer class="edition-card__footer">
+            <time datetime={String(post.publishDate)}>{footerDate}</time>
+            {footerMeta && <span aria-hidden="true"> • </span>}
+            {footerMeta && <span>{footerMeta}</span>}
+          </footer>
+        </div>
+      </a>
+    ) : (
+      <div class="edition-card__surface edition-card__surface--static">
+        <div class="edition-card__media">
+          {image ? (
+            <Image
+              src={image}
+              class="edition-card__image"
+              widths={[280, 560]}
+              width={560}
+              height={350}
+              sizes="(max-width: 640px) 100vw, 280px"
+              alt={post.title}
+              format="webp"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div class="edition-card__placeholder" aria-hidden="true">
+              <span>{isLearn ? '学' : '桥'}</span>
+            </div>
+          )}
+        </div>
+
+        <div class="edition-card__content">
+          <p class="edition-card__eyebrow">{eyebrow}</p>
+          <h2 class="edition-card__title">{post.title}</h2>
+          {
+            (post.excerpt || post.titleAr) && (
+              <div class="edition-card__subtitle">
+                {post.excerpt && <p class="edition-card__excerpt" dir="auto">{post.excerpt}</p>}
+                {post.titleAr && (
+                  <p class="edition-card__title-ar" dir="rtl" lang="ar">
+                    {post.titleAr}
+                  </p>
+                )}
+              </div>
+            )
+          }
+          <footer class="edition-card__footer">
+            <time datetime={String(post.publishDate)}>{footerDate}</time>
+            {footerMeta && <span aria-hidden="true"> • </span>}
+            {footerMeta && <span>{footerMeta}</span>}
+          </footer>
+        </div>
+      </div>
+    )
+  }
+</article>
+
+<style>
+  .edition-card__surface {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+    border: 1px solid rgba(213, 194, 165, 0.8);
+    border-radius: 0;
+    background: var(--color-xuan-50, #fbf9f6);
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+    box-shadow: 0 12px 30px rgba(74, 62, 48, 0.04);
+    transition:
+      transform 220ms ease,
+      box-shadow 220ms ease,
+      border-color 220ms ease;
+  }
+
+  .edition-card__surface::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(213, 194, 165, 0.3);
+    pointer-events: none;
+  }
+
+  .edition-card__surface:hover {
+    border-color: rgba(213, 194, 165, 1);
+    box-shadow:
+      0 2px 4px rgba(74, 62, 48, 0.04),
+      0 12px 28px rgba(74, 62, 48, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .edition-card__surface:focus-visible {
+    outline: 2px solid var(--color-gold, #c39a3c);
+    outline-offset: 3px;
+  }
+
+  .edition-card__surface--static:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  @media (min-width: 640px) {
+    .edition-card__surface {
+      grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+      min-height: 220px;
+    }
+  }
+
+  .edition-card__media {
+    position: relative;
+    min-height: 180px;
+    background: #f8f5ef;
+  }
+
+  @media (min-width: 640px) {
+    .edition-card__media {
+      min-height: 100%;
+    }
+  }
+
+  .edition-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+    object-fit: cover;
+    border-radius: 0;
+  }
+
+  @media (min-width: 640px) {
+    .edition-card__image {
+      min-height: 100%;
+      border-radius: 0;
+    }
+  }
+
+  .edition-card__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+    background: linear-gradient(160deg, #f8f5ef 0%, #f3ece0 100%);
+    border-radius: 0;
+  }
+
+  @media (min-width: 640px) {
+    .edition-card__placeholder {
+      min-height: 100%;
+      border-radius: 0;
+    }
+  }
+
+  .edition-card__placeholder span {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    line-height: 1;
+    color: rgba(28, 28, 28, 0.14);
+  }
+
+  .edition-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-height: 100%;
+    padding: 1.375rem 1.5rem 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .edition-card__content {
+      padding: 1.625rem 1.875rem 1.5rem;
+    }
+  }
+
+  .edition-card__eyebrow {
+    margin: 0 0 0.625rem;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent, #c0392b);
+  }
+
+  .edition-card__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: #1c1c1c;
+    transition: color 180ms ease;
+  }
+
+  .edition-card__surface:hover .edition-card__title {
+    color: var(--color-accent, #c0392b);
+  }
+
+  .edition-card__subtitle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin-top: 0.75rem;
+  }
+
+  .edition-card__excerpt {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: #5c534f;
+    unicode-bidi: plaintext;
+  }
+
+  .edition-card__title-ar {
+    margin: 0;
+    padding-top: 0.125rem;
+    font-family: var(--font-arabic);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: #5c534f;
+    text-align: start;
+  }
+
+  .edition-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: #8a817c;
+  }
+</style>

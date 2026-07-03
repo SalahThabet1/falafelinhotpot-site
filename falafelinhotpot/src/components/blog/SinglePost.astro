@@ -1,0 +1,334 @@
+---
+import EditionHero from '~/components/editions/EditionHero.astro';
+import ArticleFooter from '~/components/blog/ArticleFooter.astro';
+import LearnCourseCTA from '~/components/editions/LearnCourseCTA.astro';
+import { getFormattedDate } from '~/utils/utils';
+import type { Post } from '~/types';
+
+export interface Props {
+  post: Post;
+  url: string | URL;
+}
+
+const { post, url } = Astro.props;
+
+const track = post.category?.title === 'Learn' ? 'Learn' : 'Bridge';
+const issueLabel =
+  post.issueNumber != null ? `Issue ${String(post.issueNumber).padStart(2, '0')}` : undefined;
+const eyebrow = [track, issueLabel].filter(Boolean).join(' • ');
+const hasHero = Boolean(post.image);
+const formattedDate = getFormattedDate(post.publishDate);
+const readingTimeLabel =
+  post.readingTime != null
+    ? `${post.readingTime} ${post.readingTime === 1 ? 'minute' : 'minutes'} read`
+    : undefined;
+const authorName = 'Falafel';
+---
+
+<article class:list={['single-post', { 'single-post--has-hero': hasHero }]}>
+  {
+    hasHero && post.image && (
+      <EditionHero src={post.image} alt={post.title} />
+    )
+  }
+
+  <header class="single-post__header">
+    <div class="single-post__intro">
+      <p class="single-post__eyebrow">{eyebrow}</p>
+
+      <h1 class="single-post__title">{post.title}</h1>
+
+      {
+        (post.excerpt || post.titleAr) && (
+          <div class="single-post__subtitle">
+            {post.excerpt && (
+              <p class="single-post__excerpt" dir="auto">
+                {post.excerpt}
+              </p>
+            )}
+            {post.titleAr && (
+              <p class="single-post__subtitle-ar" dir="rtl" lang="ar">
+                {post.titleAr}
+              </p>
+            )}
+          </div>
+        )
+      }
+
+      <div class="single-post__meta">
+        <span class="single-post__meta-item">
+          <span class="single-post__meta-label">Published</span>
+          <time datetime={post.publishDate.toISOString()}>{formattedDate}</time>
+        </span>
+        {
+          readingTimeLabel && (
+            <span class="single-post__meta-item">
+              <span class="single-post__meta-label">Read</span>
+              <span>{readingTimeLabel}</span>
+            </span>
+          )
+        }
+        <span class="single-post__meta-item">
+          <span class="single-post__meta-label">By</span>
+          <span>{authorName}</span>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <div class="single-post__body">
+    <div class="single-post__prose">
+      <slot />
+    </div>
+
+    {track === 'Learn' && <LearnCourseCTA />}
+
+    <ArticleFooter post={post} url={url} />
+  </div>
+</article>
+
+<style>
+  .single-post {
+    width: 100%;
+  }
+
+  .single-post__header {
+    padding: clamp(2rem, 5vw, 3.25rem) var(--container-x, 1.25rem)
+      clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .single-post--has-hero .single-post__header {
+    padding-top: clamp(2.25rem, 5vw, 3.5rem);
+  }
+
+  .single-post__intro {
+    width: 100%;
+    max-width: 42rem;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .single-post__eyebrow {
+    margin: 0 0 1rem;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent, #c0392b);
+  }
+
+  .single-post__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.125rem, 5vw, 3.25rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #1c1c1c;
+  }
+
+  .single-post__subtitle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .single-post__excerpt {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: clamp(1.0625rem, 1.8vw, 1.1875rem);
+    line-height: 1.7;
+    color: #5c534f;
+    unicode-bidi: plaintext;
+  }
+
+  .single-post__subtitle-ar {
+    margin: 0;
+    font-family: var(--font-arabic);
+    font-size: clamp(1rem, 1.6vw, 1.125rem);
+    line-height: 1.65;
+    color: #5c534f;
+    text-align: start;
+  }
+
+  .single-post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    font-family: var(--font-body);
+    color: #5c534f;
+  }
+
+  .single-post__meta-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid rgba(213, 194, 165, 0.75);
+    background: rgba(253, 251, 247, 0.52);
+    font-size: 0.8125rem;
+    line-height: 1.2;
+  }
+
+  .single-post__meta-label {
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-cinnabar, #9b1b15);
+  }
+
+  .single-post__body {
+    width: 100%;
+    max-width: 45rem;
+    margin: 0 auto;
+    padding: 0 var(--container-x, 1.25rem) clamp(3rem, 8vw, 5rem);
+  }
+
+  .single-post__prose {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .single-post__prose :global(> *) {
+    margin-block: 0;
+  }
+
+  .single-post__prose :global(p) {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--color-text-muted);
+    margin: 0 0 1.5rem;
+  }
+
+  .single-post__prose :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .single-post__prose :global(h2) {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 1.875rem);
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 2.5rem 0 1rem;
+    line-height: 1.2;
+    padding-bottom: 8px;
+    border-bottom: 2px solid color-mix(in srgb, var(--color-gold) 50%, transparent);
+  }
+
+  .single-post__prose :global(h3) {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-accent, #c0392b);
+    margin: 1.5rem 0 0.75rem;
+    line-height: 1.3;
+  }
+
+  .single-post__prose :global(strong) {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .single-post__prose :global(.zh) {
+    color: var(--color-accent, #c0392b);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .single-post__prose :global(.ar) {
+    color: var(--color-gold, #c39a3c);
+    font-style: italic;
+  }
+
+  .single-post__prose :global(.py) {
+    color: var(--color-text-muted);
+    font-style: italic;
+    opacity: 0.85;
+  }
+
+  .single-post__prose :global(.pullquote) {
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+    line-height: 1.55;
+    color: var(--color-text);
+    font-style: italic;
+    margin: 2rem 0 2rem 1.5rem;
+    padding: 0 0 0 1rem;
+    border-left: 3px solid var(--color-accent, #c0392b);
+  }
+
+  .single-post__prose :global(.highlight) {
+    background: color-mix(in srgb, var(--color-gold) 15%, transparent);
+    padding: 0 4px;
+  }
+
+  .single-post__prose :global(ul),
+  .single-post__prose :global(ol) {
+    margin: 0 0 1.25rem;
+    padding-left: 1.25rem;
+  }
+
+  .single-post__prose :global(li) {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .single-post__prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9375rem;
+  }
+
+  .single-post__prose :global(th),
+  .single-post__prose :global(td) {
+    border: 1px solid var(--color-border);
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+
+  .single-post__prose :global(.language-callout),
+  .single-post__prose :global(.language-example),
+  .single-post__prose :global(.vocab-card),
+  .single-post__prose :global(.character-card),
+  .single-post__prose :global(.lesson-entry),
+  .single-post__prose :global(.edition-figure),
+  .single-post__prose :global(.edition-cta) {
+    width: 100%;
+  }
+
+  .single-post__prose :global(.edition-cta p) {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .single-post__prose :global(.edition-cta .edition-cta__text) {
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    font-weight: 600;
+    line-height: 1.45;
+    color: #1c1c1c;
+    margin-bottom: 0.75rem;
+  }
+
+  .single-post__prose :global(.edition-cta .edition-cta__subtext) {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #5c534f;
+    margin-bottom: 1.25rem;
+  }
+
+  .single-post__prose :global(h2 + p) {
+    margin-top: 0.25rem;
+  }
+</style>

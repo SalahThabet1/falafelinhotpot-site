@@ -1,0 +1,113 @@
+---
+import { getPermalink } from '~/utils/permalinks';
+
+export interface Props {
+  prevUrl?: string;
+  nextUrl?: string;
+  prevText?: string;
+  nextText?: string;
+}
+
+const { prevUrl, nextUrl, prevText = 'Newer editions', nextText = 'Older editions' } = Astro.props;
+
+const prevHref = prevUrl ? getPermalink(prevUrl) : undefined;
+const nextHref = nextUrl ? getPermalink(nextUrl) : undefined;
+---
+
+{
+  (prevHref || nextHref) && (
+    <nav class="fih-pagination" aria-label="Editions pagination">
+      <div class="fih-pagination__inner">
+        {prevHref ? (
+          <a href={prevHref} rel="prev" class="fih-pagination__link">
+            <span class="fih-pagination__arrow" aria-hidden="true">
+              ←
+            </span>
+            <span>{prevText}</span>
+          </a>
+        ) : (
+          <span class="fih-pagination__spacer" aria-hidden="true" />
+        )}
+        {nextHref ? (
+          <a href={nextHref} rel="next" class="fih-pagination__link">
+            <span>{nextText}</span>
+            <span class="fih-pagination__arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        ) : (
+          <span class="fih-pagination__spacer" aria-hidden="true" />
+        )}
+      </div>
+    </nav>
+  )
+}
+
+<style>
+  .fih-pagination {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .fih-pagination__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 2rem;
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+
+  .fih-pagination__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid #c0392b;
+    background: #c0392b;
+    color: var(--color-text-inverse);
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      color var(--duration-button) var(--ease-ink),
+      border-color var(--duration-button) var(--ease-ink),
+      background-color var(--duration-button) var(--ease-ink);
+  }
+
+  .fih-pagination__link:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: var(--color-text-inverse);
+  }
+
+  .fih-pagination__arrow {
+    color: var(--color-text-inverse);
+    font-size: 0.85rem;
+    line-height: 1;
+  }
+
+  .fih-pagination__spacer {
+    display: none;
+  }
+
+  @media (min-width: 480px) {
+    .fih-pagination__inner {
+      justify-content: space-between;
+      max-width: 100%;
+    }
+
+    .fih-pagination__spacer {
+      display: block;
+      flex: 1 1 9rem;
+      max-width: 9rem;
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+</style>

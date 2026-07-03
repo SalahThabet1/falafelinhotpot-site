@@ -1,0 +1,94 @@
+---
+import type { Post } from '~/types';
+
+export interface Props {
+  tags: Post['tags'];
+  title?: string;
+  isCategory?: boolean;
+}
+
+const { tags, title, isCategory = false } = Astro.props;
+---
+
+{
+  tags && Array.isArray(tags) && tags.length > 0 && (
+    <div class="article-tags">
+      {title && <span class="article-tags__label">{title}</span>}
+      <ul class="article-tags__list">
+        {tags.map((tag) => (
+          <li class="article-tags__item">
+            {isCategory ? (
+              <a href={`/category/${tag.slug}`} class="article-tags__pill">
+                {tag.title}
+              </a>
+            ) : (
+              <span class="article-tags__pill">{tag.title}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+<style>
+  .article-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    min-width: 0;
+    flex: 1 1 12rem;
+  }
+
+  .article-tags__label {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8a817c;
+  }
+
+  .article-tags__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .article-tags__item {
+    margin: 0;
+  }
+
+  .article-tags__pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--color-border, #d5c2a5);
+    border-radius: 0;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--color-ink);
+    text-decoration: none;
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease;
+  }
+
+  a.article-tags__pill:hover {
+    background: var(--color-xuan-50, #fbf9f6);
+    border-color: rgba(213, 194, 165, 1);
+    color: var(--color-cinnabar, #9b1b15);
+  }
+
+  a.article-tags__pill:focus-visible {
+    outline: 2px solid var(--color-gold, #c39a3c);
+    outline-offset: 2px;
+  }
+</style>

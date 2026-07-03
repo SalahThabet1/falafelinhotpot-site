@@ -1,0 +1,66 @@
+---
+export interface Props {
+  href?: string;
+}
+
+const { href = '/mandarin-starterkit-course/#pricing' } = Astro.props;
+---
+
+<aside class="learn-course-cta" aria-label="Mandarin Starter Kit course">
+  <p class="learn-course-cta__text">
+    If you want to learn authentic Mandarin — the kind people actually speak, with pronunciation,
+    pinyin, and cultural context built for Arabic speakers — the Starter Kit is where to begin.
+  </p>
+  <a href={href} class="learn-course-cta__link">Get the Mandarin Starter Kit →</a>
+</aside>
+
+<style>
+  .learn-course-cta {
+    margin: 2.5rem 0 0;
+    padding: 1.25rem 0 0;
+    border-top: 1px solid rgba(213, 194, 165, 0.65);
+    text-align: left;
+  }
+
+  .learn-course-cta__text {
+    margin: 0 0 0.875rem;
+    max-width: 52ch;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: #5c534f;
+  }
+
+  .learn-course-cta__link {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-cinnabar, #9b1b15);
+    border-bottom: 1px solid transparent;
+    transition:
+      color 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .learn-course-cta__link:hover {
+    color: #7a1510;
+    border-color: #7a1510;
+  }
+
+  .learn-course-cta__link:focus-visible {
+    outline: 2px solid var(--color-gold, #c39a3c);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 640px) {
+    .learn-course-cta__text {
+      max-width: 100%;
+      font-size: 0.875rem;
+    }
+  }
+</style>

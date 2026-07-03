@@ -1,0 +1,76 @@
+---
+import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
+
+import FihLayout from '~/layouts/FihLayout.astro';
+import SinglePost from '~/components/blog/SinglePost.astro';
+import ArticleSchema from '~/components/common/ArticleSchema.astro';
+import EditionNav from '~/components/editions/EditionNav.astro';
+import RelatedPosts from '~/components/blog/RelatedPosts.astro';
+import { fetchPosts, getStaticPathsBlogPost, blogPostRobots } from '~/utils/blog';
+import { getCanonical } from '~/utils/permalinks';
+import type { MetaData } from '~/types';
+
+export const prerender = true;
+
+export const getStaticPaths = (async () => {
+  return await getStaticPathsBlogPost();
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { post } = Astro.props as Props;
+
+const SERIES_ORDER: Record<string, number> = { cultural: 0, learn: 1 };
+
+const editionPosts = (await fetchPosts()).sort((a, b) => {
+  const seriesA = SERIES_ORDER[a.series ?? 'cultural'] ?? 0;
+  const seriesB = SERIES_ORDER[b.series ?? 'cultural'] ?? 0;
+  if (seriesA !== seriesB) return seriesA - seriesB;
+  return (a.issueNumber ?? 0) - (b.issueNumber ?? 0);
+});
+
+const currentIndex = editionPosts.findIndex((p) => p.id === post.id);
+const prevPost = currentIndex > 0 ? editionPosts[currentIndex - 1] : undefined;
+const nextPost =
+  currentIndex >= 0 && currentIndex < editionPosts.length - 1
+    ? editionPosts[currentIndex + 1]
+    : undefined;
+
+const url = getCanonical(post.permalink);
+const imageUrl = post.image ? getCanonical(post.image) : undefined;
+
+const metadata = {
+  title: post.metadata?.title ?? post.title,
+  description: post.metadata?.description ?? post.excerpt,
+  canonical: post.metadata?.canonical ?? url,
+  robots: {
+    index: post.metadata?.robots?.index ?? blogPostRobots.index,
+    follow: post.metadata?.robots?.follow ?? blogPostRobots.follow,
+  },
+  openGraph: {
+    type: 'article',
+    ...(post.image ? { images: [{ url: post.image }] } : {}),
+    ...post.metadata?.openGraph,
+  },
+  twitter: post.metadata?.twitter,
+} as MetaData;
+---
+
+<FihLayout metadata={metadata} hideFooter={true}>
+  <ArticleSchema post={post} url={url} imageUrl={imageUrl} />
+  <SinglePost post={post} url={url}>
+    {post.Content && <post.Content />}
+  </SinglePost>
+  {
+    currentIndex >= 0 && (
+      <EditionNav
+        prevPost={prevPost}
+        nextPost={nextPost}
+        currentIndex={currentIndex}
+        totalPosts={editionPosts.length}
+        currentSeries={post.series}
+      />
+    )
+  }
+  <RelatedPosts post={post} />
+</FihLayout>

@@ -1,0 +1,65 @@
+---
+import FihLayout from '~/layouts/FihLayout.astro';
+import InkAtmosphere from '~/components/brand/InkAtmosphere.astro';
+import { getHomePermalink, getPermalink } from '~/utils/permalinks';
+
+const title = 'Page not found';
+---
+
+<FihLayout metadata={{ title }}>
+  <section
+    class="section"
+    style="min-height: 60dvh; display: flex; align-items: center; position: relative"
+  >
+    <InkAtmosphere washes={1} opacity={0.2} />
+    <div class="container" style="text-align: center; position: relative; z-index: 2">
+      <p class="label">404</p>
+      <h1>This page wandered off the Silk Road</h1>
+      <p class="body-text" style="margin: 0 auto 32px">
+        The page you're looking for doesn't exist — but the journal continues.
+      </p>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap">
+        <a
+          href={getHomePermalink()}
+          class="btn btn--primary btn--lg"
+          data-track="404_nav"
+          data-nav-target="home">Back to homepage</a
+        >
+        <a
+          href={getPermalink('/editions')}
+          class="btn btn--secondary btn--lg"
+          data-track="404_nav"
+          data-nav-target="editions">Browse editions</a
+        >
+      </div>
+      <script is:inline>
+        (function () {
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', '404_page_view', {
+              page_location: window.location.href,
+              page_path: window.location.pathname,
+            });
+          }
+          function init404Tracking() {
+            document.querySelectorAll('[data-track="404_nav"]').forEach((el) => {
+              if (el.dataset.tracked) return;
+              el.dataset.tracked = 'true';
+              el.addEventListener('click', () => {
+                if (typeof window.gtag !== 'function') return;
+                window.gtag('event', '404_nav_click', {
+                  target: el.dataset.navTarget || '',
+                });
+              });
+            });
+          }
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init404Tracking);
+          } else {
+            init404Tracking();
+          }
+          document.addEventListener('astro:page-load', init404Tracking);
+        })();
+      </script>
+    </div>
+  </section>
+</FihLayout>
