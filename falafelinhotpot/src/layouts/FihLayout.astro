@@ -59,26 +59,58 @@ const type = metadata.openGraph?.type === 'article' ? 'article' : 'website';
     <script>
       const initReveal = () => {
         const animated = document.querySelectorAll('.reveal, .sr-fade, .sr-left, .sr-scale');
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          animated.forEach((el) => {
-            el.classList.add('visible');
-            el.classList.add('sr-visible');
-          });
+        if (!animated.length) return;
+
+        const reveal = (el) => {
+          el.classList.add('visible', 'sr-visible');
+        };
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+          animated.forEach(reveal);
           return;
         }
+
+        // Content must never depend on JS/scroll to become visible (a fade-in
+        // that never fires — blocked script, headless renderer, a tab that
+        // never scrolls — should never ship a blank section). Anything
+        // already on screen at load is revealed immediately; only content
+        // below the fold is held back for the entrance transition, and even
+        // that gets a hard timeout so it can never stay hidden for good.
+        const viewportH = window.innerHeight;
+        const pending = [];
+        animated.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < viewportH && rect.bottom > 0) {
+            reveal(el);
+          } else {
+            el.classList.add('reveal-pending');
+            pending.push(el);
+          }
+        });
+        if (!pending.length) return;
+
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                entry.target.classList.add('sr-visible');
+                entry.target.classList.remove('reveal-pending');
+                reveal(entry.target);
                 observer.unobserve(entry.target);
               }
             });
           },
           { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
         );
-        animated.forEach((el) => observer.observe(el));
+        pending.forEach((el) => observer.observe(el));
+
+        window.setTimeout(() => {
+          pending.forEach((el) => {
+            observer.unobserve(el);
+            el.classList.remove('reveal-pending');
+            reveal(el);
+          });
+        }, 4000);
       };
 
       if (document.readyState === 'loading') {

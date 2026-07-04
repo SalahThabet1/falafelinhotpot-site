@@ -150,7 +150,10 @@ const authorName = 'Falafel';
     font-size: clamp(1rem, 1.6vw, 1.125rem);
     line-height: 1.65;
     color: #5c534f;
-    text-align: start;
+    /* Anchored left (not `start`, which flips to the right under dir="rtl")
+       so the Arabic line sits directly under the English excerpt above it —
+       equal visual weight, not a disconnected fragment at the far edge. */
+    text-align: left;
   }
 
   .single-post__meta {

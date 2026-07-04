@@ -133,10 +133,8 @@ const footerMeta =
     color: inherit;
     text-decoration: none;
     position: relative;
-    box-shadow: 0 12px 30px rgba(74, 62, 48, 0.04);
     transition:
       transform 220ms ease,
-      box-shadow 220ms ease,
       border-color 220ms ease;
   }
 
@@ -150,9 +148,6 @@ const footerMeta =
 
   .edition-card__surface:hover {
     border-color: rgba(213, 194, 165, 1);
-    box-shadow:
-      0 2px 4px rgba(74, 62, 48, 0.04),
-      0 12px 28px rgba(74, 62, 48, 0.1);
     transform: translateY(-2px);
   }
 
@@ -287,7 +282,10 @@ const footerMeta =
     font-size: 0.9375rem;
     line-height: 1.65;
     color: #5c534f;
-    text-align: start;
+    /* Anchored left (not `start`, which flips to the right under dir="rtl")
+       so the Arabic line sits directly under the English excerpt above it —
+       equal visual weight, not a disconnected fragment at the far edge. */
+    text-align: left;
   }
 
   .edition-card__footer {
