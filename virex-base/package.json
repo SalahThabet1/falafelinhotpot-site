@@ -18,7 +18,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "prebuild": "test -d ../../landing-main && npm run sync:mandarin-landing || test -f public/mandarin-starterkit-course/index.html",
+    "prebuild": "test -f public/mandarin-starterkit-course/index.html",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",

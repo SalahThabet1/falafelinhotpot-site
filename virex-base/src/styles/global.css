@@ -66,26 +66,21 @@
   --font-arabic-kufi: 'Noto Kufi Arabic', 'Cairo', sans-serif;
 
   /* Brand Colors */
-  --color-primary: oklch(0.55 0.2 265);
-  --color-primary-dark: oklch(0.45 0.2 265);
-  --color-secondary: oklch(0.65 0.25 350);
+  --color-primary: var(--color-cinnabar);
+  --color-primary-dark: var(--color-cinnabar-dark);
+  --color-secondary: var(--color-xuan-200);
 
-  /* Semantic Colors */
-  --color-background: oklch(1 0 0);
-  --color-surface: oklch(0.98 0 0);
-  --color-text: oklch(0.15 0 0);
-  --color-text-muted: oklch(0.45 0 0);
-  --color-border: oklch(0.9 0 0);
-
-  /* Dashboard Status Colors - Light Mode */
-  --color-success: oklch(0.45 0.15 145);
-  --color-success-bg: oklch(0.95 0.05 145);
-  --color-warning: oklch(0.46 0.15 85);
-  --color-warning-bg: oklch(0.95 0.05 85);
-  --color-error: oklch(0.46 0.2 25);
-  --color-error-bg: oklch(0.95 0.05 25);
-  --color-info: oklch(0.45 0.15 240);
-  --color-info-bg: oklch(0.95 0.05 240);
+  /* Semantic Colors — aliased to the Neo-Chinese Editorial palette above.
+     These previously held generic grayscale/blue placeholders left over
+     from the inherited Virex theme (including a pure #fff background,
+     which design.md explicitly forbids); every page's true background
+     was only ever the parchment set by section-level styles, so any gap
+     between sections (404/403/500, thin viewports) leaked pure white. */
+  --color-background: var(--color-parchment);
+  --color-surface: var(--color-card);
+  --color-text: var(--color-ink);
+  --color-text-muted: var(--color-ink-light);
+  --color-border: var(--color-xuan-300);
 
   /* Spacing */
   --spacing-section: 6rem;
@@ -95,25 +90,6 @@
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 1rem;
-}
-
-/* Dark mode overrides */
-.dark {
-  --color-background: oklch(0.15 0 0);
-  --color-surface: oklch(0.2 0 0);
-  --color-text: oklch(0.95 0 0);
-  --color-text-muted: oklch(0.65 0 0);
-  --color-border: oklch(0.3 0 0);
-
-  /* Dashboard Status Colors - Dark Mode */
-  --color-success: oklch(0.65 0.15 145);
-  --color-success-bg: oklch(0.25 0.05 145);
-  --color-warning: oklch(0.7 0.15 85);
-  --color-warning-bg: oklch(0.25 0.05 85);
-  --color-error: oklch(0.65 0.2 25);
-  --color-error-bg: oklch(0.25 0.05 25);
-  --color-info: oklch(0.65 0.15 240);
-  --color-info-bg: oklch(0.25 0.05 240);
 }
 
 /* Base styles */

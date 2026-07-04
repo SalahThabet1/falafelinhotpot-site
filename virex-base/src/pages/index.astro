@@ -284,7 +284,11 @@ const videos = [
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .reveal { opacity: 0; }
+  /* Visible by default — JS only hides below-fold sections (via
+     .reveal-pending, added just before they're observed) to animate them in.
+     If JS never runs, nothing is ever hidden in the first place. */
+  .reveal { opacity: 1; }
+  .reveal.reveal-pending { opacity: 0; }
 
   .reveal.visible {
     animation: fadeInUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -292,7 +296,7 @@ const videos = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reveal { opacity: 1; }
+    .reveal.reveal-pending { opacity: 1; }
     .reveal.visible { animation: none; }
   }
 
