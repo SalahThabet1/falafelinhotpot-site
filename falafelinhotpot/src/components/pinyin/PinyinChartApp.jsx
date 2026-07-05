@@ -10,7 +10,7 @@ import LearnSection from './LearnSection';
 import { FINAL_GROUPS, INITIAL_GROUPS } from './finalsGroups';
 import irregulars from './irregulars.json';
 import { IconTable, IconSoundMap, IconBook } from './icons';
-import { initAudio, unlockAudio, playAudio, stopAudio, preloadBatch, pinyinAudioSrc } from './audioEngine';
+import { initAudio, unlockAudio, playAudio, stopAudio, preloadBatch, pinyinAudioSrc, foldPinyinKey } from './audioEngine';
 import ShimmerBorder from './components/ShimmerBorder';
 import './App.css';
 import './components/SoundCell.css';
@@ -60,16 +60,21 @@ const CELLS = (() => {
 })();
 
 /* ── Cell ── */
-const SoundCell = memo(function SoundCell({ cellKey, onTap, isDimmed, isMatched, isIrregular, groupColor }) {
+const SoundCell = memo(function SoundCell({ cellKey, onTap, isDimmed, isMatched, isCurrent, isIrregular, groupColor }) {
   const data = CELLS[cellKey];
   if (!data) return <td className="cell cell--empty" />;
   const cls = 'cell-btn' +
     (isDimmed ? ' cell-btn--dimmed' : '') +
     (isMatched ? ' cell-btn--matched' : '') +
+    (isCurrent ? ' cell-btn--current' : '') +
     (isIrregular ? ' cell-btn--irregular' : '');
   return (
     <td className="cell" style={{ '--gc': groupColor }}>
-      <button className={cls} onClick={() => onTap(data.syl, data.pins)}>
+      <button
+        className={cls}
+        data-cell-key={cellKey}
+        onClick={() => onTap(data.syl, data.pins)}
+      >
         {data.syl}
       </button>
     </td>
@@ -109,12 +114,28 @@ function ToneSheetContent({ syllable, pinyins, onPlay }) {
   );
 }
 
+/* Parses a raw search query into a toneless base (with 'v' for 'ü', same
+   convention as foldPinyinKey) plus an optional tone digit — either typed
+   directly ('ma1') or carried by a pasted toned character ('mā'). This is
+   what lets Pinyin-mode search work from a plain keyboard instead of
+   requiring literal tone marks. */
+function parseSearchQuery(raw) {
+  const folded = foldPinyinKey(raw.trim().toLowerCase());
+  let { base, tone } = folded;
+  if (!tone) {
+    const m = base.match(/^(.*?)([1-4])$/);
+    if (m) { base = m[1]; tone = m[2]; }
+  }
+  return { base, tone };
+}
+
 export default function App() {
   const [active, setActive] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [clickMode, setClickMode] = useState('Show tones');
   const [activeTab, setActiveTab] = useState('chart');
   const [searchMode, setSearchMode] = useState('syllable'); // 'syllable' | 'pinyin' | 'both'
+  const [searchResultIndex, setSearchResultIndex] = useState(-1);
   const tableWrapRef = useRef(null);
   const audioInitRef = useRef(false);
 
@@ -180,24 +201,76 @@ export default function App() {
   const cellKeys = Object.keys(CELLS);
   const totalCells = cellKeys.length;
 
-  /* Pre-compute matched cell keys — single pass, O(1) lookup per cell */
+  /* Pre-compute matched cell keys — single pass, O(1) lookup per cell.
+     Syllable mode matches the toneless spelling only. Pinyin mode matches
+     pronunciation: typing a plain "ma" ignores tone, typing "ma1" (or
+     pasting an actual "mā") requires that exact tone. Both modes accept
+     'v' for 'ü', same convention as the audio filenames. */
   const matchedKeys = useMemo(() => {
     const set = new Set();
     if (!isSearching) return set;
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return set;
+    const { base: qBase, tone: qTone } = parseSearchQuery(searchQuery);
+    if (!qBase) return set;
     for (const key of cellKeys) {
       const data = CELLS[key];
       if (!data) continue;
       if (searchMode === 'syllable' || searchMode === 'both') {
-        if (data.syl.toLowerCase().includes(q)) { set.add(key); continue; }
+        if (foldPinyinKey(data.syl).base.includes(qBase)) { set.add(key); continue; }
       }
       if (searchMode === 'pinyin' || searchMode === 'both') {
-        if (data.pins && data.pins.some(p => p && p.toLowerCase().includes(q))) { set.add(key); continue; }
+        // A tone digit means the user knows exactly which syllable+tone they
+        // want ("ma3" = mǎ), so the base has to match exactly, not just
+        // contain it — otherwise "ma3" would also pull in "mang"/"mao" cells
+        // that happen to have some 3rd-tone reading.
+        const matches = data.pins && data.pins.some(p => {
+          if (!p) return false;
+          const { base: pBase, tone: pTone } = foldPinyinKey(p);
+          const baseMatches = qTone ? pBase === qBase : pBase.includes(qBase);
+          if (!baseMatches) return false;
+          return !qTone || pTone === qTone;
+        });
+        if (matches) { set.add(key); continue; }
       }
     }
     return set;
   }, [searchQuery, searchMode, isSearching, cellKeys]);
+
+  /* Stable left-to-right, top-to-bottom order for Enter-key cycling —
+     cellKeys is already built in that order (INITIALS x FINALS), so this
+     is just filtering it down to the current matches. */
+  const matchedKeysOrdered = useMemo(
+    () => cellKeys.filter(k => matchedKeys.has(k)),
+    [cellKeys, matchedKeys]
+  );
+
+  // A new query or mode invalidates whatever match we were on.
+  useEffect(() => {
+    setSearchResultIndex(-1);
+  }, [searchQuery, searchMode]);
+
+  const currentMatchKey = searchResultIndex >= 0 ? matchedKeysOrdered[searchResultIndex] : null;
+  const [matchAnnouncement, setMatchAnnouncement] = useState('');
+
+  /* Enter: jump to the first match. Enter again: advance to the next one,
+     wrapping back to the first after the last. Deliberately does NOT move
+     DOM focus to the cell — that would steal focus out of the search input
+     and break the ability to keep pressing Enter to advance. The jump is
+     communicated visually (.cell-btn--current) and to screen readers via
+     the aria-live region below, while focus stays in the input. */
+  const goToNextMatch = useCallback(() => {
+    if (!matchedKeysOrdered.length) return;
+    const nextIndex = (searchResultIndex + 1) % matchedKeysOrdered.length;
+    setSearchResultIndex(nextIndex);
+    const key = matchedKeysOrdered[nextIndex];
+    const data = CELLS[key];
+    const el = tableWrapRef.current?.querySelector(`[data-cell-key="${key}"]`);
+    if (el) {
+      el.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' });
+    }
+    if (data) {
+      setMatchAnnouncement(`${data.syl}, match ${nextIndex + 1} of ${matchedKeysOrdered.length}`);
+    }
+  }, [matchedKeysOrdered, searchResultIndex]);
 
   return (
     <Tabs.Root className="app" value={activeTab} onValueChange={setActiveTab}>
@@ -248,6 +321,7 @@ export default function App() {
                               onTap={open}
                               isDimmed={isSearching && !matchesQuery}
                               isMatched={isSearching && matchesQuery}
+                              isCurrent={cellKey === currentMatchKey}
                               isIrregular={isIrreg}
                               groupColor={FINAL_COLOR_MAP[fin]}
                             />
@@ -291,7 +365,9 @@ export default function App() {
                 onChange={e => setSearchQuery(e.target.value)}
                 searchMode={searchMode}
                 onSearchModeChange={setSearchMode}
+                onEnter={goToNextMatch}
               />
+              <span className="sr-only" role="status" aria-live="polite">{matchAnnouncement}</span>
             </div>
           )}
           <Tabs.List className="dock-tabs" aria-label="View mode">

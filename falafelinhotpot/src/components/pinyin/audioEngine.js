@@ -88,14 +88,25 @@ const TONE_TO_NUM = {'ā':'a1','á':'a2','ǎ':'a3','à':'a4',
   'ǖ':'v1','ǘ':'v2','ǚ':'v3','ǜ':'v4',
   'ü':'v'};
 
-export function pinyinAudioSrc(py) {
+/* Folds a tone-marked pinyin string (mā, lü, xuě...) down to its base
+   letters (with 'v' standing in for 'ü', matching the "use 'v' for 'ü'"
+   search convention) plus a separate tone digit, e.g. 'mā' -> {base:'ma',
+   tone:'1'}, 'lü' -> {base:'lv', tone:''}. Shared by the audio filename
+   builder below and by the search matching in PinyinChartApp.jsx, so
+   there's exactly one place that knows how to read a toned character. */
+export function foldPinyinKey(py) {
   let s = '', t = '';
   for (const ch of py) {
     const m = TONE_TO_NUM[ch];
     if (m) { if (m[1]) { t = m[1]; s += m[0]; } else s += m; }
-    else s += ch;
+    else s += ch.toLowerCase();
   }
-  return `/audio/${s}${t}.mp3`;
+  return { base: s, tone: t };
+}
+
+export function pinyinAudioSrc(py) {
+  const { base, tone } = foldPinyinKey(py);
+  return `/audio/${base}${tone}.mp3`;
 }
 
 export function initAudio() {
