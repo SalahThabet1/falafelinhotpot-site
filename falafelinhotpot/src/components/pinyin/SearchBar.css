@@ -74,10 +74,9 @@
   color: var(--text-secondary);
 }
 
-/* ─── Clear & Filter Buttons ─── */
+/* ─── Clear Button ─── */
 
-.search-clear,
-.search-filter-toggle {
+.search-clear {
   flex-shrink: 0;
   width: 2rem;
   height: 2rem;
@@ -96,17 +95,10 @@
   opacity: 0.85;
 }
 
-.search-clear:hover,
-.search-filter-toggle:hover {
+.search-clear:hover {
   background: rgba(192, 57, 43, 0.08);
   color: var(--text-accent);
   opacity: 1;
-}
-
-.search-filter-toggle[data-state="open"] {
-  color: var(--text-accent);
-  opacity: 1;
-  background: rgba(192, 57, 43, 0.08);
 }
 
 /* ─── Hint ─── */
@@ -125,93 +117,3 @@
 }
 
 .search-bar:focus-within .search-hint { opacity: 0.6; }
-
-/* ─── Options Panel — Glass Popover ─── */
-
-.search-options-panel {
-  /* Above the site Nav (100). */
-  z-index: 110;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-  box-shadow: var(--glass-shadow-lg);
-  padding: 0.6rem 0.7rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-  animation: popover-in 0.2s var(--anim-ease-out);
-}
-
-.search-options-panel:focus {
-  outline: none;
-}
-
-@keyframes popover-in {
-  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
-}
-
-.search-options-section {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.search-options-label {
-  flex-shrink: 0;
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  font-weight: 450;
-  color: var(--text-secondary);
-  min-width: 4.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.search-options-group {
-  flex: 1;
-  display: flex;
-  gap: 0.3rem;
-}
-
-.search-options-desc {
-  margin: 0.4rem 0 0;
-  padding-top: 0.4rem;
-  border-top: 1px solid var(--border-color);
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  line-height: 1.4;
-  color: var(--text-secondary);
-}
-
-.search-option-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.55rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.4);
-  color: var(--text-secondary);
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  -webkit-tap-highlight-color: transparent;
-  white-space: nowrap;
-}
-
-.search-option-pill:hover {
-  border-color: var(--highlight-border);
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.6);
-}
-
-.search-option-pill.active {
-  border-color: var(--text-accent);
-  color: var(--text-accent);
-  background: rgba(192, 57, 43, 0.06);
-  font-weight: 500;
-}
