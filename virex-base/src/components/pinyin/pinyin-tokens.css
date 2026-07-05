@@ -120,13 +120,13 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
+  /* Grid lines only — no radial-gradient blobs. Also cheaper to paint: a
+     fixed-size repeating pattern instead of 3 large gradients recalculated
+     across the full page. */
   background:
     linear-gradient(rgba(196, 168, 130, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196, 168, 130, 0.1) 1px, transparent 1px),
-    radial-gradient(ellipse at 20% 50%, rgba(196, 168, 130, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(195, 154, 60, 0.08) 0%, transparent 40%),
-    radial-gradient(ellipse at 50% 80%, rgba(192, 57, 43, 0.04) 0%, transparent 50%);
-  background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
+    linear-gradient(90deg, rgba(196, 168, 130, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px;
 }
 
 .pinyin-page ::selection {

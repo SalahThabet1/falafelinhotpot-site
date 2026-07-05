@@ -53,8 +53,8 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   background: var(--glass-bg);
-  backdrop-filter: blur(16px) saturate(1.3);
-  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .lp-toc-list {
@@ -117,8 +117,8 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   background: var(--glass-bg);
-  backdrop-filter: blur(16px) saturate(1.3);
-  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   scroll-margin-top: 4rem;
 }
@@ -206,8 +206,8 @@
 /* ── Callout ── */
 .lp-callout {
   background: var(--glass-bg);
-  backdrop-filter: blur(16px) saturate(1.3);
-  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid color-mix(in srgb, var(--text-accent) 25%, var(--border-color));
   border-radius: var(--radius);
   padding: 0.7rem 0.9rem;
@@ -425,8 +425,8 @@
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -506,8 +506,8 @@
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .irreg-group-head {
@@ -581,9 +581,11 @@
   padding: 0.65rem 0.75rem;
   border: 1px solid color-mix(in srgb, var(--tone-color) 30%, var(--border-color));
   border-radius: var(--radius);
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  /* No backdrop-filter — there are 5 of these in a row, and blurring each
+     one independently is exactly the "many small blurred elements"
+     anti-pattern this app's own .row-head already avoids for the same
+     reason. A solid tint carries the card affordance just as well here. */
+  background: var(--bg-secondary);
   font-size: 0.92rem;
   transition: border-color 0.2s ease, background 0.2s ease;
 }
