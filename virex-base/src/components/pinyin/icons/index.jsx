@@ -17,4 +17,5 @@ export {
   AlertTriangle as IconAlert,
   TrendingUp as IconTrending,
   RefreshCw as IconRefresh,
+  Waypoints as IconSoundMap,
 } from 'lucide-react';

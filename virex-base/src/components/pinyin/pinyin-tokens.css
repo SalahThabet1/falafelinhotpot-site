@@ -7,26 +7,35 @@
    to declare globally. Tailwind preflight (loaded once via global.css)
    already handles box-sizing/margin/padding resets — not duplicated here. */
 :root {
-  --red: #C0392B;
-  --red-bright: #C0392B;
+  /* Aliased to this site's actual Neo-Chinese Editorial tokens (design.md) —
+     values were already near-identical; this makes them the same source. */
+  --red: var(--color-cinnabar, #9B1B15);
+  --red-bright: var(--color-cinnabar, #9B1B15);
   --sand: #C4A882;
   --sand-light: #D9C5A8;
-  --ink: #1C1C1C;
-  --gold: #C39A3C;
+  --ink: var(--color-ink, #2C2C2A);
+  --gold: var(--color-gold, #C39A3C);
+  --card-border: rgba(213, 194, 165, 0.5); /* border-xuan-300/50, design.md 5C */
 
-  --bg-primary: #F5EDE0;
-  --bg-secondary: #EDE4D4;
+  --bg-primary: var(--color-xuan-100, #F5ECE0);
+  --bg-secondary: var(--color-xuan-200, #EEDBB6);
   --bg-card: rgba(255, 255, 255, 0.55);
   --bg-card-solid: #FFFFFF;
   --bg-hover: rgba(196, 168, 130, 0.12);
-  --text-primary: #1C1C1C;
-  --text-secondary: #8B7D72;
-  --text-accent: #C0392B;
-  --tone-1: #C0392B;
-  --tone-2: #27AE60;
-  --tone-3: #2980B9;
+  --text-primary: var(--ink);
+  /* Darkened from #8B7D72 to clear 4.5:1 against --bg-primary (WCAG 1.4.3) —
+     the raw value was only 3.4:1 and this token is used as body/caption text
+     throughout the app, frequently with additional opacity layered on top. */
+  --text-secondary: #74685F;
+  --text-accent: var(--red);
+  --tone-1: var(--red);
+  /* Darkened from #27AE60 (2.46:1) to #1B7A43 (4.62:1) — used as text color
+     for tone marks/numbers, not just as a swatch. */
+  --tone-2: #1B7A43;
+  --tone-3: #2470A2;
   --tone-4: #8E44AD;
-  --tone-neutral: #999999;
+  /* Darkened from #999999 (2.44:1) to #6A6A6A (4.62:1). */
+  --tone-neutral: #6A6A6A;
   --border-color: rgba(196, 168, 130, 0.25);
   --radius: 10px;
 
@@ -40,9 +49,10 @@
   --anim-duration-normal: 0.25s;
   --anim-duration-slow: 0.35s;
   --anim-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --anim-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Snappier deceleration for sheet/modal slide-ins — replaces the elastic
+     easing this used to be (--anim-spring). */
+  --anim-ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --anim-ease: cubic-bezier(0.4, 0, 0.2, 1);
-  --anim-scale: 1;
 
   --highlight-bg: rgba(192, 57, 43, 0.08);
   --highlight-border: rgba(192, 57, 43, 0.3);
@@ -51,20 +61,72 @@
   --glass-bg: rgba(255, 255, 255, 0.45);
   --glass-bg-strong: rgba(255, 255, 255, 0.65);
   --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-shadow: 0 4px 24px rgba(139, 109, 78, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
-  --glass-shadow-lg: 0 8px 40px rgba(139, 109, 78, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  /* design.md 5C formula — flat content cards get only a faint, tight shadow. */
+  --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  /* Modals/popups only — kept more pronounced so they still read as floating
+     above the page, ambient-tinted (never generic black) per design.md. */
+  --glass-shadow-lg: 0 20px 50px rgba(43, 32, 20, 0.18), 0 4px 14px rgba(43, 32, 20, 0.08);
 }
 
+/* Reduced motion — no CSS property in this app reads a "scale" variable, so
+   turning motion off has to happen at the transition/animation level itself,
+   not through a token nothing consumes. Scoped to the page and to the Radix
+   portals (Dialog/Popover mount to document.body as siblings of .pinyin-page,
+   same reasoning as the focus-visible rules below). */
 @media (prefers-reduced-motion: reduce) {
-  :root { --anim-scale: 0; }
+  .pinyin-page *,
+  .pinyin-page *::before,
+  .pinyin-page *::after,
+  [data-radix-popper-content-wrapper],
+  [data-radix-popper-content-wrapper] *,
+  .tpop-overlay, .tpop-overlay *,
+  .tpop-modal, .tpop-modal *,
+  .overlay, .overlay *,
+  .sheet, .sheet * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ===== Scoped base styles — page-local, not global `body` ===== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .pinyin-page {
   font-family: var(--font-sans);
   font-weight: 300;
   color: var(--text-primary);
   line-height: 1.6;
+}
+
+/* Restored grid + paper-grain background from the original standalone app,
+   scoped to this page only (was global `body::before` pre-migration). The
+   app content is a later sibling in the DOM so it paints above this without
+   needing an explicit z-index on every child. */
+.pinyin-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(rgba(196, 168, 130, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 168, 130, 0.1) 1px, transparent 1px),
+    radial-gradient(ellipse at 20% 50%, rgba(196, 168, 130, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(195, 154, 60, 0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 80%, rgba(192, 57, 43, 0.04) 0%, transparent 50%);
+  background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
 }
 
 .pinyin-page ::selection {
@@ -85,7 +147,7 @@
 }
 
 .pinyin-page .search-input:focus-visible { outline: 2px solid var(--text-accent); outline-offset: -2px; border-radius: 4px; }
-.pinyin-page .tab-btn:focus-visible { outline-offset: -2px; }
+.pinyin-page .dock-btn:focus-visible { outline-offset: -2px; }
 .pinyin-page .cell-btn:focus-visible { outline: 2px solid var(--text-accent); outline-offset: -2px; border-radius: 4px; }
 .pinyin-page .tone-btn:focus-visible,
 .pinyin-page .mode-btn:focus-visible,
