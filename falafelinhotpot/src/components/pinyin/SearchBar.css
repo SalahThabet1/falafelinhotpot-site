@@ -15,7 +15,6 @@
   border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   transition: all 0.25s var(--anim-ease-out);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 }
 
 .search-bar:hover {
@@ -26,7 +25,7 @@
 .search-bar:focus-within {
   background: rgba(255, 255, 255, 0.7);
   border-color: var(--text-accent);
-  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.08), 0 2px 12px rgba(192, 57, 43, 0.06);
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.08);
 }
 
 /* ─── Search Icon ─── */
@@ -36,14 +35,16 @@
   display: grid;
   place-items: center;
   color: var(--text-secondary);
-  opacity: 0.5;
+  /* 0.85, not the 0.5 it used to be — a non-text UI icon still needs 3:1
+     against its background (WCAG 1.4.11), and 0.5 landed under 2:1 here. */
+  opacity: 0.85;
   pointer-events: none;
   transition: opacity 0.2s ease;
   line-height: 1;
 }
 
 .search-bar:focus-within .search-icon {
-  opacity: 0.85;
+  opacity: 1;
 }
 
 /* ─── Input ─── */
@@ -65,13 +66,10 @@
 }
 
 .search-input::placeholder {
+  /* Placeholder text needs the same 4.5:1 as any other text (WCAG 1.4.3) —
+     opacity used to fade it to ~2:1. --text-secondary alone already reads
+     as secondary next to --text-primary, so no extra fade is applied. */
   color: var(--text-secondary);
-  opacity: 0.6;
-  transition: opacity 0.2s ease;
-}
-
-.search-input:focus::placeholder {
-  opacity: 0.35;
 }
 
 /* ─── Clear & Filter Buttons ─── */
@@ -92,7 +90,8 @@
   line-height: 1;
   transition: all 0.15s ease;
   -webkit-tap-highlight-color: transparent;
-  opacity: 0.5;
+  /* 0.85, not 0.5 — icon-only buttons still need 3:1 non-text contrast. */
+  opacity: 0.85;
 }
 
 .search-clear:hover,
@@ -115,15 +114,15 @@
   font-family: var(--font-sans);
   font-size: 0.7rem;
   font-weight: 400;
+  /* Real text — no opacity fade (it used to sit under 2.5:1 at 0.5). */
   color: var(--text-secondary);
-  opacity: 0.5;
   letter-spacing: 0.02em;
   white-space: nowrap;
   pointer-events: none;
   transition: opacity 0.2s ease;
 }
 
-.search-bar:focus-within .search-hint { opacity: 0.25; }
+.search-bar:focus-within .search-hint { opacity: 0.6; }
 
 /* ─── Options Panel — Glass Popover ─── */
 

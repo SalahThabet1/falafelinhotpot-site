@@ -9,7 +9,7 @@ import TonePairBoard from './TonePairBoard';
 import LearnSection from './LearnSection';
 import { FINAL_GROUPS, INITIAL_GROUPS } from './finalsGroups';
 import irregulars from './irregulars.json';
-import { IconInfo, IconTable, IconRefresh, IconBook } from './icons';
+import { IconInfo, IconTable, IconSoundMap, IconBook } from './icons';
 import { initAudio, unlockAudio, playAudio, stopAudio, preloadBatch } from './audioEngine';
 import ShimmerBorder from './components/ShimmerBorder';
 import './App.css';
@@ -300,29 +300,10 @@ export default function App() {
 
   return (
     <Tabs.Root className="app" value={activeTab} onValueChange={setActiveTab}>
-        <Tabs.List className="tab-bar" aria-label="View mode">
-          <Tabs.Trigger className="tab-btn" value="chart">
-            <IconTable size={14} />
-            Sound Table
-          </Tabs.Trigger>
-          <Tabs.Trigger className="tab-btn" value="pairs">
-            <IconRefresh size={14} />
-            The Sound Map
-          </Tabs.Trigger>
-          <Tabs.Trigger className="tab-btn" value="learn">
-            <IconBook size={14} />
-            Learn
-          </Tabs.Trigger>
-        </Tabs.List>
+        <h1 className="sr-only">Pinyin Chart</h1>
 
         <Tabs.Content className="tab-content" value="chart" forceMount={false}>
-            <div className="controls-bar">
-              <SearchBar
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                searchMode={searchMode}
-                onSearchModeChange={setSearchMode}
-              />
+            <div className="mode-bar">
               <ClickModeSwitch mode={clickMode} onChange={setClickMode} />
             </div>
 
@@ -403,6 +384,33 @@ export default function App() {
           <p className="lp-footer-copy">
             All rights reserved &middot; &copy; falafelinhotpot.com
           </p>
+        </div>
+
+        <div className="dock">
+          {activeTab === 'chart' && (
+            <div className="dock-context">
+              <SearchBar
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                searchMode={searchMode}
+                onSearchModeChange={setSearchMode}
+              />
+            </div>
+          )}
+          <Tabs.List className="dock-tabs" aria-label="View mode">
+            <Tabs.Trigger className="dock-btn dock-btn--chart" value="chart">
+              <IconTable size={14} />
+              Sound Table
+            </Tabs.Trigger>
+            <Tabs.Trigger className="dock-btn dock-btn--pairs" value="pairs">
+              <IconSoundMap size={14} />
+              The Sound Map
+            </Tabs.Trigger>
+            <Tabs.Trigger className="dock-btn dock-btn--learn" value="learn">
+              <IconBook size={14} />
+              Learn
+            </Tabs.Trigger>
+          </Tabs.List>
         </div>
 
         <Dialog.Root open={!!active} onOpenChange={open => { if (!open) close(); }}>
