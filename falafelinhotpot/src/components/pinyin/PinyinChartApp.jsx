@@ -9,7 +9,7 @@ import TonePairBoard from './TonePairBoard';
 import LearnSection from './LearnSection';
 import { FINAL_GROUPS, INITIAL_GROUPS } from './finalsGroups';
 import irregulars from './irregulars.json';
-import { IconInfo, IconTable, IconSoundMap, IconBook } from './icons';
+import { IconTable, IconSoundMap, IconBook } from './icons';
 import { initAudio, unlockAudio, playAudio, stopAudio, preloadBatch, pinyinAudioSrc } from './audioEngine';
 import ShimmerBorder from './components/ShimmerBorder';
 import './App.css';
@@ -109,87 +109,6 @@ function ToneSheetContent({ syllable, pinyins, onPlay }) {
   );
 }
 
-/* ── Irregular groupings by phonetic category ── */
-const IRREG_GROUPS = [
-  {
-    label: 'Apical Vowels (舌尖音)',
-    desc: 'The letter "i" sounds completely different — no front vowel, just a sustained buzz.',
-    keys: ['zi', 'ci', 'si', 'zhi', 'chi', 'shi', 'ri'],
-  },
-  {
-    label: 'Ü Rule — Written "u", Spoken "ü"',
-    desc: 'After j, q, x and y, the letter "u" represents the rounded front vowel [y]. The umlaut is omitted in writing.',
-    keys: ['ju', 'qu', 'xu', 'juan', 'quan', 'xuan', 'jun', 'qun', 'xun', 'jue', 'que', 'xue', 'yuan', 'yue', 'yun'],
-  },
-  {
-    label: 'Vowel Shifts',
-    desc: 'Letters "e" and "a" take unexpected values in certain environments.',
-    keys: ['ye', 'yan', 'yin', 'ying'],
-  },
-  {
-    label: 'Hidden Glides',
-    desc: 'Compound finals conceal an extra vowel that surfaces in careful speech.',
-    keys: ['iu', 'ui', 'un'],
-  },
-  {
-    label: 'Labial + "o" → [wo]',
-    desc: 'A [w] glide is inserted between labial initials and "o".',
-    keys: ['bo', 'po', 'mo', 'fo', 'lo', 'yo'],
-  },
-  {
-    label: 'Eng as [əŋ]',
-    desc: 'The "eng" final uses a schwa [ə], not a front [e].',
-    keys: ['beng', 'peng', 'weng', 'yong'],
-  },
-  {
-    label: 'Syllabic Nasals',
-    desc: 'Standalone nasal consonants — no vowel at all.',
-    keys: ['m', 'n', 'ng', 'hm', 'hng'],
-  },
-  {
-    label: 'Rare / Exceptional',
-    desc: 'Syllables that break standard initial-final constraints.',
-    keys: ['dia', 'nun', 'bia'],
-  },
-];
-
-/* ── Irregular group card ── */
-function IrregularGroupCard({ group }) {
-  return (
-    <div className="btm-irreg-group">
-      <h4 className="btm-irreg-head">{group.label}</h4>
-      <p className="btm-irreg-desc">{group.desc}</p>
-      <div className="btm-irreg-rows">
-        {group.keys.map(k => (
-          <div key={k} className="btm-irreg-row">
-            <code className="btm-irreg-syl">{k}</code>
-            <span className="btm-irreg-exp">{irregulars[k]}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ── Irregular section below Sound Table ── */
-function IrregularCard() {
-  return (
-    <div className="btm-irreg-wrap">
-      <h3 className="btm-irreg-title">
-        <IconInfo size={16} />
-        Irregular Pronunciations
-      </h3>
-      <p className="btm-irreg-sub">
-        Syllables that break the expected sound rules from their spelling, grouped by phonetic theme.
-      </p>
-      {IRREG_GROUPS.map(g => (
-        <IrregularGroupCard key={g.label} group={g} />
-      ))}
-    </div>
-  );
-}
-
-/* ── App ── */
 export default function App() {
   const [active, setActive] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -343,10 +262,6 @@ export default function App() {
                   Matched <strong>{matchedKeys.size || totalCells}</strong> / {totalCells} syllables
                 </div>
               )}
-            </div>
-
-            <div className="irreg-section">
-              <IrregularCard />
             </div>
         </Tabs.Content>
 
