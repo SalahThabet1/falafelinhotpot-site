@@ -1,6 +1,10 @@
 /* ===== Learn Page (full tab, blog style) ===== */
 .learn-page {
-  background: var(--bg-primary);
+  /* Matches the glass cards' own blended tone (45% white over --bg-primary)
+     instead of the plain page color — otherwise the header/dividers (no
+     card behind them) read visibly darker than every card, a two-tone
+     jump down the page. */
+  background: color-mix(in srgb, white 45%, var(--bg-primary));
   padding: 0 1rem 3rem;
   min-height: 60vh;
 }
