@@ -1,9 +1,18 @@
 /* ===== Layout ===== */
 .app {
-  min-height: calc(100vh - var(--nav-height, 60px));
-  min-height: calc(100dvh - var(--nav-height, 60px));
+  /* Full viewport height, not (100dvh - nav-height) — padding-top below
+     already carves the nav-height out of this box (border-box), so the
+     content area still ends up exactly (100dvh - nav-height) tall. */
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  /* On mobile the top tab bar moved into the bottom dock, so nothing at the
+     top of .app is sticky anymore to naturally clear the site's fixed Nav
+     the way it used to. Without this, .mode-bar renders at y:0, hidden
+     underneath the Nav. Desktop's .dock is still sticky at the top and
+     provides its own clearance, so both of these are reset there. */
+  padding-top: var(--nav-height, 60px);
 }
 
 /* ===== Bottom Dock (mobile) / Top Tab Bar (desktop) — Frosted Glass =====
@@ -157,6 +166,12 @@
 
 /* ===== Desktop (≥768px): dock reverts to the original top tab bar ===== */
 @media (min-width: 768px) {
+  .app {
+    min-height: calc(100vh - var(--nav-height, 60px));
+    min-height: calc(100dvh - var(--nav-height, 60px));
+    padding-top: 0;
+  }
+
   .dock {
     position: sticky;
     /* Dock below the site's fixed Nav instead of hiding behind it — this has

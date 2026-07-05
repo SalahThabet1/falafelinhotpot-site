@@ -152,9 +152,7 @@
 .pinyin-page .tone-btn:focus-visible,
 .pinyin-page .mode-btn:focus-visible,
 .pinyin-page .sheet-close:focus-visible,
-.pinyin-page .search-clear:focus-visible,
-.pinyin-page .search-filter-toggle:focus-visible,
-.pinyin-page .search-option-pill:focus-visible { outline-offset: 0px; }
+.pinyin-page .search-clear:focus-visible { outline-offset: 0px; }
 
 /* Radix portals (Dialog/Popover) mount to document.body as siblings of
    .pinyin-page — re-apply the focus-visible + selection rules there too. */

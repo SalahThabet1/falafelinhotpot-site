@@ -7,8 +7,6 @@ export {
   Volume2 as IconSpeaker,
   X as IconClose,
   ChevronDown as IconChevronDown,
-  SlidersHorizontal as IconFilter,
-  Check as IconCheck,
   Music as IconMusic,
   Puzzle as IconPuzzle,
   BookOpen as IconBook,

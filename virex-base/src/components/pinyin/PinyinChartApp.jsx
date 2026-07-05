@@ -114,27 +114,11 @@ function ToneSheetContent({ syllable, pinyins, onPlay }) {
   );
 }
 
-/* Parses a raw search query into a toneless base (with 'v' for 'ü', same
-   convention as foldPinyinKey) plus an optional tone digit — either typed
-   directly ('ma1') or carried by a pasted toned character ('mā'). This is
-   what lets Pinyin-mode search work from a plain keyboard instead of
-   requiring literal tone marks. */
-function parseSearchQuery(raw) {
-  const folded = foldPinyinKey(raw.trim().toLowerCase());
-  let { base, tone } = folded;
-  if (!tone) {
-    const m = base.match(/^(.*?)([1-4])$/);
-    if (m) { base = m[1]; tone = m[2]; }
-  }
-  return { base, tone };
-}
-
 export default function App() {
   const [active, setActive] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [clickMode, setClickMode] = useState('Show tones');
   const [activeTab, setActiveTab] = useState('chart');
-  const [searchMode, setSearchMode] = useState('syllable'); // 'syllable' | 'pinyin' | 'both'
   const [searchResultIndex, setSearchResultIndex] = useState(-1);
   const tableWrapRef = useRef(null);
   const audioInitRef = useRef(false);
@@ -202,38 +186,21 @@ export default function App() {
   const totalCells = cellKeys.length;
 
   /* Pre-compute matched cell keys — single pass, O(1) lookup per cell.
-     Syllable mode matches the toneless spelling only. Pinyin mode matches
-     pronunciation: typing a plain "ma" ignores tone, typing "ma1" (or
-     pasting an actual "mā") requires that exact tone. Both modes accept
-     'v' for 'ü', same convention as the audio filenames. */
+     Matches the toneless spelling only. Still accepts 'v' for 'ü' (same
+     convention as the audio filenames) since several syllables (lü, nü...)
+     are spelled with an umlaut that isn't on a normal keyboard. */
   const matchedKeys = useMemo(() => {
     const set = new Set();
     if (!isSearching) return set;
-    const { base: qBase, tone: qTone } = parseSearchQuery(searchQuery);
+    const qBase = foldPinyinKey(searchQuery.trim().toLowerCase()).base;
     if (!qBase) return set;
     for (const key of cellKeys) {
       const data = CELLS[key];
       if (!data) continue;
-      if (searchMode === 'syllable' || searchMode === 'both') {
-        if (foldPinyinKey(data.syl).base.includes(qBase)) { set.add(key); continue; }
-      }
-      if (searchMode === 'pinyin' || searchMode === 'both') {
-        // A tone digit means the user knows exactly which syllable+tone they
-        // want ("ma3" = mǎ), so the base has to match exactly, not just
-        // contain it — otherwise "ma3" would also pull in "mang"/"mao" cells
-        // that happen to have some 3rd-tone reading.
-        const matches = data.pins && data.pins.some(p => {
-          if (!p) return false;
-          const { base: pBase, tone: pTone } = foldPinyinKey(p);
-          const baseMatches = qTone ? pBase === qBase : pBase.includes(qBase);
-          if (!baseMatches) return false;
-          return !qTone || pTone === qTone;
-        });
-        if (matches) { set.add(key); continue; }
-      }
+      if (foldPinyinKey(data.syl).base.includes(qBase)) set.add(key);
     }
     return set;
-  }, [searchQuery, searchMode, isSearching, cellKeys]);
+  }, [searchQuery, isSearching, cellKeys]);
 
   /* Stable left-to-right, top-to-bottom order for Enter-key cycling —
      cellKeys is already built in that order (INITIALS x FINALS), so this
@@ -243,10 +210,10 @@ export default function App() {
     [cellKeys, matchedKeys]
   );
 
-  // A new query or mode invalidates whatever match we were on.
+  // A new query invalidates whatever match we were on.
   useEffect(() => {
     setSearchResultIndex(-1);
-  }, [searchQuery, searchMode]);
+  }, [searchQuery]);
 
   const currentMatchKey = searchResultIndex >= 0 ? matchedKeysOrdered[searchResultIndex] : null;
   const [matchAnnouncement, setMatchAnnouncement] = useState('');
@@ -363,8 +330,6 @@ export default function App() {
               <SearchBar
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                searchMode={searchMode}
-                onSearchModeChange={setSearchMode}
                 onEnter={goToNextMatch}
               />
               <span className="sr-only" role="status" aria-live="polite">{matchAnnouncement}</span>
