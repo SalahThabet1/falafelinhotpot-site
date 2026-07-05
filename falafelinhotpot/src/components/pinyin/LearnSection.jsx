@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { FINAL_GROUPS } from './finalsGroups';
 import irregulars from './irregulars.json';
 import {
   IconMusic, IconPuzzle, IconBook,
   IconTable, IconTarget, IconAlert,
-  IconTrending, IconRefresh
+  IconTrending, IconRefresh, IconPlay, IconSpeaker
 } from './icons';
+import { unlockAudio, playAudio, stopAudio, pinyinAudioSrc } from './audioEngine';
 import './LearnSection.css';
+
+/* Light haptic feedback for mobile — same trivial helper duplicated
+   per-component elsewhere in this app (PinyinChartApp.jsx, TonePairBoard.jsx). */
+function hapticFeedback() {
+  try {
+    if (navigator.vibrate) navigator.vibrate(10);
+  } catch (_) {}
+}
 
 /* ── Irregular groupings by phonetic category ── */
 const IRREG_GROUPS = [
@@ -51,6 +60,28 @@ const IRREG_GROUPS = [
     keys: ['dia', 'nun', 'bia'],
   },
 ];
+
+/* A few IRREG_GROUPS keys aren't themselves playable full syllables (bare
+   finals with no initial, or standalone nasal interjections) — these map to
+   a representative full syllable from the main chart that demonstrates the
+   same sound instead. `bia` has no confirmed audio and no honest substitute
+   (it IS the specific rare form being taught), so it's omitted entirely
+   rather than pointed at an unrelated syllable. */
+const IRREG_AUDIO_OVERRIDES = {
+  ui: 'hui',
+  un: 'dun',
+  m: 'ma',
+  n: 'na',
+  ng: 'dang',
+  hm: 'ha',
+  hng: 'hang',
+  bia: null,
+};
+
+function irregExampleFor(key) {
+  if (key in IRREG_AUDIO_OVERRIDES) return IRREG_AUDIO_OVERRIDES[key];
+  return key;
+}
 
 const TOC_ITEMS = [
   { id: 'tones-glance', label: 'The Four Tones', icon: IconMusic },
@@ -175,7 +206,11 @@ function FinalsTable() {
           {FINAL_GROUPS.map(g => (
             <tr key={g.label}>
               <td className="ft-group">{g.label}</td>
-              <td className="ft-finals">{g.finals.join(' • ')}</td>
+              <td className="ft-finals">
+                {g.finals.map(f => (
+                  <span key={f} className="ft-chip">{f}</span>
+                ))}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -185,19 +220,26 @@ function FinalsTable() {
 }
 
 /* ── Pronunciation group card ── */
-function PronGroup({ icon: IconComp, title, rows }) {
+function PronGroup({ icon: IconComp, title, rows, playingKey, onPlay }) {
   return (
     <div className="pron-group">
-      <div className="pron-group-head">
+      <h4 className="pron-group-head">
         {IconComp && <IconComp size={18} />}
         <span className="pron-title">{title}</span>
-      </div>
+      </h4>
       <div className="pron-group-rows">
         {rows.map(r => (
           <div key={r.code} className="pron-row">
             <code className="pron-code">{r.code}</code>
             <span className="pron-desc">{r.desc}</span>
             {r.aspiration && <span className="pron-asp">{r.aspiration}</span>}
+            {r.example && (
+              <ListenButton
+                active={playingKey === `pron-${r.code}`}
+                onClick={() => onPlay(`pron-${r.code}`, pinyinAudioSrc(r.example))}
+                label={`Play ${r.example}`}
+              />
+            )}
           </div>
         ))}
       </div>
@@ -206,7 +248,7 @@ function PronGroup({ icon: IconComp, title, rows }) {
 }
 
 /* ── Tone Demo Row ── */
-function ToneDemoRow({ mark, num, label, example, meaning, color }) {
+function ToneDemoRow({ mark, num, label, example, meaning, color, isPlaying, onPlay }) {
   return (
     <div className="tone-demo-row" style={{ '--tone-color': color }}>
       <span className="tone-demo-mark">{mark}</span>
@@ -214,30 +256,73 @@ function ToneDemoRow({ mark, num, label, example, meaning, color }) {
       <span className="tone-demo-label">{label}</span>
       <span className="tone-demo-example">{example}</span>
       <span className="tone-demo-meaning">{meaning}</span>
+      <ListenButton active={isPlaying} onClick={onPlay} label={`Play ${example}`} />
     </div>
   );
 }
 
 /* ── Irregular group display ── */
-function IrregularGroup({ group }) {
+function IrregularGroup({ group, playingKey, onPlay }) {
   return (
     <div className="irreg-group-card">
       <h4 className="irreg-group-head">{group.label}</h4>
       <p className="irreg-group-desc">{group.desc}</p>
       <div className="irreg-group-rows">
-        {group.keys.map(k => (
-          <div key={k} className="irreg-row">
-            <code className="irreg-syl">{k}</code>
-            <span className="irreg-exp">{irregulars[k]}</span>
-          </div>
-        ))}
+        {group.keys.map(k => {
+          const example = irregExampleFor(k);
+          return (
+            <div key={k} className="irreg-row">
+              <code className="irreg-syl">{k}</code>
+              <span className="irreg-exp">{irregulars[k]}</span>
+              {example && (
+                <ListenButton
+                  active={playingKey === `irreg-${k}`}
+                  onClick={() => onPlay(`irreg-${k}`, `/audio/${example}1.mp3`)}
+                  label={`Play ${example}`}
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
+/* ── Listen button — mirrors TonePairBoard.jsx's .tpop-play pattern exactly:
+   a single "now playing" key lives in the parent (audioEngine only supports
+   one playing clip at a time), tapping the active button again stops it,
+   and onEnded auto-clears the state when a clip finishes naturally. ── */
+function ListenButton({ active, onClick, label }) {
+  return (
+    <button
+      type="button"
+      className={`lp-listen-btn${active ? ' lp-listen-btn--active' : ''}`}
+      onClick={onClick}
+      aria-label={label}
+    >
+      {active ? <IconSpeaker size={16} /> : <IconPlay size={16} />}
+    </button>
+  );
+}
+
 /* ── Main Learn Component ── */
 export default function LearnSection() {
+  const [playingKey, setPlayingKey] = useState(null);
+
+  const handlePlay = useCallback((key, src) => {
+    hapticFeedback();
+    unlockAudio();
+    if (playingKey === key) {
+      stopAudio();
+      setPlayingKey(null);
+      return;
+    }
+    setPlayingKey(key);
+    stopAudio();
+    playAudio(src, () => setPlayingKey(null)).catch(() => setPlayingKey(null));
+  }, [playingKey]);
+
   return (
     <div className="learn-page">
       <div className="learn-page-inner">
@@ -319,29 +404,35 @@ export default function LearnSection() {
             <PronGroup
               icon={IconBook}
               title="Alveolo-palatal (j / q / x)"
+              playingKey={playingKey}
+              onPlay={handlePlay}
               rows={[
-                { code: 'j', desc: 'unaspirated, like "jeep" with flatter tongue', aspiration: 'no puff' },
-                { code: 'q', desc: 'aspirated, strong puff of air', aspiration: 'strong puff' },
-                { code: 'x', desc: 'like "sheep" with tongue raised to palate', aspiration: '—' },
+                { code: 'j', desc: 'unaspirated, like "jeep" with flatter tongue', aspiration: 'no puff', example: 'jī' },
+                { code: 'q', desc: 'aspirated, strong puff of air', aspiration: 'strong puff', example: 'qī' },
+                { code: 'x', desc: 'like "sheep" with tongue raised to palate', aspiration: '—', example: 'xī' },
               ]}
             />
             <PronGroup
               icon={IconBook}
               title="Retroflex (zh / ch / sh / r)"
+              playingKey={playingKey}
+              onPlay={handlePlay}
               rows={[
-                { code: 'zh', desc: 'unaspirated, like "j" with curled tongue', aspiration: 'no puff' },
-                { code: 'ch', desc: 'aspirated, like "church" with curled tongue', aspiration: 'strong puff' },
-                { code: 'sh', desc: 'like "shirt" with curled tongue tip', aspiration: '—' },
-                { code: 'r', desc: 'voiced counterpart of sh, like "rain"', aspiration: '—' },
+                { code: 'zh', desc: 'unaspirated, like "j" with curled tongue', aspiration: 'no puff', example: 'zhī' },
+                { code: 'ch', desc: 'aspirated, like "church" with curled tongue', aspiration: 'strong puff', example: 'chī' },
+                { code: 'sh', desc: 'like "shirt" with curled tongue tip', aspiration: '—', example: 'shī' },
+                { code: 'r', desc: 'voiced counterpart of sh, like "rain"', aspiration: '—', example: 'rī' },
               ]}
             />
             <PronGroup
               icon={IconBook}
               title="Dental / Flat (z / c / s)"
+              playingKey={playingKey}
+              onPlay={handlePlay}
               rows={[
-                { code: 'z', desc: 'unaspirated, like "dz" in "adze"', aspiration: 'no puff' },
-                { code: 'c', desc: 'aspirated, like "ts" in "cats"', aspiration: 'strong puff' },
-                { code: 's', desc: 'like "s" in "see"', aspiration: '—' },
+                { code: 'z', desc: 'unaspirated, like "dz" in "adze"', aspiration: 'no puff', example: 'zī' },
+                { code: 'c', desc: 'aspirated, like "ts" in "cats"', aspiration: 'strong puff', example: 'cī' },
+                { code: 's', desc: 'like "s" in "see"', aspiration: '—', example: 'sī' },
               ]}
             />
           </div>
@@ -361,7 +452,7 @@ export default function LearnSection() {
             all visible, no toggles.
           </p>
           {IRREG_GROUPS.map(g => (
-            <IrregularGroup key={g.label} group={g} />
+            <IrregularGroup key={g.label} group={g} playingKey={playingKey} onPlay={handlePlay} />
           ))}
         </section>
 
@@ -384,7 +475,12 @@ export default function LearnSection() {
               { mark: 'ˇ', num: '3rd', label: 'dipping', example: 'mǎ', meaning: 'horse', color: 'var(--tone-3)' },
               { mark: 'ˋ', num: '4th', label: 'falling', example: 'mà', meaning: 'scold', color: 'var(--tone-4)' },
             ].map(t => (
-              <ToneDemoRow key={t.num} {...t} />
+              <ToneDemoRow
+                key={t.num}
+                {...t}
+                isPlaying={playingKey === `tone-${t.example}`}
+                onPlay={() => handlePlay(`tone-${t.example}`, pinyinAudioSrc(t.example))}
+              />
             ))}
           </div>
           <p className="lp-body">
