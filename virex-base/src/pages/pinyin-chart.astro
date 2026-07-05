@@ -1,0 +1,32 @@
+---
+import FihLayout from '~/layouts/FihLayout.astro';
+import PinyinChartApp from '~/components/pinyin/PinyinChartApp.jsx';
+
+import '~/components/pinyin/pinyin-tokens.css';
+import '~/components/pinyin/App.css';
+import '~/components/pinyin/SearchBar.css';
+import '~/components/pinyin/ClickModeSwitch.css';
+import '~/components/pinyin/LearnSection.css';
+import '~/components/pinyin/TonePairBoard.css';
+import '~/components/pinyin/components/SoundCell.css';
+import '~/components/pinyin/components/ToneSheet.css';
+
+const metadata = {
+  title: 'Pinyin Chart',
+  description:
+    'Interactive Mandarin Pinyin chart — explore every syllable with native audio, tone practice, tone-pair drills, and a full pronunciation guide.',
+};
+---
+
+<FihLayout metadata={metadata} hideFooter>
+  <div class="pinyin-page">
+    <PinyinChartApp client:load />
+  </div>
+</FihLayout>
+
+<style>
+  .pinyin-page {
+    position: relative;
+    min-height: 100dvh;
+  }
+</style>

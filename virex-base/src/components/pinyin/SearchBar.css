@@ -1,0 +1,206 @@
+/* ─── Search Bar Container ─── */
+
+.search-bar-wrapper {
+  position: relative;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.65rem;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  transition: all 0.25s var(--anim-ease-out);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.search-bar:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(196, 168, 130, 0.35);
+}
+
+.search-bar:focus-within {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: var(--text-accent);
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.08), 0 2px 12px rgba(192, 57, 43, 0.06);
+}
+
+/* ─── Search Icon ─── */
+
+.search-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  line-height: 1;
+}
+
+.search-bar:focus-within .search-icon {
+  opacity: 0.85;
+}
+
+/* ─── Input ─── */
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  outline: none;
+  line-height: 1.4;
+  padding: 0.25rem 0;
+  transition: color 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.search-input:focus::placeholder {
+  opacity: 0.35;
+}
+
+/* ─── Clear & Filter Buttons ─── */
+
+.search-clear,
+.search-filter-toggle {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0.5;
+}
+
+.search-clear:hover,
+.search-filter-toggle:hover {
+  background: rgba(192, 57, 43, 0.08);
+  color: var(--text-accent);
+  opacity: 1;
+}
+
+.search-filter-toggle[data-state="open"] {
+  color: var(--text-accent);
+  opacity: 1;
+  background: rgba(192, 57, 43, 0.08);
+}
+
+/* ─── Hint ─── */
+
+.search-hint {
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.search-bar:focus-within .search-hint { opacity: 0.25; }
+
+/* ─── Options Panel — Glass Popover ─── */
+
+.search-options-panel {
+  /* Above the site Nav (100). */
+  z-index: 110;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--glass-shadow-lg);
+  padding: 0.6rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  animation: popover-in 0.2s var(--anim-ease-out);
+}
+
+.search-options-panel:focus {
+  outline: none;
+}
+
+@keyframes popover-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+}
+
+.search-options-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-options-label {
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 450;
+  color: var(--text-secondary);
+  min-width: 4.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.search-options-group {
+  flex: 1;
+  display: flex;
+  gap: 0.3rem;
+}
+
+.search-option-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.search-option-pill:hover {
+  border-color: var(--highlight-border);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.search-option-pill.active {
+  border-color: var(--text-accent);
+  color: var(--text-accent);
+  background: rgba(192, 57, 43, 0.06);
+  font-weight: 500;
+}
