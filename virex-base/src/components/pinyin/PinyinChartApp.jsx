@@ -10,29 +10,11 @@ import LearnSection from './LearnSection';
 import { FINAL_GROUPS, INITIAL_GROUPS } from './finalsGroups';
 import irregulars from './irregulars.json';
 import { IconInfo, IconTable, IconSoundMap, IconBook } from './icons';
-import { initAudio, unlockAudio, playAudio, stopAudio, preloadBatch } from './audioEngine';
+import { initAudio, unlockAudio, playAudio, stopAudio, preloadBatch, pinyinAudioSrc } from './audioEngine';
 import ShimmerBorder from './components/ShimmerBorder';
 import './App.css';
 import './components/SoundCell.css';
 import './components/ToneSheet.css';
-
-/* Tone-marked pinyin → audio filename converter */
-const TONE_TO_NUM = {'ā':'a1','á':'a2','ǎ':'a3','à':'a4',
-  'ē':'e1','é':'e2','ě':'e3','è':'e4',
-  'ī':'i1','í':'i2','ǐ':'i3','ì':'i4',
-  'ō':'o1','ó':'o2','ǒ':'o3','ò':'o4',
-  'ū':'u1','ú':'u2','ǔ':'u3','ù':'u4',
-  'ǖ':'v1','ǘ':'v2','ǚ':'v3','ǜ':'v4',
-  'ü':'v'};
-const pinyinAudioSrc = py => {
-  let s = '', t = '';
-  for (const ch of py) {
-    const m = TONE_TO_NUM[ch];
-    if (m) { if (m[1]) { t = m[1]; s += m[0]; } else s += m; }
-    else s += ch;
-  }
-  return `/audio/${s}${t}.mp3`;
-};
 
 /* Light haptic feedback for mobile */
 function hapticFeedback() {

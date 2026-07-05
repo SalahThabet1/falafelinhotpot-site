@@ -406,10 +406,22 @@
 }
 
 .ft-finals {
-  font-family: var(--font-sans);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.ft-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
   color: var(--text-primary);
-  opacity: 0.85;
-  letter-spacing: 0.03em;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
 }
 
 /* ── Pronunciation Groups ── */
@@ -457,14 +469,19 @@
 }
 
 .pron-group-rows {
-  padding: 0.3rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.5rem 0.7rem 0.6rem;
 }
 
 .pron-row {
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  padding: 0.35rem 0;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.6rem;
+  row-gap: 0.3rem;
+  padding-bottom: 0.55rem;
   font-size: 0.88rem;
   line-height: 1.5;
   border-bottom: 1px solid var(--border-color);
@@ -472,6 +489,7 @@
 
 .pron-row:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 .pron-code {
@@ -483,9 +501,14 @@
 }
 
 .pron-desc {
+  flex: 1 1 auto;
+  max-width: 58ch;
   color: var(--text-primary);
   opacity: 0.85;
-  flex: 1;
+}
+
+.pron-row .lp-listen-btn {
+  margin-left: auto;
 }
 
 .pron-asp {
@@ -532,14 +555,17 @@
 .irreg-group-rows {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem 0.75rem;
 }
 
 .irreg-row {
   display: flex;
-  flex-direction: column;
-  gap: 0.05rem;
-  padding: 0.5rem 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.3rem;
+  padding-bottom: 0.65rem;
   border-bottom: 1px solid var(--border-color);
   line-height: 1.45;
   transition: background 0.15s ease;
@@ -547,6 +573,7 @@
 
 .irreg-row:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 .irreg-row:hover {
@@ -561,9 +588,15 @@
 }
 
 .irreg-exp {
+  flex: 1 1 100%;
+  max-width: 60ch;
   font-size: 0.85rem;
   color: var(--text-primary);
   opacity: 0.85;
+}
+
+.irreg-row .lp-listen-btn {
+  margin-left: auto;
 }
 
 /* ── Tone Demo ── */
@@ -742,6 +775,33 @@
 .tone-tag.t4 { background: var(--tone-4); }
 .tone-tag.t5 { background: var(--tone-neutral); color: white; }
 
+/* ── Listen button — same visual spec as TonePairBoard.css's .tpop-play,
+   ported here since each component owns its own stylesheet. ── */
+.lp-listen-btn {
+  border: none;
+  background: rgba(192, 57, 43, 0.08);
+  color: var(--text-accent);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lp-listen-btn:hover { background: rgba(192, 57, 43, 0.14); }
+.lp-listen-btn:active { transform: scale(0.9); background: rgba(192, 57, 43, 0.18); }
+.lp-listen-btn--active { animation: lp-listen-pulse 0.8s ease-in-out infinite; }
+
+@keyframes lp-listen-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
 /* ── Desktop tweaks ── */
 @media (min-width: 768px) {
   .learn-page {
@@ -762,12 +822,6 @@
 
   .lp-h {
     font-size: 1.4rem;
-  }
-
-  .irreg-row {
-    flex-direction: row;
-    align-items: baseline;
-    gap: 0.7rem;
   }
 
   .irreg-syl {
