@@ -17,6 +17,40 @@ function hapticFeedback() {
   } catch (_) {}
 }
 
+/* Most finals aren't spoken as written when standalone (zero initial) —
+   Mandarin substitutes a y/w spelling instead (ia -> ya, u -> wu, un -> wen,
+   etc.). Each override carries the actual playable syllable plus a
+   tone-marked `display` form shown inline in the chip, so tapping "ia" and
+   hearing "yā" doesn't read as a mismatch. `ê` has no confirmed recording
+   and is left silent rather than guessed at. */
+const FINAL_AUDIO_OVERRIDES = {
+  ê: null,
+  ia: { syllable: 'ya', display: 'yā' },
+  iai: { syllable: 'yai', display: 'yāi' },
+  iao: { syllable: 'yao', display: 'yāo' },
+  ian: { syllable: 'yan', display: 'yān' },
+  iang: { syllable: 'yang', display: 'yāng' },
+  iong: { syllable: 'yong', display: 'yōng' },
+  io: { syllable: 'yo', display: 'yō' },
+  u: { syllable: 'wu', display: 'wū' },
+  ua: { syllable: 'wa', display: 'wā' },
+  uo: { syllable: 'wo', display: 'wō' },
+  uai: { syllable: 'wai', display: 'wāi' },
+  ui: { syllable: 'wei', display: 'wēi' },
+  uan: { syllable: 'wan', display: 'wān' },
+  un: { syllable: 'wen', display: 'wēn' },
+  uang: { syllable: 'wang', display: 'wāng' },
+  'ü': { syllable: 'yu', display: 'yū' },
+  'üe': { syllable: 'yue', display: 'yuē' },
+  'üan': { syllable: 'yuan', display: 'yuān' },
+  'ün': { syllable: 'yun', display: 'yūn' },
+};
+
+function finalAudioFor(final) {
+  if (final in FINAL_AUDIO_OVERRIDES) return FINAL_AUDIO_OVERRIDES[final];
+  return { syllable: final, display: null };
+}
+
 /* ── Irregular groupings by phonetic category ── */
 const IRREG_GROUPS = [
   {
@@ -64,23 +98,26 @@ const IRREG_GROUPS = [
 /* A few IRREG_GROUPS keys aren't themselves playable full syllables (bare
    finals with no initial, or standalone nasal interjections) — these map to
    a representative full syllable from the main chart that demonstrates the
-   same sound instead. `bia` has no confirmed audio and no honest substitute
-   (it IS the specific rare form being taught), so it's omitted entirely
-   rather than pointed at an unrelated syllable. */
+   same sound instead. Each override carries a tone-marked `display` form so
+   the substitute syllable can be shown next to the Listen button — without
+   it, tapping "m" and hearing "mā" would just be confusing. `bia` has no
+   confirmed audio and no honest substitute (it IS the specific rare form
+   being taught), so it's omitted entirely rather than pointed at an
+   unrelated syllable. */
 const IRREG_AUDIO_OVERRIDES = {
-  ui: 'hui',
-  un: 'dun',
-  m: 'ma',
-  n: 'na',
-  ng: 'dang',
-  hm: 'ha',
-  hng: 'hang',
+  ui: { syllable: 'hui', display: 'huī' },
+  un: { syllable: 'dun', display: 'dūn' },
+  m: { syllable: 'ma', display: 'mā' },
+  n: { syllable: 'na', display: 'nā' },
+  ng: { syllable: 'dang', display: 'dāng' },
+  hm: { syllable: 'ha', display: 'hā' },
+  hng: { syllable: 'hang', display: 'hāng' },
   bia: null,
 };
 
 function irregExampleFor(key) {
   if (key in IRREG_AUDIO_OVERRIDES) return IRREG_AUDIO_OVERRIDES[key];
-  return key;
+  return { syllable: key, display: null };
 }
 
 const TOC_ITEMS = [
@@ -192,7 +229,7 @@ function SyllableDiagram() {
 }
 
 /* ── Finals table ── */
-function FinalsTable() {
+function FinalsTable({ playingKey, onPlay }) {
   return (
     <div className="finals-table-wrap">
       <table className="finals-table">
@@ -207,9 +244,23 @@ function FinalsTable() {
             <tr key={g.label}>
               <td className="ft-group">{g.label}</td>
               <td className="ft-finals">
-                {g.finals.map(f => (
-                  <span key={f} className="ft-chip">{f}</span>
-                ))}
+                {g.finals.map(f => {
+                  const audio = finalAudioFor(f);
+                  if (!audio) return <span key={f} className="ft-chip">{f}</span>;
+                  const key = `final-${f}`;
+                  return (
+                    <button
+                      key={f}
+                      type="button"
+                      className={`ft-chip ft-chip--playable${playingKey === key ? ' ft-chip--active' : ''}`}
+                      onClick={() => onPlay(key, `/audio/${audio.syllable}1.mp3`)}
+                      aria-label={`Play ${audio.display || f}`}
+                    >
+                      {f}
+                      {audio.display && <span className="ft-chip-alt">· {audio.display}</span>}
+                    </button>
+                  );
+                })}
               </td>
             </tr>
           ))}
@@ -230,16 +281,18 @@ function PronGroup({ icon: IconComp, title, rows, playingKey, onPlay }) {
       <div className="pron-group-rows">
         {rows.map(r => (
           <div key={r.code} className="pron-row">
-            <code className="pron-code">{r.code}</code>
-            <span className="pron-desc">{r.desc}</span>
+            <div className="pron-row-main">
+              <code className="pron-code">{r.code}</code>
+              <span className="pron-desc">{r.desc}</span>
+              {r.example && (
+                <ListenButton
+                  active={playingKey === `pron-${r.code}`}
+                  onClick={() => onPlay(`pron-${r.code}`, pinyinAudioSrc(r.example))}
+                  label={`Play ${r.example}`}
+                />
+              )}
+            </div>
             {r.aspiration && <span className="pron-asp">{r.aspiration}</span>}
-            {r.example && (
-              <ListenButton
-                active={playingKey === `pron-${r.code}`}
-                onClick={() => onPlay(`pron-${r.code}`, pinyinAudioSrc(r.example))}
-                label={`Play ${r.example}`}
-              />
-            )}
           </div>
         ))}
       </div>
@@ -275,11 +328,16 @@ function IrregularGroup({ group, playingKey, onPlay }) {
               <code className="irreg-syl">{k}</code>
               <span className="irreg-exp">{irregulars[k]}</span>
               {example && (
-                <ListenButton
-                  active={playingKey === `irreg-${k}`}
-                  onClick={() => onPlay(`irreg-${k}`, `/audio/${example}1.mp3`)}
-                  label={`Play ${example}`}
-                />
+                <div className="irreg-audio">
+                  {example.display && (
+                    <span className="irreg-audio-note">plays {example.display}</span>
+                  )}
+                  <ListenButton
+                    active={playingKey === `irreg-${k}`}
+                    onClick={() => onPlay(`irreg-${k}`, `/audio/${example.syllable}1.mp3`)}
+                    label={`Play ${example.display || example.syllable}`}
+                  />
+                </div>
               )}
             </div>
           );
@@ -385,7 +443,7 @@ export default function LearnSection() {
             The finals (vowel or vowel–consonant endings) group naturally by
             their starting sound. These groups make memorisation easier:
           </p>
-          <FinalsTable />
+          <FinalsTable playingKey={playingKey} onPlay={handlePlay} />
         </section>
 
         <SectionSplit label="Pronunciation" />

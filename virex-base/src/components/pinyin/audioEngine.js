@@ -31,21 +31,52 @@ function evictLRU() {
   cache.delete(oldest);
 }
 
+/* ── Loudness normalization ──
+   The audio library (2000+ short clips, recorded/sourced at different
+   times) has inconsistent loudness. Rather than re-encode every file, each
+   clip's playback gain is derived once from its own RMS level and cached
+   alongside the decoded buffer, so quiet clips play louder and loud clips
+   play quieter — landing everything near the same perceived loudness. */
+const TARGET_RMS = 0.15;
+const MAX_GAIN = 4;    // +12dB cap — don't amplify near-silent/noisy clips into a hiss
+const MIN_GAIN = 0.25; // -12dB cap — don't crush an already-loud clip to near nothing
+
+function computeRMS(buffer) {
+  let sumSquares = 0;
+  let count = 0;
+  for (let ch = 0; ch < buffer.numberOfChannels; ch++) {
+    const data = buffer.getChannelData(ch);
+    for (let i = 0; i < data.length; i++) {
+      sumSquares += data[i] * data[i];
+      count++;
+    }
+  }
+  return count ? Math.sqrt(sumSquares / count) : 0;
+}
+
+function computeNormalizationGain(buffer) {
+  const rms = computeRMS(buffer);
+  if (rms < 1e-4) return 1; // effectively silent — don't amplify noise floor
+  const gain = TARGET_RMS / rms;
+  return Math.min(MAX_GAIN, Math.max(MIN_GAIN, gain));
+}
+
 async function getBuffer(url) {
   if (cache.has(url)) {
-    const buf = cache.get(url);
+    const entry = cache.get(url);
     cache.delete(url);
-    cache.set(url, buf);
-    return buf;
+    cache.set(url, entry);
+    return entry;
   }
 
   const resp = await fetch(url);
   const arrayBuf = await resp.arrayBuffer();
   const audioBuf = await ctx.decodeAudioData(arrayBuf);
+  const entry = { buffer: audioBuf, gain: computeNormalizationGain(audioBuf) };
 
   evictLRU();
-  cache.set(url, audioBuf);
-  return audioBuf;
+  cache.set(url, entry);
+  return entry;
 }
 
 /* Tone-marked pinyin → audio filename converter */
@@ -85,12 +116,30 @@ export function stopAudio() {
 
 let fallbackAudio = null;
 
+/* Shared across plays — a gentle leveler that narrows peak-to-peak
+   variance on top of the per-clip gain, so the "wave energy" envelope
+   (not just average loudness) reads as consistent clip to clip. */
+let sharedCompressor = null;
+function getCompressor(c) {
+  if (!sharedCompressor) {
+    sharedCompressor = c.createDynamicsCompressor();
+    sharedCompressor.threshold.value = -24;
+    sharedCompressor.knee.value = 30;
+    sharedCompressor.ratio.value = 4;
+    sharedCompressor.attack.value = 0.003;
+    sharedCompressor.release.value = 0.25;
+    sharedCompressor.connect(c.destination);
+  }
+  return sharedCompressor;
+}
+
 export async function playAudio(url, onEnded) {
   const c = getContext();
 
   if (!c) {
     if (fallbackAudio) { fallbackAudio.pause(); fallbackAudio.currentTime = 0; }
     fallbackAudio = new Audio(url);
+    fallbackAudio.volume = 0.9;
     if (onEnded) fallbackAudio.onended = onEnded;
     fallbackAudio.play().catch(() => {});
     return;
@@ -101,16 +150,23 @@ export async function playAudio(url, onEnded) {
   stopAudio();
 
   try {
-    const buffer = await getBuffer(url);
+    const { buffer, gain } = await getBuffer(url);
     const source = c.createBufferSource();
     source.buffer = buffer;
-    source.connect(c.destination);
+
+    const gainNode = c.createGain();
+    gainNode.gain.value = gain;
+
+    source.connect(gainNode);
+    gainNode.connect(getCompressor(c));
+
     if (onEnded) source.onended = onEnded;
     source.start(0);
     currentSource = source;
   } catch (_) {
     if (fallbackAudio) fallbackAudio.pause();
     fallbackAudio = new Audio(url);
+    fallbackAudio.volume = 0.9;
     if (onEnded) fallbackAudio.onended = onEnded;
     fallbackAudio.play().catch(() => {});
   }
