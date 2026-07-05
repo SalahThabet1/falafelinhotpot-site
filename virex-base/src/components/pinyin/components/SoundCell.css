@@ -91,6 +91,14 @@
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--gc, var(--red)) 40%, transparent);
 }
 
+/* Current search result (Enter-key cycling) — a distinct ring on top of
+   the group-colored --matched highlight so the "you are here" cell reads
+   clearly among all the other matches. */
+.cell-btn--current {
+  box-shadow: 0 0 0 2px var(--red), 0 0 0 4px var(--highlight-bg);
+  z-index: 2;
+}
+
 /* Irregular cell */
 .cell-btn--irregular {
   font-weight: 500;

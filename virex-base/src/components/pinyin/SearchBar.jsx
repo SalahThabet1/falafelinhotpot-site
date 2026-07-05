@@ -5,21 +5,29 @@ import { IconSearch, IconFilter, IconCheck, IconClose } from './icons';
 import './SearchBar.css';
 
 const SEARCH_MODES = [
-  { value: 'syllable', label: 'Syllable' },
-  { value: 'pinyin', label: 'Pinyin' },
-  { value: 'both', label: 'Both' },
+  { value: 'syllable', label: 'Syllable', desc: 'Match the spelling only, e.g. "ma".' },
+  { value: 'pinyin', label: 'Pinyin', desc: 'Match pronunciation — add a tone number for an exact tone, e.g. "ma1" for mā.' },
+  { value: 'both', label: 'Both', desc: 'Match spelling or pronunciation.' },
 ];
 
 const SearchBar = memo(function SearchBar({
   value = '',
   onChange,
-  placeholder = 'Search syllables…',
+  placeholder = 'Search',
   searchMode = 'syllable',
   onSearchModeChange,
+  onEnter,
 }) {
   const handleClear = () => {
     if (onChange) {
       onChange({ target: { value: '' } });
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+      e.preventDefault();
+      onEnter?.();
     }
   };
 
@@ -34,6 +42,7 @@ const SearchBar = memo(function SearchBar({
           className="search-input"
           value={value}
           onChange={onChange}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           aria-label="Search syllables"
           autoComplete="off"
@@ -79,6 +88,9 @@ const SearchBar = memo(function SearchBar({
                   ))}
                 </div>
               </div>
+              <p className="search-options-desc">
+                {SEARCH_MODES.find(m => m.value === searchMode)?.desc}
+              </p>
             </Popover.Content>
           </Popover.Portal>
         </Popover.Root>
