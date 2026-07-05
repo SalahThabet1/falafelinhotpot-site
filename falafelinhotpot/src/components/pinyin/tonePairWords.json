@@ -1,0 +1,2202 @@
+{
+  "1-1": [
+    {
+      "chars": "东西",
+      "pinyin": "dōngxī",
+      "syllables": [
+        "dōng",
+        "xī"
+      ],
+      "translation": "east and west"
+    },
+    {
+      "chars": "今天",
+      "pinyin": "jīntiān",
+      "syllables": [
+        "jīn",
+        "tiān"
+      ],
+      "translation": "today"
+    },
+    {
+      "chars": "先生",
+      "pinyin": "xiānshēng",
+      "syllables": [
+        "xiān",
+        "shēng"
+      ],
+      "translation": "teacher"
+    },
+    {
+      "chars": "分钟",
+      "pinyin": "fēnzhōng",
+      "syllables": [
+        "fēn",
+        "zhōng"
+      ],
+      "translation": "minute"
+    },
+    {
+      "chars": "医生",
+      "pinyin": "yīshēng",
+      "syllables": [
+        "yī",
+        "shēng"
+      ],
+      "translation": "doctor"
+    },
+    {
+      "chars": "妈妈",
+      "pinyin": "māmā",
+      "syllables": [
+        "mā",
+        "mā"
+      ],
+      "translation": "mama"
+    },
+    {
+      "chars": "星期",
+      "pinyin": "xīngqī",
+      "syllables": [
+        "xīng",
+        "qī"
+      ],
+      "translation": "week"
+    },
+    {
+      "chars": "飞机",
+      "pinyin": "fēijī",
+      "syllables": [
+        "fēi",
+        "jī"
+      ],
+      "translation": "airplane"
+    },
+    {
+      "chars": "休息",
+      "pinyin": "xiūxī",
+      "syllables": [
+        "xiū",
+        "xī"
+      ],
+      "translation": "rest"
+    },
+    {
+      "chars": "公司",
+      "pinyin": "gōngsī",
+      "syllables": [
+        "gōng",
+        "sī"
+      ],
+      "translation": "company; firm; corporation"
+    },
+    {
+      "chars": "咖啡",
+      "pinyin": "kāfēi",
+      "syllables": [
+        "kā",
+        "fēi"
+      ],
+      "translation": "(loanword) coffee"
+    },
+    {
+      "chars": "哥哥",
+      "pinyin": "gēgē",
+      "syllables": [
+        "gē",
+        "gē"
+      ],
+      "translation": "older brother"
+    }
+  ],
+  "1-2": [
+    {
+      "chars": "中国",
+      "pinyin": "zhōngguó",
+      "syllables": [
+        "zhōng",
+        "guó"
+      ],
+      "translation": "China"
+    },
+    {
+      "chars": "衣服",
+      "pinyin": "yīfú",
+      "syllables": [
+        "yī",
+        "fú"
+      ],
+      "translation": "clothes"
+    },
+    {
+      "chars": "虽然",
+      "pinyin": "suīrán",
+      "syllables": [
+        "suī",
+        "rán"
+      ],
+      "translation": "although; even though (often used correlatively with 可是[ke3 shi4] or 但是[dan4 shi4] etc)"
+    },
+    {
+      "chars": "非常",
+      "pinyin": "fēicháng",
+      "syllables": [
+        "fēi",
+        "cháng"
+      ],
+      "translation": "very; really"
+    },
+    {
+      "chars": "中文",
+      "pinyin": "zhōngwén",
+      "syllables": [
+        "zhōng",
+        "wén"
+      ],
+      "translation": "Chinese language"
+    },
+    {
+      "chars": "公园",
+      "pinyin": "gōngyuán",
+      "syllables": [
+        "gōng",
+        "yuán"
+      ],
+      "translation": "park (for public recreation)"
+    },
+    {
+      "chars": "关于",
+      "pinyin": "guānyú",
+      "syllables": [
+        "guān",
+        "yú"
+      ],
+      "translation": "pertaining to"
+    },
+    {
+      "chars": "刚才",
+      "pinyin": "gāngcái",
+      "syllables": [
+        "gāng",
+        "cái"
+      ],
+      "translation": "just now"
+    },
+    {
+      "chars": "刷牙",
+      "pinyin": "shuāyá",
+      "syllables": [
+        "shuā",
+        "yá"
+      ],
+      "translation": "to brush one's teeth"
+    },
+    {
+      "chars": "帮忙",
+      "pinyin": "bāngmáng",
+      "syllables": [
+        "bāng",
+        "máng"
+      ],
+      "translation": "to help"
+    },
+    {
+      "chars": "当然",
+      "pinyin": "dāngrán",
+      "syllables": [
+        "dāng",
+        "rán"
+      ],
+      "translation": "only natural"
+    },
+    {
+      "chars": "新闻",
+      "pinyin": "xīnwén",
+      "syllables": [
+        "xīn",
+        "wén"
+      ],
+      "translation": "news"
+    }
+  ],
+  "1-3": [
+    {
+      "chars": "中午",
+      "pinyin": "zhōngwǔ",
+      "syllables": [
+        "zhōng",
+        "wǔ"
+      ],
+      "translation": "noon"
+    },
+    {
+      "chars": "多少",
+      "pinyin": "duōshǎo",
+      "syllables": [
+        "duō",
+        "shǎo"
+      ],
+      "translation": "number; amount"
+    },
+    {
+      "chars": "妻子",
+      "pinyin": "qīzǐ",
+      "syllables": [
+        "qī",
+        "zǐ"
+      ],
+      "translation": "wife and children"
+    },
+    {
+      "chars": "宾馆",
+      "pinyin": "bīnguǎn",
+      "syllables": [
+        "bīn",
+        "guǎn"
+      ],
+      "translation": "guesthouse"
+    },
+    {
+      "chars": "开始",
+      "pinyin": "kāishǐ",
+      "syllables": [
+        "kāi",
+        "shǐ"
+      ],
+      "translation": "to begin"
+    },
+    {
+      "chars": "机场",
+      "pinyin": "jīchǎng",
+      "syllables": [
+        "jī",
+        "chǎng"
+      ],
+      "translation": "airport; airfield"
+    },
+    {
+      "chars": "身体",
+      "pinyin": "shēntǐ",
+      "syllables": [
+        "shēn",
+        "tǐ"
+      ],
+      "translation": "the body"
+    },
+    {
+      "chars": "铅笔",
+      "pinyin": "qiānbǐ",
+      "syllables": [
+        "qiān",
+        "bǐ"
+      ],
+      "translation": "(lead) pencil"
+    },
+    {
+      "chars": "清楚",
+      "pinyin": "qīngchǔ",
+      "syllables": [
+        "qīng",
+        "chǔ"
+      ],
+      "translation": "clear"
+    },
+    {
+      "chars": "经理",
+      "pinyin": "jīnglǐ",
+      "syllables": [
+        "jīng",
+        "lǐ"
+      ],
+      "translation": "manager"
+    },
+    {
+      "chars": "黑板",
+      "pinyin": "hēibǎn",
+      "syllables": [
+        "hēi",
+        "bǎn"
+      ],
+      "translation": "blackboard"
+    },
+    {
+      "chars": "优点",
+      "pinyin": "yōudiǎn",
+      "syllables": [
+        "yōu",
+        "diǎn"
+      ],
+      "translation": "merit"
+    }
+  ],
+  "1-4": [
+    {
+      "chars": "医院",
+      "pinyin": "yīyuàn",
+      "syllables": [
+        "yī",
+        "yuàn"
+      ],
+      "translation": "hospital"
+    },
+    {
+      "chars": "商店",
+      "pinyin": "shāngdiàn",
+      "syllables": [
+        "shāng",
+        "diàn"
+      ],
+      "translation": "store; shop"
+    },
+    {
+      "chars": "天气",
+      "pinyin": "tiānqì",
+      "syllables": [
+        "tiān",
+        "qì"
+      ],
+      "translation": "weather"
+    },
+    {
+      "chars": "工作",
+      "pinyin": "gōngzuò",
+      "syllables": [
+        "gōng",
+        "zuò"
+      ],
+      "translation": "to work"
+    },
+    {
+      "chars": "高兴",
+      "pinyin": "gāoxìng",
+      "syllables": [
+        "gāo",
+        "xìng"
+      ],
+      "translation": "happy"
+    },
+    {
+      "chars": "一下",
+      "pinyin": "yīxià",
+      "syllables": [
+        "yī",
+        "xià"
+      ],
+      "translation": "(after a verb) a bit; a little (indicating brief duration, or softening the tone, or suggesting giving sth a try)"
+    },
+    {
+      "chars": "因为",
+      "pinyin": "yīnwèi",
+      "syllables": [
+        "yīn",
+        "wèi"
+      ],
+      "translation": "because; owing to; on account of"
+    },
+    {
+      "chars": "希望",
+      "pinyin": "xīwàng",
+      "syllables": [
+        "xī",
+        "wàng"
+      ],
+      "translation": "to hope"
+    },
+    {
+      "chars": "帮助",
+      "pinyin": "bāngzhù",
+      "syllables": [
+        "bāng",
+        "zhù"
+      ],
+      "translation": "assistance; aid"
+    },
+    {
+      "chars": "生日",
+      "pinyin": "shēngrì",
+      "syllables": [
+        "shēng",
+        "rì"
+      ],
+      "translation": "birthday"
+    },
+    {
+      "chars": "生病",
+      "pinyin": "shēngbìng",
+      "syllables": [
+        "shēng",
+        "bìng"
+      ],
+      "translation": "to fall ill"
+    },
+    {
+      "chars": "知道",
+      "pinyin": "zhīdào",
+      "syllables": [
+        "zhī",
+        "dào"
+      ],
+      "translation": "to know; to become aware of"
+    }
+  ],
+  "1-5": [
+    {
+      "chars": "杯子",
+      "pinyin": "bēizi",
+      "syllables": [
+        "bēi",
+        "zi"
+      ],
+      "translation": "cup"
+    },
+    {
+      "chars": "桌子",
+      "pinyin": "zhuōzi",
+      "syllables": [
+        "zhuō",
+        "zi"
+      ],
+      "translation": "table"
+    },
+    {
+      "chars": "多么",
+      "pinyin": "duōme",
+      "syllables": [
+        "duō",
+        "me"
+      ],
+      "translation": "how (wonderful etc)"
+    },
+    {
+      "chars": "功夫",
+      "pinyin": "gōngfu",
+      "syllables": [
+        "gōng",
+        "fu"
+      ],
+      "translation": "skill"
+    },
+    {
+      "chars": "包子",
+      "pinyin": "bāozi",
+      "syllables": [
+        "bāo",
+        "zi"
+      ],
+      "translation": "baozi; bao (steamed stuffed bun)"
+    },
+    {
+      "chars": "孙子",
+      "pinyin": "sūnzi",
+      "syllables": [
+        "sūn",
+        "zi"
+      ],
+      "translation": "Sun Tzu, also known as Sun Wu 孫武|孙武[Sun1 Wu3] (c. 500 BC, dates of birth and death uncertain), general, strategist and philosopher of the Spring and Autumn Period (700-475 BC), believed to be the author of the “Art of War” 孫子兵法|孙子兵法[Sun1 zi3 Bing1 fa3], one of the Seven Military Classics of ancient China 武經七書|武经七书[Wu3 jing1 Qi1 shu1]"
+    },
+    {
+      "chars": "接着",
+      "pinyin": "jiēzhe",
+      "syllables": [
+        "jiē",
+        "zhe"
+      ],
+      "translation": "to catch and hold on"
+    },
+    {
+      "chars": "叉子",
+      "pinyin": "chāzi",
+      "syllables": [
+        "chā",
+        "zi"
+      ],
+      "translation": "fork"
+    },
+    {
+      "chars": "夹子",
+      "pinyin": "jiāzi",
+      "syllables": [
+        "jiā",
+        "zi"
+      ],
+      "translation": "clip"
+    },
+    {
+      "chars": "屋子",
+      "pinyin": "wūzi",
+      "syllables": [
+        "wū",
+        "zi"
+      ],
+      "translation": "house"
+    },
+    {
+      "chars": "梳子",
+      "pinyin": "shūzi",
+      "syllables": [
+        "shū",
+        "zi"
+      ],
+      "translation": "comb"
+    },
+    {
+      "chars": "狮子",
+      "pinyin": "shīzi",
+      "syllables": [
+        "shī",
+        "zi"
+      ],
+      "translation": "Leo (star sign)"
+    }
+  ],
+  "2-1": [
+    {
+      "chars": "学生",
+      "pinyin": "xuéshēng",
+      "syllables": [
+        "xué",
+        "shēng"
+      ],
+      "translation": "student"
+    },
+    {
+      "chars": "明天",
+      "pinyin": "míngtiān",
+      "syllables": [
+        "míng",
+        "tiān"
+      ],
+      "translation": "tomorrow"
+    },
+    {
+      "chars": "昨天",
+      "pinyin": "zuótiān",
+      "syllables": [
+        "zuó",
+        "tiān"
+      ],
+      "translation": "yesterday"
+    },
+    {
+      "chars": "房间",
+      "pinyin": "fángjiān",
+      "syllables": [
+        "fáng",
+        "jiān"
+      ],
+      "translation": "room"
+    },
+    {
+      "chars": "旁边",
+      "pinyin": "pángbiān",
+      "syllables": [
+        "páng",
+        "biān"
+      ],
+      "translation": "side; adjacent place"
+    },
+    {
+      "chars": "时间",
+      "pinyin": "shíjiān",
+      "syllables": [
+        "shí",
+        "jiān"
+      ],
+      "translation": "(concept of) time"
+    },
+    {
+      "chars": "其他",
+      "pinyin": "qítā",
+      "syllables": [
+        "qí",
+        "tā"
+      ],
+      "translation": "other"
+    },
+    {
+      "chars": "国家",
+      "pinyin": "guójiā",
+      "syllables": [
+        "guó",
+        "jiā"
+      ],
+      "translation": "country; nation; state"
+    },
+    {
+      "chars": "年轻",
+      "pinyin": "niánqīng",
+      "syllables": [
+        "nián",
+        "qīng"
+      ],
+      "translation": "young"
+    },
+    {
+      "chars": "提高",
+      "pinyin": "tígāo",
+      "syllables": [
+        "tí",
+        "gāo"
+      ],
+      "translation": "to raise"
+    },
+    {
+      "chars": "熊猫",
+      "pinyin": "xióngmāo",
+      "syllables": [
+        "xióng",
+        "māo"
+      ],
+      "translation": "panda"
+    },
+    {
+      "chars": "爬山",
+      "pinyin": "páshān",
+      "syllables": [
+        "pá",
+        "shān"
+      ],
+      "translation": "to go for a hike (esp. in the hills or mountains)"
+    }
+  ],
+  "2-2": [
+    {
+      "chars": "同学",
+      "pinyin": "tóngxué",
+      "syllables": [
+        "tóng",
+        "xué"
+      ],
+      "translation": "to study at the same school"
+    },
+    {
+      "chars": "学习",
+      "pinyin": "xuéxí",
+      "syllables": [
+        "xué",
+        "xí"
+      ],
+      "translation": "to learn"
+    },
+    {
+      "chars": "其实",
+      "pinyin": "qíshí",
+      "syllables": [
+        "qí",
+        "shí"
+      ],
+      "translation": "actually; in fact; really"
+    },
+    {
+      "chars": "别人",
+      "pinyin": "biérén",
+      "syllables": [
+        "bié",
+        "rén"
+      ],
+      "translation": "other people; others; other person"
+    },
+    {
+      "chars": "回答",
+      "pinyin": "huídá",
+      "syllables": [
+        "huí",
+        "dá"
+      ],
+      "translation": "to reply; to answer"
+    },
+    {
+      "chars": "完成",
+      "pinyin": "wánchéng",
+      "syllables": [
+        "wán",
+        "chéng"
+      ],
+      "translation": "to complete; to accomplish"
+    },
+    {
+      "chars": "年级",
+      "pinyin": "niánjí",
+      "syllables": [
+        "nián",
+        "jí"
+      ],
+      "translation": "grade"
+    },
+    {
+      "chars": "明白",
+      "pinyin": "míngbái",
+      "syllables": [
+        "míng",
+        "bái"
+      ],
+      "translation": "clear; obvious; unequivocal"
+    },
+    {
+      "chars": "爷爷",
+      "pinyin": "yéyé",
+      "syllables": [
+        "yé",
+        "yé"
+      ],
+      "translation": "(coll.) paternal grandfather; grandpa"
+    },
+    {
+      "chars": "留学",
+      "pinyin": "liúxué",
+      "syllables": [
+        "liú",
+        "xué"
+      ],
+      "translation": "to study abroad"
+    },
+    {
+      "chars": "皮鞋",
+      "pinyin": "píxié",
+      "syllables": [
+        "pí",
+        "xié"
+      ],
+      "translation": "leather shoes"
+    },
+    {
+      "chars": "着急",
+      "pinyin": "zháojí",
+      "syllables": [
+        "zháo",
+        "jí"
+      ],
+      "translation": "to worry; to feel anxious"
+    }
+  ],
+  "2-3": [
+    {
+      "chars": "朋友",
+      "pinyin": "péngyǒu",
+      "syllables": [
+        "péng",
+        "yǒu"
+      ],
+      "translation": "friend"
+    },
+    {
+      "chars": "没有",
+      "pinyin": "méiyǒu",
+      "syllables": [
+        "méi",
+        "yǒu"
+      ],
+      "translation": "haven't"
+    },
+    {
+      "chars": "苹果",
+      "pinyin": "píngguǒ",
+      "syllables": [
+        "píng",
+        "guǒ"
+      ],
+      "translation": "Apple (American tech company)"
+    },
+    {
+      "chars": "游泳",
+      "pinyin": "yóuyǒng",
+      "syllables": [
+        "yóu",
+        "yǒng"
+      ],
+      "translation": "swimming"
+    },
+    {
+      "chars": "牛奶",
+      "pinyin": "niúnǎi",
+      "syllables": [
+        "niú",
+        "nǎi"
+      ],
+      "translation": "cow's milk"
+    },
+    {
+      "chars": "啤酒",
+      "pinyin": "píjiǔ",
+      "syllables": [
+        "pí",
+        "jiǔ"
+      ],
+      "translation": "beer (loanword)"
+    },
+    {
+      "chars": "如果",
+      "pinyin": "rúguǒ",
+      "syllables": [
+        "rú",
+        "guǒ"
+      ],
+      "translation": "if; in case; in the event that"
+    },
+    {
+      "chars": "而且",
+      "pinyin": "érqiě",
+      "syllables": [
+        "ér",
+        "qiě"
+      ],
+      "translation": "(not only ...) but also"
+    },
+    {
+      "chars": "词典",
+      "pinyin": "cídiǎn",
+      "syllables": [
+        "cí",
+        "diǎn"
+      ],
+      "translation": "dictionary"
+    },
+    {
+      "chars": "即使",
+      "pinyin": "jíshǐ",
+      "syllables": [
+        "jí",
+        "shǐ"
+      ],
+      "translation": "even if; even though"
+    },
+    {
+      "chars": "提醒",
+      "pinyin": "tíxǐng",
+      "syllables": [
+        "tí",
+        "xǐng"
+      ],
+      "translation": "to remind"
+    },
+    {
+      "chars": "烦恼",
+      "pinyin": "fánnǎo",
+      "syllables": [
+        "fán",
+        "nǎo"
+      ],
+      "translation": "to be worried"
+    }
+  ],
+  "2-4": [
+    {
+      "chars": "前面",
+      "pinyin": "qiánmiàn",
+      "syllables": [
+        "qián",
+        "miàn"
+      ],
+      "translation": "ahead"
+    },
+    {
+      "chars": "名字",
+      "pinyin": "míngzì",
+      "syllables": [
+        "míng",
+        "zì"
+      ],
+      "translation": "name (of a person or thing)"
+    },
+    {
+      "chars": "学校",
+      "pinyin": "xuéxiào",
+      "syllables": [
+        "xué",
+        "xiào"
+      ],
+      "translation": "school"
+    },
+    {
+      "chars": "时候",
+      "pinyin": "shíhòu",
+      "syllables": [
+        "shí",
+        "hòu"
+      ],
+      "translation": "time"
+    },
+    {
+      "chars": "羊肉",
+      "pinyin": "yángròu",
+      "syllables": [
+        "yáng",
+        "ròu"
+      ],
+      "translation": "mutton"
+    },
+    {
+      "chars": "颜色",
+      "pinyin": "yánsè",
+      "syllables": [
+        "yán",
+        "sè"
+      ],
+      "translation": "color"
+    },
+    {
+      "chars": "一定",
+      "pinyin": "yídìng",
+      "syllables": [
+        "yí",
+        "dìng"
+      ],
+      "translation": "surely; certainly; definitely"
+    },
+    {
+      "chars": "习惯",
+      "pinyin": "xíguàn",
+      "syllables": [
+        "xí",
+        "guàn"
+      ],
+      "translation": "habit"
+    },
+    {
+      "chars": "决定",
+      "pinyin": "juédìng",
+      "syllables": [
+        "jué",
+        "dìng"
+      ],
+      "translation": "to decide; to determine; to make up one's mind"
+    },
+    {
+      "chars": "同事",
+      "pinyin": "tóngshì",
+      "syllables": [
+        "tóng",
+        "shì"
+      ],
+      "translation": "colleague; co-worker"
+    },
+    {
+      "chars": "同意",
+      "pinyin": "tóngyì",
+      "syllables": [
+        "tóng",
+        "yì"
+      ],
+      "translation": "to agree"
+    },
+    {
+      "chars": "城市",
+      "pinyin": "chéngshì",
+      "syllables": [
+        "chéng",
+        "shì"
+      ],
+      "translation": "city; town"
+    }
+  ],
+  "2-5": [
+    {
+      "chars": "什么",
+      "pinyin": "shénme",
+      "syllables": [
+        "shén",
+        "me"
+      ],
+      "translation": "what?"
+    },
+    {
+      "chars": "儿子",
+      "pinyin": "érzi",
+      "syllables": [
+        "ér",
+        "zi"
+      ],
+      "translation": "son"
+    },
+    {
+      "chars": "便宜",
+      "pinyin": "piányi",
+      "syllables": [
+        "pián",
+        "yi"
+      ],
+      "translation": "convenient"
+    },
+    {
+      "chars": "孩子",
+      "pinyin": "háizi",
+      "syllables": [
+        "hái",
+        "zi"
+      ],
+      "translation": "child"
+    },
+    {
+      "chars": "觉得",
+      "pinyin": "juéde",
+      "syllables": [
+        "jué",
+        "de"
+      ],
+      "translation": "to think that ...; to feel that ..."
+    },
+    {
+      "chars": "瓶子",
+      "pinyin": "píngzi",
+      "syllables": [
+        "píng",
+        "zi"
+      ],
+      "translation": "bottle"
+    },
+    {
+      "chars": "盘子",
+      "pinyin": "pánzi",
+      "syllables": [
+        "pán",
+        "zi"
+      ],
+      "translation": "tray"
+    },
+    {
+      "chars": "裙子",
+      "pinyin": "qúnzi",
+      "syllables": [
+        "qún",
+        "zi"
+      ],
+      "translation": "skirt"
+    },
+    {
+      "chars": "除了",
+      "pinyin": "chúle",
+      "syllables": [
+        "chú",
+        "le"
+      ],
+      "translation": "apart from; besides; in addition to (used to exclude, as in 除了他，誰也沒來|除了他，谁也没来[chu2 le5 ta1 , shei2 ye3 mei2 lai2] \"apart from him, nobody came\", or to include, as in 除了英語，他也會法語|除了英语，他也会法语[chu2 le5 Ying1 yu3 , ta1 ye3 hui4 Fa3 yu3] \"in addition to English, he also knows French\")"
+    },
+    {
+      "chars": "鼻子",
+      "pinyin": "bízi",
+      "syllables": [
+        "bí",
+        "zi"
+      ],
+      "translation": "nose"
+    },
+    {
+      "chars": "值得",
+      "pinyin": "zhíde",
+      "syllables": [
+        "zhí",
+        "de"
+      ],
+      "translation": "worth the money"
+    },
+    {
+      "chars": "勺子",
+      "pinyin": "sháozi",
+      "syllables": [
+        "sháo",
+        "zi"
+      ],
+      "translation": "spoon; ladle"
+    }
+  ],
+  "3-1": [
+    {
+      "chars": "北京",
+      "pinyin": "běijīng",
+      "syllables": [
+        "běi",
+        "jīng"
+      ],
+      "translation": "Beijing municipality, capital of the People's Republic of China (short name 京[Jing1])"
+    },
+    {
+      "chars": "喜欢",
+      "pinyin": "xǐhuān",
+      "syllables": [
+        "xǐ",
+        "huān"
+      ],
+      "translation": "to like; to be fond of"
+    },
+    {
+      "chars": "老师",
+      "pinyin": "lǎoshī",
+      "syllables": [
+        "lǎo",
+        "shī"
+      ],
+      "translation": "teacher"
+    },
+    {
+      "chars": "好吃",
+      "pinyin": "hǎochī",
+      "syllables": [
+        "hǎo",
+        "chī"
+      ],
+      "translation": "tasty; delicious"
+    },
+    {
+      "chars": "左边",
+      "pinyin": "zuǒbiān",
+      "syllables": [
+        "zuǒ",
+        "biān"
+      ],
+      "translation": "left"
+    },
+    {
+      "chars": "已经",
+      "pinyin": "yǐjīng",
+      "syllables": [
+        "yǐ",
+        "jīng"
+      ],
+      "translation": "already"
+    },
+    {
+      "chars": "手机",
+      "pinyin": "shǒujī",
+      "syllables": [
+        "shǒu",
+        "jī"
+      ],
+      "translation": "cell phone; mobile phone"
+    },
+    {
+      "chars": "眼睛",
+      "pinyin": "yǎnjīng",
+      "syllables": [
+        "yǎn",
+        "jīng"
+      ],
+      "translation": "eye"
+    },
+    {
+      "chars": "北方",
+      "pinyin": "běifāng",
+      "syllables": [
+        "běi",
+        "fāng"
+      ],
+      "translation": "north"
+    },
+    {
+      "chars": "小心",
+      "pinyin": "xiǎoxīn",
+      "syllables": [
+        "xiǎo",
+        "xīn"
+      ],
+      "translation": "to be careful"
+    },
+    {
+      "chars": "简单",
+      "pinyin": "jiǎndān",
+      "syllables": [
+        "jiǎn",
+        "dān"
+      ],
+      "translation": "simple; not complicated"
+    },
+    {
+      "chars": "起飞",
+      "pinyin": "qǐfēi",
+      "syllables": [
+        "qǐ",
+        "fēi"
+      ],
+      "translation": "(of an aircraft or rocket) to take off; to lift off"
+    }
+  ],
+  "3-2": [
+    {
+      "chars": "哪儿",
+      "pinyin": "nǎér",
+      "syllables": [
+        "nǎ",
+        "ér"
+      ],
+      "translation": "where?"
+    },
+    {
+      "chars": "女儿",
+      "pinyin": "nǚér",
+      "syllables": [
+        "nǚ",
+        "ér"
+      ],
+      "translation": "daughter"
+    },
+    {
+      "chars": "可能",
+      "pinyin": "kěnéng",
+      "syllables": [
+        "kě",
+        "néng"
+      ],
+      "translation": "might (happen)"
+    },
+    {
+      "chars": "小时",
+      "pinyin": "xiǎoshí",
+      "syllables": [
+        "xiǎo",
+        "shí"
+      ],
+      "translation": "hour"
+    },
+    {
+      "chars": "旅游",
+      "pinyin": "lǚyóu",
+      "syllables": [
+        "lǚ",
+        "yóu"
+      ],
+      "translation": "trip"
+    },
+    {
+      "chars": "起床",
+      "pinyin": "qǐchuáng",
+      "syllables": [
+        "qǐ",
+        "chuáng"
+      ],
+      "translation": "to get out of bed; to get up"
+    },
+    {
+      "chars": "以前",
+      "pinyin": "yǐqián",
+      "syllables": [
+        "yǐ",
+        "qián"
+      ],
+      "translation": "before"
+    },
+    {
+      "chars": "有名",
+      "pinyin": "yǒumíng",
+      "syllables": [
+        "yǒu",
+        "míng"
+      ],
+      "translation": "famous"
+    },
+    {
+      "chars": "检查",
+      "pinyin": "jiǎnchá",
+      "syllables": [
+        "jiǎn",
+        "chá"
+      ],
+      "translation": "inspection"
+    },
+    {
+      "chars": "水平",
+      "pinyin": "shuǐpíng",
+      "syllables": [
+        "shuǐ",
+        "píng"
+      ],
+      "translation": "horizontal; level"
+    },
+    {
+      "chars": "解决",
+      "pinyin": "jiějué",
+      "syllables": [
+        "jiě",
+        "jué"
+      ],
+      "translation": "to solve; to resolve; to settle (a problem)"
+    },
+    {
+      "chars": "起来",
+      "pinyin": "qǐlái",
+      "syllables": [
+        "qǐ",
+        "lái"
+      ],
+      "translation": "to stand up; to get up"
+    }
+  ],
+  "3-3": [
+    {
+      "chars": "小姐",
+      "pinyin": "xiǎojiě",
+      "syllables": [
+        "xiǎo",
+        "jiě"
+      ],
+      "translation": "young lady"
+    },
+    {
+      "chars": "水果",
+      "pinyin": "shuǐguǒ",
+      "syllables": [
+        "shuǐ",
+        "guǒ"
+      ],
+      "translation": "fruit"
+    },
+    {
+      "chars": "可以",
+      "pinyin": "kěyǐ",
+      "syllables": [
+        "kě",
+        "yǐ"
+      ],
+      "translation": "can"
+    },
+    {
+      "chars": "姐姐",
+      "pinyin": "jiějiě",
+      "syllables": [
+        "jiě",
+        "jiě"
+      ],
+      "translation": "older sister"
+    },
+    {
+      "chars": "所以",
+      "pinyin": "suǒyǐ",
+      "syllables": [
+        "suǒ",
+        "yǐ"
+      ],
+      "translation": "therefore"
+    },
+    {
+      "chars": "手表",
+      "pinyin": "shǒubiǎo",
+      "syllables": [
+        "shǒu",
+        "biǎo"
+      ],
+      "translation": "wristwatch"
+    },
+    {
+      "chars": "了解",
+      "pinyin": "liǎojiě",
+      "syllables": [
+        "liǎo",
+        "jiě"
+      ],
+      "translation": "to understand"
+    },
+    {
+      "chars": "只有",
+      "pinyin": "zhǐyǒu",
+      "syllables": [
+        "zhǐ",
+        "yǒu"
+      ],
+      "translation": "only have ...; there is only ..."
+    },
+    {
+      "chars": "奶奶",
+      "pinyin": "nǎinǎi",
+      "syllables": [
+        "nǎi",
+        "nǎi"
+      ],
+      "translation": "(informal) grandma (paternal grandmother)"
+    },
+    {
+      "chars": "影响",
+      "pinyin": "yǐngxiǎng",
+      "syllables": [
+        "yǐng",
+        "xiǎng"
+      ],
+      "translation": "influence"
+    },
+    {
+      "chars": "打扫",
+      "pinyin": "dǎsǎo",
+      "syllables": [
+        "dǎ",
+        "sǎo"
+      ],
+      "translation": "to clean"
+    },
+    {
+      "chars": "洗澡",
+      "pinyin": "xǐzǎo",
+      "syllables": [
+        "xǐ",
+        "zǎo"
+      ],
+      "translation": "to bathe"
+    }
+  ],
+  "3-4": [
+    {
+      "chars": "米饭",
+      "pinyin": "mǐfàn",
+      "syllables": [
+        "mǐ",
+        "fàn"
+      ],
+      "translation": "(cooked) rice"
+    },
+    {
+      "chars": "准备",
+      "pinyin": "zhǔnbèi",
+      "syllables": [
+        "zhǔn",
+        "bèi"
+      ],
+      "translation": "preparation"
+    },
+    {
+      "chars": "早上",
+      "pinyin": "zǎoshàng",
+      "syllables": [
+        "zǎo",
+        "shàng"
+      ],
+      "translation": "early morning"
+    },
+    {
+      "chars": "晚上",
+      "pinyin": "wǎnshàng",
+      "syllables": [
+        "wǎn",
+        "shàng"
+      ],
+      "translation": "evening"
+    },
+    {
+      "chars": "考试",
+      "pinyin": "kǎoshì",
+      "syllables": [
+        "kǎo",
+        "shì"
+      ],
+      "translation": "to take an exam"
+    },
+    {
+      "chars": "跑步",
+      "pinyin": "pǎobù",
+      "syllables": [
+        "pǎo",
+        "bù"
+      ],
+      "translation": "to run"
+    },
+    {
+      "chars": "主要",
+      "pinyin": "zhǔyào",
+      "syllables": [
+        "zhǔ",
+        "yào"
+      ],
+      "translation": "main; principal; major; primary"
+    },
+    {
+      "chars": "体育",
+      "pinyin": "tǐyù",
+      "syllables": [
+        "tǐ",
+        "yù"
+      ],
+      "translation": "sports"
+    },
+    {
+      "chars": "努力",
+      "pinyin": "nǔlì",
+      "syllables": [
+        "nǔ",
+        "lì"
+      ],
+      "translation": "to make an effort; to try hard; to strive"
+    },
+    {
+      "chars": "可爱",
+      "pinyin": "kěài",
+      "syllables": [
+        "kě",
+        "ài"
+      ],
+      "translation": "adorable"
+    },
+    {
+      "chars": "总是",
+      "pinyin": "zǒngshì",
+      "syllables": [
+        "zǒng",
+        "shì"
+      ],
+      "translation": "always"
+    },
+    {
+      "chars": "感冒",
+      "pinyin": "gǎnmào",
+      "syllables": [
+        "gǎn",
+        "mào"
+      ],
+      "translation": "to catch cold"
+    }
+  ],
+  "3-5": [
+    {
+      "chars": "怎么",
+      "pinyin": "zěnme",
+      "syllables": [
+        "zěn",
+        "me"
+      ],
+      "translation": "how?"
+    },
+    {
+      "chars": "我们",
+      "pinyin": "wǒmen",
+      "syllables": [
+        "wǒ",
+        "men"
+      ],
+      "translation": "we; us; ourselves; our"
+    },
+    {
+      "chars": "椅子",
+      "pinyin": "yǐzi",
+      "syllables": [
+        "yǐ",
+        "zi"
+      ],
+      "translation": "chair"
+    },
+    {
+      "chars": "暖和",
+      "pinyin": "nuǎnhuo",
+      "syllables": [
+        "nuǎn",
+        "huo"
+      ],
+      "translation": "warm"
+    },
+    {
+      "chars": "肚子",
+      "pinyin": "dǔzi",
+      "syllables": [
+        "dǔ",
+        "zi"
+      ],
+      "translation": "belly"
+    },
+    {
+      "chars": "饺子",
+      "pinyin": "jiǎozi",
+      "syllables": [
+        "jiǎo",
+        "zi"
+      ],
+      "translation": "dumpling"
+    },
+    {
+      "chars": "嗓子",
+      "pinyin": "sǎngzi",
+      "syllables": [
+        "sǎng",
+        "zi"
+      ],
+      "translation": "throat"
+    },
+    {
+      "chars": "姥姥",
+      "pinyin": "lǎolao",
+      "syllables": [
+        "lǎo",
+        "lao"
+      ],
+      "translation": "(coll.) mother's mother; maternal grandmother"
+    },
+    {
+      "chars": "尺子",
+      "pinyin": "chǐzi",
+      "syllables": [
+        "chǐ",
+        "zi"
+      ],
+      "translation": "ruler (measuring instrument)"
+    },
+    {
+      "chars": "尾巴",
+      "pinyin": "wěiba",
+      "syllables": [
+        "wěi",
+        "ba"
+      ],
+      "translation": "tail"
+    },
+    {
+      "chars": "影子",
+      "pinyin": "yǐngzi",
+      "syllables": [
+        "yǐng",
+        "zi"
+      ],
+      "translation": "shadow"
+    },
+    {
+      "chars": "显得",
+      "pinyin": "xiǎnde",
+      "syllables": [
+        "xiǎn",
+        "de"
+      ],
+      "translation": "to seem"
+    }
+  ],
+  "4-1": [
+    {
+      "chars": "丈夫",
+      "pinyin": "zhàngfū",
+      "syllables": [
+        "zhàng",
+        "fū"
+      ],
+      "translation": "husband"
+    },
+    {
+      "chars": "上班",
+      "pinyin": "shàngbān",
+      "syllables": [
+        "shàng",
+        "bān"
+      ],
+      "translation": "to go to work"
+    },
+    {
+      "chars": "右边",
+      "pinyin": "yòubiān",
+      "syllables": [
+        "yòu",
+        "biān"
+      ],
+      "translation": "right side"
+    },
+    {
+      "chars": "唱歌",
+      "pinyin": "chànggē",
+      "syllables": [
+        "chàng",
+        "gē"
+      ],
+      "translation": "to sing a song"
+    },
+    {
+      "chars": "大家",
+      "pinyin": "dàjiā",
+      "syllables": [
+        "dà",
+        "jiā"
+      ],
+      "translation": "everyone"
+    },
+    {
+      "chars": "第一",
+      "pinyin": "dìyī",
+      "syllables": [
+        "dì",
+        "yī"
+      ],
+      "translation": "first"
+    },
+    {
+      "chars": "一般",
+      "pinyin": "yìbān",
+      "syllables": [
+        "yì",
+        "bān"
+      ],
+      "translation": "same"
+    },
+    {
+      "chars": "健康",
+      "pinyin": "jiànkāng",
+      "syllables": [
+        "jiàn",
+        "kāng"
+      ],
+      "translation": "health"
+    },
+    {
+      "chars": "地方",
+      "pinyin": "dìfāng",
+      "syllables": [
+        "dì",
+        "fāng"
+      ],
+      "translation": "region"
+    },
+    {
+      "chars": "必须",
+      "pinyin": "bìxū",
+      "syllables": [
+        "bì",
+        "xū"
+      ],
+      "translation": "to have to"
+    },
+    {
+      "chars": "放心",
+      "pinyin": "fàngxīn",
+      "syllables": [
+        "fàng",
+        "xīn"
+      ],
+      "translation": "to feel relieved"
+    },
+    {
+      "chars": "照片",
+      "pinyin": "zhàopiān",
+      "syllables": [
+        "zhào",
+        "piān"
+      ],
+      "translation": "photograph"
+    }
+  ],
+  "4-2": [
+    {
+      "chars": "认识",
+      "pinyin": "rènshí",
+      "syllables": [
+        "rèn",
+        "shí"
+      ],
+      "translation": "to know"
+    },
+    {
+      "chars": "事情",
+      "pinyin": "shìqíng",
+      "syllables": [
+        "shì",
+        "qíng"
+      ],
+      "translation": "affair; matter; thing; business"
+    },
+    {
+      "chars": "去年",
+      "pinyin": "qùnián",
+      "syllables": [
+        "qù",
+        "nián"
+      ],
+      "translation": "last year"
+    },
+    {
+      "chars": "问题",
+      "pinyin": "wèntí",
+      "syllables": [
+        "wèn",
+        "tí"
+      ],
+      "translation": "question"
+    },
+    {
+      "chars": "面条",
+      "pinyin": "miàntiáo",
+      "syllables": [
+        "miàn",
+        "tiáo"
+      ],
+      "translation": "noodles"
+    },
+    {
+      "chars": "一直",
+      "pinyin": "yìzhí",
+      "syllables": [
+        "yì",
+        "zhí"
+      ],
+      "translation": "straight (in a straight line)"
+    },
+    {
+      "chars": "后来",
+      "pinyin": "hòulái",
+      "syllables": [
+        "hòu",
+        "lái"
+      ],
+      "translation": "afterwards; later"
+    },
+    {
+      "chars": "地图",
+      "pinyin": "dìtú",
+      "syllables": [
+        "dì",
+        "tú"
+      ],
+      "translation": "map"
+    },
+    {
+      "chars": "复习",
+      "pinyin": "fùxí",
+      "syllables": [
+        "fù",
+        "xí"
+      ],
+      "translation": "to review"
+    },
+    {
+      "chars": "太阳",
+      "pinyin": "tàiyáng",
+      "syllables": [
+        "tài",
+        "yáng"
+      ],
+      "translation": "sun"
+    },
+    {
+      "chars": "季节",
+      "pinyin": "jìjié",
+      "syllables": [
+        "jì",
+        "jié"
+      ],
+      "translation": "time"
+    },
+    {
+      "chars": "客人",
+      "pinyin": "kèrén",
+      "syllables": [
+        "kè",
+        "rén"
+      ],
+      "translation": "visitor"
+    }
+  ],
+  "4-3": [
+    {
+      "chars": "上午",
+      "pinyin": "shàngwǔ",
+      "syllables": [
+        "shàng",
+        "wǔ"
+      ],
+      "translation": "morning"
+    },
+    {
+      "chars": "下午",
+      "pinyin": "xiàwǔ",
+      "syllables": [
+        "xià",
+        "wǔ"
+      ],
+      "translation": "afternoon"
+    },
+    {
+      "chars": "下雨",
+      "pinyin": "xiàyǔ",
+      "syllables": [
+        "xià",
+        "yǔ"
+      ],
+      "translation": "to rain"
+    },
+    {
+      "chars": "汉语",
+      "pinyin": "hànyǔ",
+      "syllables": [
+        "hàn",
+        "yǔ"
+      ],
+      "translation": "Chinese language"
+    },
+    {
+      "chars": "电影",
+      "pinyin": "diànyǐng",
+      "syllables": [
+        "diàn",
+        "yǐng"
+      ],
+      "translation": "movie; film"
+    },
+    {
+      "chars": "电脑",
+      "pinyin": "diànnǎo",
+      "syllables": [
+        "diàn",
+        "nǎo"
+      ],
+      "translation": "computer"
+    },
+    {
+      "chars": "一起",
+      "pinyin": "yìqǐ",
+      "syllables": [
+        "yì",
+        "qǐ"
+      ],
+      "translation": "(in) the same place"
+    },
+    {
+      "chars": "报纸",
+      "pinyin": "bàozhǐ",
+      "syllables": [
+        "bào",
+        "zhǐ"
+      ],
+      "translation": "newspaper"
+    },
+    {
+      "chars": "跳舞",
+      "pinyin": "tiàowǔ",
+      "syllables": [
+        "tiào",
+        "wǔ"
+      ],
+      "translation": "to dance"
+    },
+    {
+      "chars": "上网",
+      "pinyin": "shàngwǎng",
+      "syllables": [
+        "shàng",
+        "wǎng"
+      ],
+      "translation": "to go online"
+    },
+    {
+      "chars": "办法",
+      "pinyin": "bànfǎ",
+      "syllables": [
+        "bàn",
+        "fǎ"
+      ],
+      "translation": "way of handling sth; means; measure; (practical) solution to a problem"
+    },
+    {
+      "chars": "历史",
+      "pinyin": "lìshǐ",
+      "syllables": [
+        "lì",
+        "shǐ"
+      ],
+      "translation": "history"
+    }
+  ],
+  "4-4": [
+    {
+      "chars": "再见",
+      "pinyin": "zàijiàn",
+      "syllables": [
+        "zài",
+        "jiàn"
+      ],
+      "translation": "goodbye"
+    },
+    {
+      "chars": "后面",
+      "pinyin": "hòumiàn",
+      "syllables": [
+        "hòu",
+        "miàn"
+      ],
+      "translation": "the back; the rear; the last bit"
+    },
+    {
+      "chars": "漂亮",
+      "pinyin": "piàoliàng",
+      "syllables": [
+        "piào",
+        "liàng"
+      ],
+      "translation": "pretty; beautiful"
+    },
+    {
+      "chars": "爸爸",
+      "pinyin": "bàbà",
+      "syllables": [
+        "bà",
+        "bà"
+      ],
+      "translation": "(coll.) father; dad"
+    },
+    {
+      "chars": "现在",
+      "pinyin": "xiànzài",
+      "syllables": [
+        "xiàn",
+        "zài"
+      ],
+      "translation": "now; at present; currently"
+    },
+    {
+      "chars": "电视",
+      "pinyin": "diànshì",
+      "syllables": [
+        "diàn",
+        "shì"
+      ],
+      "translation": "television; TV"
+    },
+    {
+      "chars": "看见",
+      "pinyin": "kànjiàn",
+      "syllables": [
+        "kàn",
+        "jiàn"
+      ],
+      "translation": "to see; to catch sight of"
+    },
+    {
+      "chars": "睡觉",
+      "pinyin": "shuìjiào",
+      "syllables": [
+        "shuì",
+        "jiào"
+      ],
+      "translation": "to go to bed"
+    },
+    {
+      "chars": "谢谢",
+      "pinyin": "xièxiè",
+      "syllables": [
+        "xiè",
+        "xiè"
+      ],
+      "translation": "to thank"
+    },
+    {
+      "chars": "饭店",
+      "pinyin": "fàndiàn",
+      "syllables": [
+        "fàn",
+        "diàn"
+      ],
+      "translation": "restaurant"
+    },
+    {
+      "chars": "介绍",
+      "pinyin": "jièshào",
+      "syllables": [
+        "jiè",
+        "shào"
+      ],
+      "translation": "to introduce (sb to sb)"
+    },
+    {
+      "chars": "但是",
+      "pinyin": "dànshì",
+      "syllables": [
+        "dàn",
+        "shì"
+      ],
+      "translation": "but; however"
+    }
+  ],
+  "4-5": [
+    {
+      "chars": "弟弟",
+      "pinyin": "dìdi",
+      "syllables": [
+        "dì",
+        "di"
+      ],
+      "translation": "younger brother"
+    },
+    {
+      "chars": "意思",
+      "pinyin": "yìsi",
+      "syllables": [
+        "yì",
+        "si"
+      ],
+      "translation": "idea"
+    },
+    {
+      "chars": "个子",
+      "pinyin": "gèzi",
+      "syllables": [
+        "gè",
+        "zi"
+      ],
+      "translation": "stature; height; size (of a person or object)"
+    },
+    {
+      "chars": "为了",
+      "pinyin": "wèile",
+      "syllables": [
+        "wèi",
+        "le"
+      ],
+      "translation": "for; for the purpose of; in order to"
+    },
+    {
+      "chars": "句子",
+      "pinyin": "jùzi",
+      "syllables": [
+        "jù",
+        "zi"
+      ],
+      "translation": "sentence"
+    },
+    {
+      "chars": "帽子",
+      "pinyin": "màozi",
+      "syllables": [
+        "mào",
+        "zi"
+      ],
+      "translation": "hat"
+    },
+    {
+      "chars": "筷子",
+      "pinyin": "kuàizi",
+      "syllables": [
+        "kuài",
+        "zi"
+      ],
+      "translation": "chopsticks"
+    },
+    {
+      "chars": "裤子",
+      "pinyin": "kùzi",
+      "syllables": [
+        "kù",
+        "zi"
+      ],
+      "translation": "variant of 褲子|裤子, trousers"
+    },
+    {
+      "chars": "记得",
+      "pinyin": "jìde",
+      "syllables": [
+        "jì",
+        "de"
+      ],
+      "translation": "to remember"
+    },
+    {
+      "chars": "叶子",
+      "pinyin": "yèzi",
+      "syllables": [
+        "yè",
+        "zi"
+      ],
+      "translation": "leaf"
+    },
+    {
+      "chars": "样子",
+      "pinyin": "yàngzi",
+      "syllables": [
+        "yàng",
+        "zi"
+      ],
+      "translation": "appearance"
+    },
+    {
+      "chars": "袜子",
+      "pinyin": "wàzi",
+      "syllables": [
+        "wà",
+        "zi"
+      ],
+      "translation": "socks"
+    }
+  ]
+}

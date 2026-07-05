@@ -1,0 +1,192 @@
+/* ===== Modal overlay ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  /* Above the site Nav (100) / drawer (101-102). */
+  z-index: 1000;
+  background: rgba(30, 25, 18, 0.35);
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  animation: fadeIn 0.2s ease;
+}
+
+/* ===== Bottom sheet (mobile) / centered card (desktop) — Glass ===== */
+.sheet {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 440px;
+  border-radius: 1.25rem 1.25rem 0 0;
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 1001;
+}
+
+.sheet:focus {
+  outline: none;
+}
+
+.sheet-shimmer {
+  border-radius: inherit;
+}
+
+.sheet-inner {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  border-radius: inherit;
+  padding: 1.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.1);
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sheet-syl {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+}
+
+.sheet-close {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid rgba(196, 168, 130, 0.2);
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s;
+}
+
+.sheet-close:hover {
+  border-color: var(--text-accent);
+  color: var(--text-accent);
+  background: rgba(192, 57, 43, 0.06);
+}
+
+/* ===== Tone buttons — Glass cards ===== */
+.sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+.tone-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 1rem 0.5rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.2s var(--anim-ease-out);
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.tone-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: var(--c);
+  opacity: 0.8;
+}
+
+.tone-btn:hover {
+  border-color: var(--c);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+.tone-btn:active {
+  transform: scale(0.96);
+  background: rgba(192, 57, 43, 0.08);
+  border-color: var(--c);
+}
+
+.tone-num {
+  font-family: var(--font-serif);
+  font-size: 0.65rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.1rem;
+}
+
+.tone-py {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--c);
+  line-height: 1;
+}
+
+.tone-label {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 0.15rem;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+}
+
+@keyframes slideUp {
+  from { transform: translateX(-50%) translateY(100%); }
+}
+
+/* ===== Desktop ===== */
+@media (min-width: 768px) {
+  .sheet {
+    bottom: auto;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 16px;
+    max-width: 420px;
+    animation: dialogIn 0.25s var(--anim-ease-out);
+  }
+
+  .sheet-inner {
+    padding-bottom: 1.5rem;
+    box-shadow: var(--glass-shadow-lg);
+    border-radius: inherit;
+  }
+
+  @keyframes dialogIn {
+    from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+  }
+
+  .sheet-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
