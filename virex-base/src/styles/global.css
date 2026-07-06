@@ -111,6 +111,20 @@ body {
     sans-serif;
 }
 
+/* Tailwind v4's built-in .container utility only sets width/max-width — it
+   has no horizontal padding by default. Every page here relies on .container
+   for edge gutters, so without this content sits flush against the viewport
+   edge below the max-width breakpoint (i.e. on any real device). */
+.container {
+  padding-inline: 24px;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding-inline: 16px;
+  }
+}
+
 /* Typography customizations to match theme */
 .prose {
   --tw-prose-body: var(--color-text);
