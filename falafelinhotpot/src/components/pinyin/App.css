@@ -163,9 +163,11 @@
   display: flex;
   justify-content: center;
   padding: 0.5rem 0.6rem;
-  background: var(--glass-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  /* No backdrop-filter — blurring the page's grid pattern through a
+     translucent bar smeared its sharp lines into visible rectangular
+     artifacts in the empty space beside the centered pill. A near-opaque
+     solid tone (same one .table-wrap already uses) reads clean instead. */
+  background: rgba(253, 249, 241, 0.92);
   border-bottom: 1px solid var(--glass-border);
 }
 
