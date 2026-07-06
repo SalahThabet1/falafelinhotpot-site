@@ -84,8 +84,7 @@ function WordPopupContent({ pairKey, words }) {
 }
 
 /* ── Single Grid Cell ── */
-function TonePairCell({ rowTone, colTone, pairKey, words, onClick }) {
-  const wordCount = words.length;
+function TonePairCell({ rowTone, colTone, pairKey, onClick }) {
   const isNeutral = colTone === 5;
 
   return (
@@ -102,7 +101,6 @@ function TonePairCell({ rowTone, colTone, pairKey, words, onClick }) {
         <span className="tp-cell-label-num">{isNeutral ? '∅' : colTone}</span>
       </div>
       {pairKey === '3-3' && <div className="tp-cell-badge">sandhi</div>}
-      <div className="tp-cell-count">{wordCount}</div>
     </button>
   );
 }
@@ -127,7 +125,7 @@ export default function TonePairBoard() {
       <div className="tp-board">
         <DotPattern spacing={24} radius={0.6} color="rgba(196, 168, 130, 0.18)" />
         <div className="tp-head">
-          <h2 className="tp-title">Tone Sandhi</h2>
+          <h2 className="tp-title">Tone Pairs</h2>
           <p className="tp-sub">
             Two-syllable tone combos — tap a cell to explore words
           </p>
@@ -156,15 +154,12 @@ export default function TonePairBoard() {
               </div>
               {COL_TONES.map(colTone => {
                 const pairKey = `${rowTone}-${colTone}`;
-                const words = tonePairWords[pairKey] || [];
-                const audioWords = words.filter(w => wordsWithAudio[w.chars]);
                 return (
                   <TonePairCell
                     key={pairKey}
                     rowTone={rowTone}
                     colTone={colTone}
                     pairKey={pairKey}
-                    words={audioWords}
                     onClick={openPopup}
                   />
                 );
