@@ -4,7 +4,7 @@
 export const FINAL_GROUPS = [
   { label: 'I',      finals: ['i'],                                                                         hue: 0,   color: '#C0392B' },
   { label: 'A',      finals: ['a', 'ai', 'an', 'ang', 'ao'],                                               hue: 30,  color: '#A35524' },
-  { label: 'E',      finals: ['e', 'ei', 'en', 'eng', 'er', 'ê'],                                          hue: 45,  color: '#816628' },
+  { label: 'E',      finals: ['e', 'ei', 'en', 'eng', 'er'],                                               hue: 45,  color: '#816628' },
   { label: 'O',      finals: ['o', 'ong', 'ou'],                                                            hue: 140, color: '#1B7A43' },
   { label: 'IA / IE', finals: ['ia', 'ie', 'iai', 'iao', 'iu', 'ian', 'in', 'iang', 'ing', 'iong', 'io'],  hue: 210, color: '#2470A2' },
   { label: 'U',      finals: ['u', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang'],                          hue: 265, color: '#8E44AD' },

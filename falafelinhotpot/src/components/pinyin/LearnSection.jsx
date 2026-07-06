@@ -21,10 +21,8 @@ function hapticFeedback() {
    Mandarin substitutes a y/w spelling instead (ia -> ya, u -> wu, un -> wen,
    etc.). Each override carries the actual playable syllable plus a
    tone-marked `display` form shown inline in the chip, so tapping "ia" and
-   hearing "yā" doesn't read as a mismatch. `ê` has no confirmed recording
-   and is left silent rather than guessed at. */
+   hearing "yā" doesn't read as a mismatch. */
 const FINAL_AUDIO_OVERRIDES = {
-  ê: null,
   ia: { syllable: 'ya', display: 'yā' },
   iai: { syllable: 'yai', display: 'yāi' },
   iao: { syllable: 'yao', display: 'yāo' },
