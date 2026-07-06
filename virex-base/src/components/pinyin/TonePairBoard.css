@@ -16,7 +16,6 @@
   margin: 0.5rem 0;
   width: 100%;
   max-width: 540px;
-  box-shadow: var(--glass-shadow);
 }
 
 @media (max-width: 359px) {

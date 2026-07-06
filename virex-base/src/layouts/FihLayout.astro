@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/fonts.css';
 import SEO from '~/components/common/SEO.astro';
 import Nav from '~/components/fih/Nav.astro';
 import Footer from '~/components/fih/Footer.astro';
@@ -35,13 +36,6 @@ const type = metadata.openGraph?.type === 'article' ? 'article' : 'website';
     <link rel="icon" href="/brand/favicon-192.png" type="image/png" sizes="192x192" />
     <link rel="icon" href="/brand/favicon-512.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Noto+Kufi+Arabic:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/open-design/landing.css" />
     <SEO title={title} description={description} image={image} type={type} />
     {metadata.canonical && <link rel="canonical" href={metadata.canonical} />}
     {metadata.robots?.index === false && <meta name="robots" content="noindex,follow" />}
