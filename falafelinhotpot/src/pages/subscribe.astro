@@ -63,7 +63,13 @@ const bullets = [
 <style>
   .subscribe-page {
     position: relative;
-    min-height: calc(100dvh - var(--nav-height, 60px));
+    /* Nav is position:fixed (out of flow), so the viewport-fill math has to
+       add its height back as padding, not just subtract it from min-height —
+       otherwise this section starts at y:0 underneath the fixed nav instead
+       of below it, and align-items: center hides the top of the content
+       behind the nav bar. */
+    min-height: 100dvh;
+    padding-top: var(--nav-height, 60px);
     display: flex;
     align-items: center;
   }
@@ -85,6 +91,19 @@ const bullets = [
     gap: 48px;
     align-items: start;
     padding: 0 var(--container-x);
+  }
+  /* Global h1 defaults to --text-3xl (editions-hero scale); this page's
+     two-column layout needs a smaller heading so it doesn't overpower the
+     form beside it. */
+  .subscribe-page__intro h1 {
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: #2c2c2a;
+    mix-blend-mode: multiply;
+    text-wrap: balance;
   }
   .subscribe-page__lede {
     margin: 20px 0 0;

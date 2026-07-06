@@ -30,6 +30,8 @@
   --font-chinese: 'Noto Sans SC', sans-serif;
   --font-arabic: 'Cairo', sans-serif;
   --nav-height: 60px;
+  --container: 1200px;
+  --container-x: 24px;
   --space-6: 1.5rem;
   --text-base: clamp(1rem, 1.2vw, 1.125rem);
   --text-lg: clamp(1.5rem, 2.8vw, 2rem);
@@ -114,14 +116,111 @@ body {
 /* Tailwind v4's built-in .container utility only sets width/max-width — it
    has no horizontal padding by default. Every page here relies on .container
    for edge gutters, so without this content sits flush against the viewport
-   edge below the max-width breakpoint (i.e. on any real device). */
+   edge below the max-width breakpoint (i.e. on any real device). Several
+   components also reference --container/--container-x directly (Nav,
+   Footer, SinglePost, RelatedPosts, EditionNav, subscribe) — keep both in
+   sync through the same token. */
 .container {
-  padding-inline: 24px;
+  padding-inline: var(--container-x);
 }
 
 @media (max-width: 600px) {
-  .container {
-    padding-inline: 16px;
+  :root {
+    --container-x: 16px;
+  }
+}
+
+/* Default display heading — pages that need their own scale (hero, editions
+   archive) already override this with a classed selector, which wins on
+   specificity. Without this, a bare <h1> falls back to Tailwind preflight's
+   font-size: inherit and renders the same size as body text (this is what
+   the error pages and subscribe were doing before their own overrides were
+   added). */
+h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--color-ink, #2c2c2a);
+}
+
+/* Small uppercase tracked kicker — matches the pattern already used on the
+   Editions hero and other sections; also only ever defined in the removed
+   open-design/landing.css. */
+.label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-cinnabar, #9b1b15);
+  mix-blend-mode: multiply;
+}
+
+/* Button system used on error pages (404/403/500) — same story: defined
+   only in the removed file, so these rendered as bare unstyled links. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.75rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+.btn--lg {
+  padding: 0.9rem 2.25rem;
+  font-size: 0.95rem;
+}
+.btn--primary {
+  background: var(--color-cinnabar, #9b1b15);
+  color: var(--color-parchment, #fbf7ed);
+  border-color: var(--color-cinnabar, #9b1b15);
+}
+.btn--primary:hover {
+  background: #7a1510;
+  border-color: #7a1510;
+}
+.btn--secondary {
+  background: transparent;
+  color: var(--color-ink, #2c2c2a);
+  border-color: rgba(44, 44, 42, 0.3);
+}
+.btn--secondary:hover {
+  border-color: var(--color-cinnabar, #9b1b15);
+  color: var(--color-cinnabar, #9b1b15);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--color-ink, #2c2c2a);
+  border-color: rgba(44, 44, 42, 0.3);
+}
+.btn--ghost:hover {
+  border-color: var(--color-cinnabar, #9b1b15);
+  color: var(--color-cinnabar, #9b1b15);
+}
+
+/* Body copy utility used on subscribe/error pages — also only ever defined
+   in the removed open-design/landing.css, so it rendered as unstyled
+   inherited text (no color, no max-width, no line-height) once that file
+   was deleted. */
+.body-text {
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.7;
+  color: var(--fg-2);
+  max-width: 65ch;
+}
+
+@media (max-width: 600px) {
+  .body-text {
+    font-size: 15px;
   }
 }
 
