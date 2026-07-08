@@ -121,6 +121,7 @@ body {
    Footer, SinglePost, RelatedPosts, EditionNav, subscribe) — keep both in
    sync through the same token. */
 .container {
+  margin-inline: auto;
   padding-inline: var(--container-x);
 }
 
