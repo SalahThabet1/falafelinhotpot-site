@@ -15,6 +15,7 @@ const publicRoutePrefixes = [
   '/category/learn',
   '/mandarin-starterkit-course',
   '/pinyin-chart',
+  '/get-your-chinese-business-guide',
 ];
 
 // Custom integration to warn about missing environment variables after build

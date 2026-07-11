@@ -12,9 +12,10 @@ import type { MetaData } from '~/types';
 export interface Props {
   metadata?: MetaData;
   hideFooter?: boolean;
+  hideNav?: boolean;
 }
 
-const { metadata = {}, hideFooter = false } = Astro.props;
+const { metadata = {}, hideFooter = false, hideNav = false } = Astro.props;
 const title = metadata.title ?? 'Falafel in Hotpot';
 const description =
   metadata.description ??
@@ -43,7 +44,7 @@ const type = metadata.openGraph?.type === 'article' ? 'article' : 'website';
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <ParchmentGrain />
-    <Nav />
+    {!hideNav && <Nav />}
     <main id="main-content">
       <slot />
     </main>

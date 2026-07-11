@@ -14,7 +14,12 @@
   --color-divider: rgba(28, 28, 28, 0.16);
   --color-accent: #c0392b;
   --color-forbidden-red: #c0392b;
-  --color-cinnabar: #c0392b;
+  /* Legacy Template leftover previously redeclared this to #c0392b, which sits
+     after (and so wins over) the real brand value from the @theme block
+     below — every var(--color-cinnabar) consumer site-wide (buttons,
+     eyebrows, hovers) was silently rendering the wrong red. Align to the
+     design.md-documented value instead of duplicating it. */
+  --color-cinnabar: #9b1b15;
   --color-gold: #c39a3c;
   --color-dark: #261b1c;
   --color-plum: #4b2639;
