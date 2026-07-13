@@ -40,6 +40,12 @@
       ]
     }
   ],
+  "rewrites": [
+    {
+      "source": "/download/business-chinese",
+      "destination": "/api/download/business-chinese"
+    }
+  ],
   "redirects": [
     { "source": "/newsletter", "destination": "/subscribe", "permanent": true },
     {

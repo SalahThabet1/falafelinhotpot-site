@@ -10,6 +10,7 @@ Allow: /
 
 # Disallow admin and API routes (if any)
 Disallow: /api/
+Disallow: /download/
 Disallow: /_astro/
 
 # Sitemap location
