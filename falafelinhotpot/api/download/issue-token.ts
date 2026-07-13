@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { createBusinessChineseDownloadToken } from '../../lib/business-chinese-download';
+import { createBusinessChineseDownloadToken } from '../../lib/business-chinese-download.js';
 
 function getWebhookSecret(req: VercelRequest): string | undefined {
   const headerSecret = req.headers['x-download-webhook-secret'];

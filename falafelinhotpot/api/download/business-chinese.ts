@@ -1,9 +1,8 @@
 import { issueSignedToken, presignUrl } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import {
-  BLOB_PRESIGN_TTL_SECONDS,
-  getBusinessChineseBlobPathname,
-} from '../../lib/business-chinese-download';
+
+const BLOB_PRESIGN_TTL_SECONDS = 10 * 60;
+const DEFAULT_BLOB_PATHNAME = 'business-chinese.pdf';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
@@ -16,21 +15,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(503).json({ error: 'Download service is temporarily unavailable.' });
   }
 
-  const pathname = getBusinessChineseBlobPathname();
+  const pathname = process.env.BLOB_BUSINESS_CHINESE_PATHNAME || DEFAULT_BLOB_PATHNAME;
+  const validUntil = Date.now() + BLOB_PRESIGN_TTL_SECONDS * 1000;
 
   try {
     const signedToken = await issueSignedToken({
       pathname,
-      operations: ['get', 'head'],
-      validUntil: Date.now() + BLOB_PRESIGN_TTL_SECONDS * 1000,
+      operations: ['get'],
+      validUntil,
     });
 
-    const { url } = await presignUrl(pathname, BLOB_PRESIGN_TTL_SECONDS, {
-      signedToken,
+    const { presignedUrl } = await presignUrl(signedToken, {
+      access: 'private',
+      operation: 'get',
+      pathname,
+      validUntil,
     });
 
     res.setHeader('Cache-Control', 'no-store');
-    return res.redirect(302, url);
+    return res.redirect(302, presignedUrl);
   } catch (error) {
     console.error('Failed to create business Chinese PDF download URL', error);
     return res.status(503).json({ error: 'Download service is temporarily unavailable.' });
