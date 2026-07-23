@@ -25,6 +25,7 @@ const blob = await put(pathname, file, {
   access: 'private',
   contentType: 'application/pdf',
   addRandomSuffix: false,
+  allowOverwrite: true,
 });
 
 console.log(
