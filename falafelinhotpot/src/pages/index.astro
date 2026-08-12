@@ -1,6 +1,5 @@
 ---
 import FihLayout from '~/layouts/FihLayout.astro';
-import InkDivider from '~/components/brand/InkDivider.astro';
 import VideoCard from '~/components/fih/VideoCard.astro';
 
 const metadata = {
@@ -30,6 +29,41 @@ const videos = [
 ---
 
 <FihLayout metadata={metadata}>
+
+  <!-- ④ COURSE CALLOUT ────────────────────────────────────────── -->
+  <section class="course-section">
+    <div class="container">
+      <div class="course-card">
+        <div class="course-card__media">
+          <img
+            src="/course-chinese-foundation.jpg"
+            alt="The Mandarin Starter Kit"
+            class="course-card__img"
+            width="1600"
+            height="893"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <div class="course-card__content">
+          <span class="course-badge">Mandarin Starter Kit</span>
+
+          <h3 class="course-card__h3">Chinese that finally makes sense.</h3>
+
+          <p class="course-card__body">
+            Learn the Mandarin people actually use, with pronunciation, pinyin,
+            everyday phrases, worksheets, and cultural context explained clearly for
+            Arabic speakers. Not a course you finish. A resource you keep.
+          </p>
+
+          <a href="/mandarin-starterkit-course/#pricing" class="btn btn--primary">
+            Choose your spot →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ① HERO ──────────────────────────────────────────────────── -->
   <section class="hero">
@@ -73,8 +107,6 @@ const videos = [
 
     </div>
   </section>
-
-  <InkDivider />
 
   <!-- ② NEWSLETTER ────────────────────────────────────────────── -->
   <section id="subscribe" class="nl-section">
@@ -171,8 +203,6 @@ const videos = [
     });
   </script>
 
-  <InkDivider />
-
   <!-- ③ BRAND MANIFESTO — Magazine Split ─────────────────────── -->
   <section class="manifesto-section">
     <img
@@ -206,45 +236,6 @@ const videos = [
       </div>
     </div>
   </section>
-
-  <InkDivider />
-
-  <!-- ④ COURSE CALLOUT ────────────────────────────────────────── -->
-  <section class="course-section">
-    <div class="container">
-      <div class="course-card">
-        <div class="course-card__media">
-          <img
-            src="/course-chinese-foundation.jpg"
-            alt="The Mandarin Starter Kit"
-            class="course-card__img"
-            width="1600"
-            height="893"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-
-        <div class="course-card__content">
-          <span class="course-badge">Mandarin Starter Kit</span>
-
-          <h3 class="course-card__h3">Chinese that finally makes sense.</h3>
-
-          <p class="course-card__body">
-            Learn the Mandarin people actually use, with pronunciation, pinyin,
-            everyday phrases, worksheets, and cultural context explained clearly for
-            Arabic speakers. Not a course you finish. A resource you keep.
-          </p>
-
-          <a href="/mandarin-starterkit-course/#pricing" class="btn btn--primary">
-            Choose your spot →
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <InkDivider />
 
   <!-- ⑤ VIDEO GRID ────────────────────────────────────────────── -->
   <section class="videos-section">
@@ -349,7 +340,7 @@ const videos = [
 
   /* ── ① Hero ─────────────────────────────────────────────────── */
   .hero {
-    background-color: var(--color-parchment, #fbf7ed);
+    background-color: var(--color-clay, #eddcc6);
     padding: clamp(7rem, 10vw, 9rem) 0 clamp(4rem, 7vw, 6rem);
     overflow: hidden;
   }
@@ -792,7 +783,7 @@ const videos = [
 
   /* ── ⑤ Video Grid ────────────────────────────────────────────── */
   .videos-section {
-    background-color: var(--color-clay, #eddcc6);
+    background-color: var(--color-parchment, #fbf7ed);
     position: relative;
     padding: clamp(3.5rem, 6vw, 5rem) 0;
   }
