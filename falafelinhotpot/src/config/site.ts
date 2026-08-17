@@ -6,8 +6,6 @@
  * These values can be customized via environment variables or by editing the defaults below.
  */
 
-import type { SocialLinks, LegalConfig } from '../lib/types';
-
 /** Site name displayed in header, footer, and meta tags */
 export const name = import.meta.env.SITE_NAME || 'Falafel in Hotpot';
 
@@ -29,15 +27,26 @@ export const logo = '/logo.svg';
 export const ogImage = '/images/og-image.png';
 
 /** Social media links */
-export const social: SocialLinks = {
+export const social = {
   twitter: 'https://www.instagram.com/falafelinhotpott/',
   github: 'https://www.linkedin.com/company/falafel-in-hotpot/',
   discord: 'https://www.youtube.com/@falafelinhotpot',
 };
 
 /** Legal configuration for privacy policy and terms pages */
-export const legal: LegalConfig = {
+export const legal = {
   privacyEmail: 'hello@falafelinhotpot.com',
   legalEmail: 'hello@falafelinhotpot.com',
   lastUpdated: 'June 21, 2026',
+};
+
+export const siteConfig = {
+  name,
+  description,
+  url,
+  author,
+  logo,
+  ogImage,
+  social,
+  legal,
 };

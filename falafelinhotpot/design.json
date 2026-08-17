@@ -1,0 +1,82 @@
+{
+  "name": "falafel-in-hotpot",
+  "version": "2.0",
+  "direction": "Modern Heritage / Neo-Chinese Editorial (Xin Zhongshi)",
+  "tagline": "Two civilisations. One intersection.",
+  "colors": {
+    "parchment": { "hex": "#FBF7ED", "role": "page background, hero" },
+    "clay": { "hex": "#EDDCC6", "role": "section alternate background" },
+    "ivory": { "hex": "#FDF9F1", "role": "card/surface" },
+    "surface2": { "hex": "#F4EADC", "role": "raised surfaces" },
+    "espresso": { "hex": "#1C1C1C", "role": "body text, headlines" },
+    "muted": { "hex": "#4F4744", "role": "secondary text" },
+    "faint": { "hex": "#766B65", "role": "meta, labels" },
+    "crimson": { "hex": "#C0392B", "role": "accent, CTAs, links, drop caps, pull quotes" },
+    "cinnabar": { "hex": "#9B1B15", "role": "eyebrows, seals, primary buttons" },
+    "gold": { "hex": "#C39A3C", "role": "ornament, highlights, Arabic accents" },
+    "plum": { "hex": "#261B1C", "role": "dark bands, footer" },
+    "plum2": { "hex": "#4B2639", "role": "nested dark surfaces" },
+    "border": { "rgba": "rgba(28,28,28,0.12)", "role": "hairs" },
+    "divider": { "rgba": "rgba(28,28,28,0.16)", "role": "dividers" }
+  },
+  "typography": {
+    "display": { "family": "Cormorant Garamond", "weights": [300, 400, 500, 600], "italic": true, "usage": "headlines, hero, pull quotes" },
+    "body": { "family": "DM Sans", "weights": [300, 400, 500, 600], "usage": "UI, copy, captions" },
+    "chinese": { "family": "Noto Sans SC", "weights": [400, 500], "usage": "CJK text, always pair pinyin below" },
+    "arabic": { "family": "Cairo", "weights": [400, 600, 700], "usage": "Arabic text, RTL, equal visual weight" },
+    "eyebrow": { "size": "11px", "weight": 500, "case": "uppercase", "tracking": "0.22em", "color": "#9B1B15" },
+    "hero": { "size": "64-72px", "family": "display", "lineHeight": 1.02 },
+    "sectionTitle": { "size": "40px", "family": "display", "lineHeight": 1.05 }
+  },
+  "texture": {
+    "base": "public/background.png",
+    "grainFallback": "feTurbulence SVG overlay, 5-6% alpha",
+    "inkOnPaper": "mix-blend-mode: multiply for dark text on texture",
+    "lattice": "Song Dynasty window lattice, CSS repeating grid, section headers/hero edges",
+    "cards": "frosted slate: rgba(245,236,224,0.32) + backdrop-blur + border rgba(213,194,165,0.5) + inset highlight"
+  },
+  "components": {
+    "eyebrowKicker": { "style": "11px uppercase 0.22em tracking", "color": "#9B1B15", "placement": "above headlines" },
+    "primaryButton": { "bg": "#9B1B15", "text": "#FDF9F1", "radius": 0, "padding": "12px 32px", "hoverBg": "#7A1510", "motion": "color transition only, 300ms" },
+    "contentCard": { "bg": "rgba(245,236,224,0.32)", "blur": true, "border": "rgba(213,194,165,0.5)", "radius": 0, "padding": "2rem" },
+    "nav": { "height": "60px", "style": "transparent over paper" },
+    "redSeal": { "size": "46px", "bg": "#9B1B15", "glyph": "Chinese character", "radius": 0, "appear": "scale [0.5,1.15,1] spring 0.4s" },
+    "hero": { "layout": "atmospheric split 60/40", "minHeight": "85vh", "ink": "multiply" }
+  },
+  "layout": {
+    "container": "1200px",
+    "containerX": "24px",
+    "navHeight": "60px",
+    "spaceBase": "1.5rem",
+    "radius": 0,
+    "mode": "light only"
+  },
+  "motion": {
+    "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+    "duration": "0.8-1.4s",
+    "stagger": "120ms",
+    "entrance": "ink wash reveal (clip-path center-outward)",
+    "dividers": "ink stroke draw on scroll (strokeDashoffset)",
+    "particles": "canvas ink drift in hero",
+    "reducedMotion": "collapse everything to static"
+  },
+  "rules": {
+    "noPureBlackWhite": true,
+    "noDefaultShadows": true,
+    "noEmoji": true,
+    "icons": "lucide-react-motion preferred",
+    "sharpCorners": true,
+    "tokensOnly": "use CSS variables, never raw hex in components",
+    "neverRedeclareTokens": "do not redeclare a token after @theme block (cinnabar #9B1B15 incident)",
+    "oneAccentPerPage": "crimson",
+    "legacyErasArchived": true
+  },
+  "architecture": {
+    "stack": "Astro 5 + Template base",
+    "reactIslands": ["forms", "tabs", "breadcrumbs", "FAQ", "cards", "toasts"],
+    "content": "src/content/editions (MDX)",
+    "repo": "02_web/astro_website_all/falafelinhotpot/",
+    "deploy": "Netlify",
+    "routes": ["/", "/about", "/links", "/subscribe", "/contact", "/archive", "/course"]
+  }
+}

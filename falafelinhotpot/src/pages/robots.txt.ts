@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { siteConfig } from '@/config';
+import { siteConfig } from '@/config/site';
 
 export const GET: APIRoute = () => {
   const robotsTxt = `# robots.txt for ${siteConfig.name}
