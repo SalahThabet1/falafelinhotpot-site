@@ -14,11 +14,7 @@ const embedUrl = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
 <article class="yt-card reveal" style={`--stagger: ${index}`}>
   <!-- 16:9 video area — padding-bottom trick: bulletproof cross-browser -->
   <div class="yt-card__ratio">
-    <button
-      class="yt-card__trigger"
-      data-embed={embedUrl}
-      aria-label={`Play: ${title}`}
-    >
+    <button class="yt-card__trigger" data-embed={embedUrl} aria-label={`Play: ${title}`}>
       <img
         src={thumbUrl}
         alt={title}
@@ -32,9 +28,8 @@ const embedUrl = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
         <svg viewBox="0 0 68 48" width="68" height="48" focusable="false">
           <path
             d="M66.5 7.7c-.8-2.9-3-5.1-5.9-5.9C55.3 0 34 0 34 0S12.7 0 7.4 1.8C4.5 2.6 2.3 4.8 1.5 7.7 0 13.1 0 24 0 24s0 10.9 1.5 16.3c.8 2.9 3 5.1 5.9 5.9C12.7 48 34 48 34 48s21.3 0 26.6-1.8c2.9-.8 5.1-3 5.9-5.9C68 34.9 68 24 68 24s0-10.9-1.5-16.3z"
-            fill="rgba(0,0,0,0.72)"
-          />
-          <path d="M45 24L27 14v20z" fill="#fff" />
+            fill="rgba(0,0,0,0.72)"></path>
+          <path d="M45 24L27 14v20z" fill="#fff"></path>
         </svg>
       </span>
     </button>
@@ -49,23 +44,28 @@ const embedUrl = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
 
 <script>
   document.querySelectorAll<HTMLButtonElement>('.yt-card__trigger').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const embedUrl = btn.dataset.embed;
-      if (!embedUrl) return;
+    btn.addEventListener(
+      'click',
+      () => {
+        const embedUrl = btn.dataset.embed;
+        if (!embedUrl) return;
 
-      const ratio = btn.closest('.yt-card__ratio') as HTMLElement;
-      if (!ratio) return;
+        const ratio = btn.closest('.yt-card__ratio') as HTMLElement;
+        if (!ratio) return;
 
-      const iframe = document.createElement('iframe');
-      iframe.src = embedUrl;
-      iframe.title = btn.getAttribute('aria-label') ?? 'YouTube video';
-      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-      iframe.allowFullscreen = true;
-      iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0';
+        const iframe = document.createElement('iframe');
+        iframe.src = embedUrl;
+        iframe.title = btn.getAttribute('aria-label') ?? 'YouTube video';
+        iframe.allow =
+          'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0';
 
-      ratio.innerHTML = '';
-      ratio.appendChild(iframe);
-    }, { once: true });
+        ratio.innerHTML = '';
+        ratio.appendChild(iframe);
+      },
+      { once: true }
+    );
   });
 </script>
 
@@ -79,7 +79,10 @@ const embedUrl = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
     display: flex;
     flex-direction: column;
     height: 100%;
-    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    transition:
+      transform 220ms ease,
+      box-shadow 220ms ease,
+      border-color 220ms ease;
   }
 
   .yt-card:hover {
@@ -145,7 +148,9 @@ const embedUrl = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
   .yt-card__play svg {
     opacity: 0.92;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
-    transition: transform 200ms ease, opacity 200ms ease;
+    transition:
+      transform 200ms ease,
+      opacity 200ms ease;
   }
 
   .yt-card:hover .yt-card__play svg {

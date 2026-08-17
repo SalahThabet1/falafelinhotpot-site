@@ -1,6 +1,5 @@
 import { trim } from './utils';
-
-export const SITE_URL = 'https://falafelinhotpot.com';
+import { url as SITE_URL } from '~/config/site';
 
 const trimSlash = (s: string) => trim(trim(s, '/'));
 

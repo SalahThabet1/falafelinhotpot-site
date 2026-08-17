@@ -34,8 +34,7 @@ console.log(
       pathname: blob.pathname,
       defaultPathname: BUSINESS_CHINESE_BLOB_PATHNAME,
       url: blob.url,
-      size: blob.size,
-      uploadedAt: blob.uploadedAt,
+      size: file.byteLength,
     },
     null,
     2

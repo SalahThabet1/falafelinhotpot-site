@@ -14,12 +14,14 @@ const langClass = lang === 'chinese' ? 'zh' : 'ar';
   <p class={`language-example__phrase ${langClass}`} dir={lang === 'arabic' ? 'rtl' : 'ltr'}>
     {phrase}
   </p>
-  {(transliteration || gloss) && (
-    <div class="language-example__meta">
-      {transliteration && <p class="language-example__translit">{transliteration}</p>}
-      {gloss && <p class="language-example__gloss">{gloss}</p>}
-    </div>
-  )}
+  {
+    (transliteration || gloss) && (
+      <div class="language-example__meta">
+        {transliteration && <p class="language-example__translit">{transliteration}</p>}
+        {gloss && <p class="language-example__gloss">{gloss}</p>}
+      </div>
+    )
+  }
 </aside>
 
 <style>

@@ -82,7 +82,9 @@ function isContentImage(tag) {
 }
 
 function isBoilerplateCard(html) {
-  return /WhatsApp channel|Join the channel →|Chinese language and culture tips, China and Arab/i.test(html);
+  return /WhatsApp channel|Join the channel →|Chinese language and culture tips, China and Arab/i.test(
+    html
+  );
 }
 
 function parseExamples(html) {
@@ -141,7 +143,9 @@ function parseCharMeta(html) {
 
   const pinyin =
     html.match(/class="fih-pinyin"[^>]*>([^<]+)</)?.[1] ||
-    html.match(/Cormorant Garamond'[^>]*font-style:italic;font-size:(?:17|18|22|24|26|34)px[^>]*>([^<]+)</)?.[1];
+    html.match(
+      /Cormorant Garamond'[^>]*font-style:italic;font-size:(?:17|18|22|24|26|34)px[^>]*>([^<]+)</
+    )?.[1];
 
   const toneMatch =
     html.match(/(?:NEUTRAL TONE|TONE \d|Tone \d)/i)?.[0] ||
@@ -166,9 +170,15 @@ function parseCharMeta(html) {
 
 function parseLabelDesc(html) {
   const label =
-    html.match(/font-size:7px;font-weight:700;letter-spacing:0\.16em;text-transform:uppercase[^>]*>([^<]+)</)?.[1] ||
-    html.match(/font-size:11px;font-weight:600;letter-spacing:0\.2em;text-transform:uppercase[^>]*>([^<]+)</)?.[1] ||
-    html.match(/font-size:10px;font-weight:800;letter-spacing:0\.18em;text-transform:uppercase[^>]*>([^<]+)</)?.[1] ||
+    html.match(
+      /font-size:7px;font-weight:700;letter-spacing:0\.16em;text-transform:uppercase[^>]*>([^<]+)</
+    )?.[1] ||
+    html.match(
+      /font-size:11px;font-weight:600;letter-spacing:0\.2em;text-transform:uppercase[^>]*>([^<]+)</
+    )?.[1] ||
+    html.match(
+      /font-size:10px;font-weight:800;letter-spacing:0\.18em;text-transform:uppercase[^>]*>([^<]+)</
+    )?.[1] ||
     html.match(/letter-spacing:0\.16em;text-transform:uppercase[^>]*>([^<]+)</)?.[1];
 
   const desc =
@@ -177,7 +187,8 @@ function parseLabelDesc(html) {
     html.match(/font-style:italic">([\s\S]*?)<\/p>/i)?.[1];
 
   return {
-    label: label && !/^(ANCIENT|MODERN|象形)$/i.test(stripTags(label)) ? stripTags(label) : undefined,
+    label:
+      label && !/^(ANCIENT|MODERN|象形)$/i.test(stripTags(label)) ? stripTags(label) : undefined,
     description: desc ? formatInline(stripTags(desc)) : '',
   };
 }
@@ -196,7 +207,8 @@ function parseLessonCardHtml(html, kind) {
   const { character, pinyin, tone, meaning } = parseCharMeta(html);
   const { label, description } = parseLabelDesc(html);
   const examples = parseExamples(html);
-  const badge = html.includes('PICTOGRAPH') || html.includes('象形字') ? '象形字 — Pictograph' : undefined;
+  const badge =
+    html.includes('PICTOGRAPH') || html.includes('象形字') ? '象形字 — Pictograph' : undefined;
 
   let imageSrc;
   let imageAlt;
@@ -263,7 +275,9 @@ function cardRegions(html) {
   }
 
   // Pictograph cards (#1)
-  for (const m of html.matchAll(/<!-- Top accent bar -->[\s\S]*?<!-- Bottom accent bar -->[\s\S]*?height:2px;background:linear-gradient/gi)) {
+  for (const m of html.matchAll(
+    /<!-- Top accent bar -->[\s\S]*?<!-- Bottom accent bar -->[\s\S]*?height:2px;background:linear-gradient/gi
+  )) {
     if (m[0].includes('ANCIENT')) add(m.index, m[0], 'pictograph');
   }
 
@@ -286,7 +300,9 @@ function cardRegions(html) {
   }
 
   // Compare table (#2)
-  for (const m of html.matchAll(/THE SAME WORD[\s\S]*?padding:12px 0 14px 0[\s\S]*?<\/table>\s*<\/td>\s*<\/tr>\s*<\/table>/gi)) {
+  for (const m of html.matchAll(
+    /THE SAME WORD[\s\S]*?padding:12px 0 14px 0[\s\S]*?<\/table>\s*<\/td>\s*<\/tr>\s*<\/table>/gi
+  )) {
     add(m.index, m[0], 'compare');
   }
 
@@ -332,7 +348,8 @@ function extractEduBlocks(html) {
     if (inCardRegion(m.index, regions)) continue;
     const plain = stripTags(m[1]);
     if (!plain || plain.length < 3) continue;
-    if (/WhatsApp|Join the channel|Sent to:|%SENDER|Chinese language and culture tips/i.test(plain)) continue;
+    if (/WhatsApp|Join the channel|Sent to:|%SENDER|Chinese language and culture tips/i.test(plain))
+      continue;
     if (/^你好 ·|^Falafel in Hotpot has a WhatsApp/i.test(plain)) continue;
 
     blocks.push({ type: 'paragraph', index: m.index, text: formatInline(plain) });
@@ -361,7 +378,8 @@ function extractEduBlocks(html) {
     const dupH3 = arr.some(
       (other) =>
         other.type === 'heading' &&
-        other.text.replace(/\s+/g, ' ').toLowerCase() === b.heading.replace(/\s+/g, ' ').toLowerCase()
+        other.text.replace(/\s+/g, ' ').toLowerCase() ===
+          b.heading.replace(/\s+/g, ' ').toLowerCase()
     );
     return !dupH3;
   });
@@ -437,7 +455,10 @@ export function parseEduNewsletterHtml(html, options = {}) {
         if (heading) lastHeading = heading;
 
         imports.add("import LessonEntry from '~/components/editions/LessonEntry.astro';");
-        const attrs = [mdxProp('heading', heading), mdxProp('description', block.description || block.meaning || '')];
+        const attrs = [
+          mdxProp('heading', heading),
+          mdxProp('description', block.description || block.meaning || ''),
+        ];
 
         if (block.kind === 'pictograph') {
           attrs.push('hidePhrase');
@@ -448,17 +469,24 @@ export function parseEduNewsletterHtml(html, options = {}) {
           if (block.meaning) attrs.push(mdxProp('meaning', block.meaning));
         }
 
-        if (block.imageSrc && block.imageSrc.split('?')[0] !== coverKey && !usedImages.has(block.imageSrc)) {
+        if (
+          block.imageSrc &&
+          block.imageSrc.split('?')[0] !== coverKey &&
+          !usedImages.has(block.imageSrc)
+        ) {
           usedImages.add(block.imageSrc);
           const publicPath = imagePathFor(block.imageSrc);
           const resolved = resolveImagePath(publicDir, publicPath);
-          const exists = publicDir && fs.existsSync(path.join(publicDir, resolved.replace(/^\//, '')));
+          const exists =
+            publicDir && fs.existsSync(path.join(publicDir, resolved.replace(/^\//, '')));
           if (exists) {
             attrs.push(mdxProp('image', resolved));
           } else {
             const alt = block.imageAlt || block.label || block.character || `Figure ${figNum}`;
             imageGaps.push({ slug, fig: figNum, alt, publicPath, sourceUrl: block.imageSrc });
-            mdxParts.push(`\n{/* IMAGE-GAP: ${slug} | fig-${figNum} | "${alt}" | ${publicPath} */}\n`);
+            mdxParts.push(
+              `\n{/* IMAGE-GAP: ${slug} | fig-${figNum} | "${alt}" | ${publicPath} */}\n`
+            );
           }
         }
 

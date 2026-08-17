@@ -29,7 +29,10 @@ const type = metadata.openGraph?.type === 'article' ? 'article' : 'website';
   <head>
     <meta charset="UTF-8" />
     <!-- Force light mode for public site — old dashboard theme may persist .dark in localStorage -->
-    <script is:inline>document.documentElement.classList.remove('dark');localStorage.removeItem('theme');</script>
+    <script is:inline>
+      document.documentElement.classList.remove('dark');
+      localStorage.removeItem('theme');
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -56,7 +59,7 @@ const type = metadata.openGraph?.type === 'article' ? 'article' : 'website';
         const animated = document.querySelectorAll('.reveal, .sr-fade, .sr-left, .sr-scale');
         if (!animated.length) return;
 
-        const reveal = (el) => {
+        const reveal = (el: Element) => {
           el.classList.add('visible', 'sr-visible');
         };
 
@@ -73,7 +76,7 @@ const type = metadata.openGraph?.type === 'article' ? 'article' : 'website';
         // below the fold is held back for the entrance transition, and even
         // that gets a hard timeout so it can never stay hidden for good.
         const viewportH = window.innerHeight;
-        const pending = [];
+        const pending: Element[] = [];
         animated.forEach((el) => {
           const rect = el.getBoundingClientRect();
           if (rect.top < viewportH && rect.bottom > 0) {

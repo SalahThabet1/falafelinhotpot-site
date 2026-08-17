@@ -20,7 +20,11 @@ export type ShareNetwork = {
   copyLink?: boolean;
 };
 
-export function buildShareHref(platform: SharePlatform, url: string, text: string): string | undefined {
+export function buildShareHref(
+  platform: SharePlatform,
+  url: string,
+  text: string
+): string | undefined {
   const encodedUrl = encodeURIComponent(url);
   const encodedText = encodeURIComponent(text);
   const combined = encodeURIComponent(`${text} ${url}`);

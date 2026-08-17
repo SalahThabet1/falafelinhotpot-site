@@ -62,9 +62,7 @@ const networks = getShareNetworks(shareUrl, text);
         if (!url) return;
 
         const originalLabel = button.getAttribute('aria-label') ?? 'Copy link';
-        const feedback = button
-          .closest('.social-share')
-          ?.querySelector('[data-share-feedback]');
+        const feedback = button.closest('.social-share')?.querySelector('[data-share-feedback]');
 
         try {
           await navigator.clipboard.writeText(url);

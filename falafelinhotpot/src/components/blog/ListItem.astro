@@ -52,18 +52,20 @@ const footerMeta =
 
           <h2 class="edition-card__title">{post.title}</h2>
 
-          {
-            (post.excerpt || post.titleAr) && (
-              <div class="edition-card__subtitle">
-                {post.excerpt && <p class="edition-card__excerpt" dir="auto">{post.excerpt}</p>}
-                {post.titleAr && (
-                  <p class="edition-card__title-ar" dir="rtl" lang="ar">
-                    {post.titleAr}
-                  </p>
-                )}
-              </div>
-            )
-          }
+          {(post.excerpt || post.titleAr) && (
+            <div class="edition-card__subtitle">
+              {post.excerpt && (
+                <p class="edition-card__excerpt" dir="auto">
+                  {post.excerpt}
+                </p>
+              )}
+              {post.titleAr && (
+                <p class="edition-card__title-ar" dir="rtl" lang="ar">
+                  {post.titleAr}
+                </p>
+              )}
+            </div>
+          )}
 
           <footer class="edition-card__footer">
             <time datetime={String(post.publishDate)}>{footerDate}</time>
@@ -98,18 +100,20 @@ const footerMeta =
         <div class="edition-card__content">
           <p class="edition-card__eyebrow">{eyebrow}</p>
           <h2 class="edition-card__title">{post.title}</h2>
-          {
-            (post.excerpt || post.titleAr) && (
-              <div class="edition-card__subtitle">
-                {post.excerpt && <p class="edition-card__excerpt" dir="auto">{post.excerpt}</p>}
-                {post.titleAr && (
-                  <p class="edition-card__title-ar" dir="rtl" lang="ar">
-                    {post.titleAr}
-                  </p>
-                )}
-              </div>
-            )
-          }
+          {(post.excerpt || post.titleAr) && (
+            <div class="edition-card__subtitle">
+              {post.excerpt && (
+                <p class="edition-card__excerpt" dir="auto">
+                  {post.excerpt}
+                </p>
+              )}
+              {post.titleAr && (
+                <p class="edition-card__title-ar" dir="rtl" lang="ar">
+                  {post.titleAr}
+                </p>
+              )}
+            </div>
+          )}
           <footer class="edition-card__footer">
             <time datetime={String(post.publishDate)}>{footerDate}</time>
             {footerMeta && <span aria-hidden="true"> • </span>}

@@ -22,9 +22,7 @@ export function getBusinessChineseBlobPathname(): string {
   return process.env.BLOB_BUSINESS_CHINESE_PATHNAME || BUSINESS_CHINESE_BLOB_PATHNAME;
 }
 
-export async function createBusinessChineseDownloadToken(
-  email: string
-): Promise<string> {
+export async function createBusinessChineseDownloadToken(email: string): Promise<string> {
   return new SignJWT({
     email: email.trim().toLowerCase(),
     resource: BUSINESS_CHINESE_RESOURCE,

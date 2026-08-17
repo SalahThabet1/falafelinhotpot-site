@@ -14,7 +14,8 @@ import { getOrderedImages, parseNewsletterHtml } from './parse-newsletter-html.m
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const CULTURAL_SRC = process.env.CULTURAL_SRC || path.join(process.env.HOME, 'Downloads/ac_cultural_newsletters');
+const CULTURAL_SRC =
+  process.env.CULTURAL_SRC || path.join(process.env.HOME, 'Downloads/ac_cultural_newsletters');
 const EDU_SRC = process.env.EDU_SRC || path.join(process.env.HOME, 'Downloads/ac_edu_newsletters');
 const OUT_DIR = path.join(ROOT, process.env.OUT_DIR || 'src/content/editions');
 const PUBLIC_DIR = path.join(ROOT, 'public');
@@ -22,10 +23,6 @@ const SLUGS_PATH = path.join(__dirname, 'edition-slugs.json');
 const MANIFEST_PATH = path.join(ROOT, 'MISSING_IMAGES.md');
 
 const SLUGS = JSON.parse(fs.readFileSync(SLUGS_PATH, 'utf-8'));
-
-const SKIP_SRC = /social-icons|messenger-icons|youtube-circle|instagram-circle|tiktok-circle|whatsapp-rounded|\[IMAGE_URL\]|logo_fav|wide_logo|stripo\.cluster/i;
-const SHARED_BANNER = 'a64816f9-33a3-46b0-a061-1d587926635c';
-const LOGO_ASSET = 'd24cade6-23a2-4204-b552-e8837ad95ade';
 
 const CJK_RE = /[\u4e00-\u9fff\u3400-\u4dbf]/;
 const ARABIC_RE = /[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/;
@@ -115,7 +112,10 @@ function titleCase(s) {
     .split(/\s+/)
     .map((w) => {
       const lower = w.toLowerCase();
-      if (['no', 'i', 'a', 'the', 'in', 'on', 'and', 'or', 'to', 'of', 'is', 'it'].includes(lower) && w === lower)
+      if (
+        ['no', 'i', 'a', 'the', 'in', 'on', 'and', 'or', 'to', 'of', 'is', 'it'].includes(lower) &&
+        w === lower
+      )
         return lower;
       return w.charAt(0).toUpperCase() + w.slice(1);
     })
@@ -136,7 +136,8 @@ function truncate(s, n = 160) {
 
 function extFromUrl(url) {
   const ext = path.extname(url.split('?')[0]).toLowerCase();
-  if (['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext)) return ext === '.jpeg' ? '.jpg' : ext;
+  if (['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext))
+    return ext === '.jpeg' ? '.jpg' : ext;
   return '.jpg';
 }
 
@@ -165,9 +166,7 @@ function listIssueFolders(srcRoot, issuePattern) {
     const hasDate = /^\d{4}-\d{2}-\d{2}/.test(sdate);
 
     const subjFile = fs.readdirSync(dir).find((f) => f.endsWith('_subject.txt'));
-    const txtFile = fs
-      .readdirSync(dir)
-      .find((f) => f.endsWith('.txt') && !f.includes('subject'));
+    const txtFile = fs.readdirSync(dir).find((f) => f.endsWith('.txt') && !f.includes('subject'));
     const htmlFile = fs.readdirSync(dir).find((f) => f.endsWith('.html'));
 
     folders.push({
@@ -190,61 +189,6 @@ function listIssueFolders(srcRoot, issuePattern) {
     if (!cur || score(f) > score(cur)) byIssue[f.issue] = f;
   }
   return byIssue;
-}
-
-// ---------------------------------------------------------------------------
-// Image extraction
-// ---------------------------------------------------------------------------
-
-function extractImages(html) {
-  const images = [];
-  const re = /<img[^>]+>/gi;
-  let match;
-  while ((match = re.exec(html)) !== null) {
-    const tag = match[0];
-    const src = tag.match(/src="([^"]+)"/i)?.[1];
-    const alt = tag.match(/alt="([^"]*)"/i)?.[1] ?? '';
-    const width = Number(tag.match(/width="(\d+)"/i)?.[1] ?? 0);
-    const isAdapt = /adapt-img/.test(tag);
-    if (!src || SKIP_SRC.test(src)) continue;
-    if (src.includes(LOGO_ASSET) && width < 200) continue;
-    if (!alt && width > 0 && width < 120 && !isAdapt) continue;
-    images.push({
-      src,
-      alt: decodeEntities(alt).replace(/&mdash;/g, '—'),
-      width,
-      isAdapt,
-    });
-  }
-
-  const seen = new Set();
-  return images.filter((img) => {
-    const key = img.src.split('?')[0];
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-}
-
-function pickHeroAndFigures(images) {
-  const substantive = images.filter(
-    (img) =>
-      img.isAdapt ||
-      img.width >= 400 ||
-      (img.alt && img.alt.length > 20) ||
-      (img.src.includes('activehosted.com/content/') && !SKIP_SRC.test(img.src))
-  );
-  const nonBanner = substantive.filter(
-    (img) => !img.src.includes(SHARED_BANNER) && !SKIP_SRC.test(img.src)
-  );
-  const hero =
-    nonBanner.find((img) => img.isAdapt && img.width >= 300) ??
-    nonBanner.find((img) => img.width >= 400) ??
-    nonBanner[0];
-
-  const heroKey = hero?.src.split('?')[0];
-  const figures = nonBanner.filter((img) => img.src.split('?')[0] !== heroKey);
-  return { hero, figures };
 }
 
 // ---------------------------------------------------------------------------
@@ -291,9 +235,11 @@ function shouldSkipLine(line, ctx) {
   if (/^Infinite personality\.$/i.test(t)) return true;
   if (/^Chinese characters$/i.test(t)) return true;
   if (/^come from life\.$/i.test(t)) return true;
-  if (ctx.track === 'learn' && /^Chinese characters come from life\.$/i.test(t) && !ctx.bodyStarted) return true;
+  if (ctx.track === 'learn' && /^Chinese characters come from life\.$/i.test(t) && !ctx.bodyStarted)
+    return true;
   if (/^and the pictures hidden inside Chinese writing\.?$/i.test(t)) return true;
-  if (/^Let me show you six of them\.?$/i.test(t) && ctx.track === 'learn' && ctx.issueNumber === 1) return false;
+  if (/^Let me show you six of them\.?$/i.test(t) && ctx.track === 'learn' && ctx.issueNumber === 1)
+    return false;
   return false;
 }
 
@@ -362,17 +308,23 @@ function formatInline(text) {
   );
 
   // Split by existing tags, wrap bare CJK/Arabic segments only
-  out = out.replace(/([\u4e00-\u9fff\u3400-\u4dbf]+(?:[，。！？、]?[\u4e00-\u9fff\u3400-\u4dbf]+)*)/g, (m, _g, offset) => {
-    const before = out.slice(Math.max(0, offset - 20), offset);
-    if (before.includes('class="zh"') || before.includes("character=\"")) return m;
-    return `<span class="zh">${m}</span>`;
-  });
+  out = out.replace(
+    /([\u4e00-\u9fff\u3400-\u4dbf]+(?:[，。！？、]?[\u4e00-\u9fff\u3400-\u4dbf]+)*)/g,
+    (m, _g, offset) => {
+      const before = out.slice(Math.max(0, offset - 20), offset);
+      if (before.includes('class="zh"') || before.includes('character="')) return m;
+      return `<span class="zh">${m}</span>`;
+    }
+  );
 
-  out = out.replace(/([\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+(?:\s+[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+)*)/g, (m, _g, offset) => {
-    const before = out.slice(Math.max(0, offset - 20), offset);
-    if (before.includes('class="ar"')) return m;
-    return `<span class="ar">${m}</span>`;
-  });
+  out = out.replace(
+    /([\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+(?:\s+[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+)*)/g,
+    (m, _g, offset) => {
+      const before = out.slice(Math.max(0, offset - 20), offset);
+      if (before.includes('class="ar"')) return m;
+      return `<span class="ar">${m}</span>`;
+    }
+  );
 
   out = out.replace(/<span class="zh"><span class="zh">/g, '<span class="zh">');
   out = out.replace(/<span class="ar"><span class="ar">/g, '<span class="ar">');
@@ -410,9 +362,13 @@ function parseLanguageBlock(lines, startIdx) {
   if (!parts.length) return { nextIdx: startIdx + 1, block: '' };
 
   const phrase = parts[0].replace(/[。?？!！]$/, '');
-  const translit = parts.find((p) => /^[A-Za-z\u0100-\u017F]/.test(p) && (p.includes('—') || p.includes('-'))) || '';
-  const gloss = parts.find((p) => /^What it means|^Could mean|^Not a question/i.test(p)) ||
-    parts.slice(2).find((p) => p.length > 15) || '';
+  const translit =
+    parts.find((p) => /^[A-Za-z\u0100-\u017F]/.test(p) && (p.includes('—') || p.includes('-'))) ||
+    '';
+  const gloss =
+    parts.find((p) => /^What it means|^Could mean|^Not a question/i.test(p)) ||
+    parts.slice(2).find((p) => p.length > 15) ||
+    '';
 
   let block = `\n<strong><span class="${langClass}">${phrase}</span></strong>\n`;
   if (translit) block += `— ${formatInline(translit)}\n\n`;
@@ -423,7 +379,8 @@ function parseLanguageBlock(lines, startIdx) {
 
 function parseLearn01CharacterCards(text) {
   const cards = [];
-  const charHeaderRe = /^\*{2,4}([\u4e00-\u9fff]) — ([a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü]+) — (.+?)\*{2,4}$/;
+  const charHeaderRe =
+    /^\*{2,4}([\u4e00-\u9fff]) — ([a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü]+) — (.+?)\*{2,4}$/;
 
   const lines = text.split('\n').map((l) => l.trim());
   let intro = [];
@@ -432,7 +389,15 @@ function parseLearn01CharacterCards(text) {
   while (i < lines.length) {
     const hm = lines[i].match(charHeaderRe);
     if (!hm) {
-      if (lines[i] && !shouldSkipLine(lines[i], { track: 'learn', subjectLine: '', titleAr: '', bodyStarted: false }))
+      if (
+        lines[i] &&
+        !shouldSkipLine(lines[i], {
+          track: 'learn',
+          subjectLine: '',
+          titleAr: '',
+          bodyStarted: false,
+        })
+      )
         intro.push(lines[i]);
       i++;
       continue;
@@ -467,7 +432,13 @@ function parseLearn01CharacterCards(text) {
     const toneMatch = text.match(new RegExp(`${pinyin}[\\s\\S]{0,30}Tone (\\d)`, 'i'));
     const tone = toneMatch ? `Tone ${toneMatch[1]}` : '';
 
-    cards.push({ character, pinyin, tone, meaning, description: dedupeSentences(descLines.join(' ') || meaning) });
+    cards.push({
+      character,
+      pinyin,
+      tone,
+      meaning,
+      description: dedupeSentences(descLines.join(' ') || meaning),
+    });
   }
 
   return { intro: intro.filter(Boolean), cards };
@@ -496,7 +467,13 @@ function buildLearn01Body(text) {
   const closingMatch = tail.match(
     /This is what I find most beautiful about Chinese characters\.[\s\S]+?And that is a very long conversation\./
   );
-  if (closingMatch) closingLines.push(...closingMatch[0].split(/\n\n+/).map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean));
+  if (closingMatch)
+    closingLines.push(
+      ...closingMatch[0]
+        .split(/\n\n+/)
+        .map((l) => l.replace(/\s+/g, ' ').trim())
+        .filter(Boolean)
+    );
 
   const natural = cards.filter((c) => ['日', '月', '山', '水', '木'].includes(c.character));
   const animals = cards.filter((c) => c.character === '马');
@@ -614,7 +591,9 @@ function bodyToMdx(rawText, ctx) {
 // ---------------------------------------------------------------------------
 
 function uuidFromUrl(url) {
-  return url.match(/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i)?.[1]?.toLowerCase();
+  return url
+    .match(/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i)?.[1]
+    ?.toLowerCase();
 }
 
 function basenameFromUrl(url) {
@@ -626,7 +605,8 @@ function listContentImages(searchDirs) {
   for (const imagesDir of searchDirs) {
     if (!fs.existsSync(imagesDir)) continue;
     for (const f of fs.readdirSync(imagesDir)) {
-      if (/rounded-gray|linkedin|youtube|instagram|tiktok|whatsapp|47ca7986-dfea/i.test(f)) continue;
+      if (/rounded-gray|linkedin|youtube|instagram|tiktok|whatsapp|47ca7986-dfea/i.test(f))
+        continue;
       if (!/\.(jpe?g|png|webp|gif)$/i.test(f)) continue;
       files.push(path.join(imagesDir, f));
     }
@@ -727,7 +707,15 @@ export function syncEduImages(options = {}) {
     const slug = SLUGS.learn[String(folder.issue)];
     const html = folder.htmlPath ? fs.readFileSync(folder.htmlPath, 'utf-8') : '';
     if (!html) continue;
-    const r = syncNewsletterImages(folder, html, slug, folder.issue, 'thursday-lesson', 'learn', log);
+    const r = syncNewsletterImages(
+      folder,
+      html,
+      slug,
+      folder.issue,
+      'thursday-lesson',
+      'learn',
+      log
+    );
     copied += r.copied;
     missing += r.missing;
   }
@@ -797,7 +785,12 @@ function buildMdx(edition, imageGaps) {
     });
   }
 
-  const imports = [...new Set([...extraImports, "import EditionCTA from '~/components/editions/EditionCTA.astro';"])];
+  const imports = [
+    ...new Set([
+      ...extraImports,
+      "import EditionCTA from '~/components/editions/EditionCTA.astro';",
+    ]),
+  ];
 
   const ctaText =
     track === 'cultural'
@@ -831,7 +824,10 @@ metadata:
 
 function extractTags(subjectLine, bodyMd, track) {
   const tags = new Set();
-  const words = subjectLine.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/);
+  const words = subjectLine
+    .toLowerCase()
+    .replace(/[^\w\s]/g, '')
+    .split(/\s+/);
   for (const w of ['chinese', 'arabic', 'culture', 'language', 'grammar', 'characters']) {
     if (words.includes(w) || bodyMd.toLowerCase().includes(w)) tags.add(w);
   }

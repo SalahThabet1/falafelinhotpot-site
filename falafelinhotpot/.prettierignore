@@ -4,3 +4,7 @@ node_modules/
 package-lock.json
 *.md
 src/content/editions/*.mdx
+# vendored built landing course output, committed as-is
+public/mandarin-starterkit-course/
+# self-contained React island with its own formatting conventions
+src/components/pinyin/

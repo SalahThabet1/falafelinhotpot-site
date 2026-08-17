@@ -67,15 +67,21 @@ export function formatInline(text) {
     '<span class="zh">$1</span> — <span class="py">$2</span> — $3'
   );
 
-  out = out.replace(/([\u4e00-\u9fff\u3400-\u4dbf]+(?:[，。！？、]?[\u4e00-\u9fff\u3400-\u4dbf]+)*)/g, (m) => {
-    if (m.includes('class=')) return m;
-    return `<span class="zh">${m}</span>`;
-  });
+  out = out.replace(
+    /([\u4e00-\u9fff\u3400-\u4dbf]+(?:[，。！？、]?[\u4e00-\u9fff\u3400-\u4dbf]+)*)/g,
+    (m) => {
+      if (m.includes('class=')) return m;
+      return `<span class="zh">${m}</span>`;
+    }
+  );
 
-  out = out.replace(/([\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+(?:\s+[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+)*)/g, (m) => {
-    if (m.includes('class=')) return m;
-    return `<span class="ar">${m}</span>`;
-  });
+  out = out.replace(
+    /([\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+(?:\s+[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+)*)/g,
+    (m) => {
+      if (m.includes('class=')) return m;
+      return `<span class="ar">${m}</span>`;
+    }
+  );
 
   out = out.replace(/<span class="zh"><span class="zh">/g, '<span class="zh">');
   out = out.replace(/<\/span><\/span>/g, '</span>');
@@ -169,9 +175,7 @@ function parseLanguageCard(html) {
 
   const lang = langMatch[1].toLowerCase() === 'chinese' ? 'chinese' : 'arabic';
   const phraseMatch = html.match(
-    lang === 'chinese'
-      ? /font-family:'Noto Sans SC'[^>]*>([^<]+)</
-      : /dir="rtl"[^>]*>([^<]+)</
+    lang === 'chinese' ? /font-family:'Noto Sans SC'[^>]*>([^<]+)</ : /dir="rtl"[^>]*>([^<]+)</
   );
   const translitMatch = html.match(/font-style:italic[^>]*>([^<]+)</);
 
@@ -294,7 +298,8 @@ function extractBlocks(html, track) {
     const idx = m.index;
     if (inRange(idx, skipRanges)) continue;
 
-    if (/In Chinese|In Arabic|What it means:|Could mean/i.test(inner) && inner.length < 200) continue;
+    if (/In Chinese|In Arabic|What it means:|Could mean/i.test(inner) && inner.length < 200)
+      continue;
 
     const plain = stripTags(inner);
     if (!plain || plain.length < 3) continue;
@@ -348,9 +353,7 @@ export function getOrderedImages(html, track = 'cultural') {
   const cover = getCoverImage(html);
   const coverKey = cover?.src?.split('?')[0];
   const blocks = extractBlocks(html, track);
-  const images = blocks.filter(
-    (b) => b.type === 'image' && b.src.split('?')[0] !== coverKey
-  );
+  const images = blocks.filter((b) => b.type === 'image' && b.src.split('?')[0] !== coverKey);
   return {
     cover,
     inline: images,
@@ -440,7 +443,9 @@ export function parseNewsletterHtml(html, options = {}) {
           publicDir && fs.existsSync(path.join(publicDir, resolvedPath.replace(/^\//, '')));
 
         if (exists) {
-          mdxParts.push(`\n<EditionFigure src="${resolvedPath}" alt="${alt.replace(/"/g, '\\"')}" />\n`);
+          mdxParts.push(
+            `\n<EditionFigure src="${resolvedPath}" alt="${alt.replace(/"/g, '\\"')}" />\n`
+          );
         } else {
           imageGaps.push({ slug, fig: figNum, alt, publicPath, sourceUrl: block.src });
           mdxParts.push(

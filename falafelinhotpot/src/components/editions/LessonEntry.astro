@@ -40,11 +40,9 @@ const {
 const isPictograph = layout === 'pictograph' && Boolean(image && character);
 
 const isPhrase =
-  Boolean(character) &&
-  (character.length > 2 || /[，。？！、？]/.test(character));
+  typeof character === 'string' && (character.length > 2 || /[，。？！、？]/.test(character));
 
-const showPhrase =
-  !hidePhrase && Boolean(character || pinyin || tone || meaning);
+const showPhrase = !hidePhrase && Boolean(character || pinyin || tone || meaning);
 
 const imageAlt = meaning || character || label || heading;
 
@@ -76,12 +74,14 @@ if (label && heading) {
 <section class="lesson-entry">
   <h2 class="lesson-entry__heading">{heading}</h2>
 
-  {(eyebrow || badge) && (
-    <div class="lesson-entry__eyebrows">
-      {eyebrow && <p class="lesson-entry__eyebrow">{eyebrow}</p>}
-      {badge && <p class="lesson-entry__badge">{badge}</p>}
-    </div>
-  )}
+  {
+    (eyebrow || badge) && (
+      <div class="lesson-entry__eyebrows">
+        {eyebrow && <p class="lesson-entry__eyebrow">{eyebrow}</p>}
+        {badge && <p class="lesson-entry__badge">{badge}</p>}
+      </div>
+    )
+  }
 
   {
     isPictograph ? (

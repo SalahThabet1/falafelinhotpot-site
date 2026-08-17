@@ -120,7 +120,11 @@ export function unlockAudio() {
 
 export function stopAudio() {
   if (currentSource) {
-    try { currentSource.stop(); } catch (_) {}
+    try {
+      currentSource.stop();
+    } catch {
+      // noop — stopping an already-stopped source throws; safe to ignore
+    }
     currentSource = null;
   }
 }
@@ -174,7 +178,7 @@ export async function playAudio(url, onEnded) {
     if (onEnded) source.onended = onEnded;
     source.start(0);
     currentSource = source;
-  } catch (_) {
+  } catch {
     if (fallbackAudio) fallbackAudio.pause();
     fallbackAudio = new Audio(url);
     fallbackAudio.volume = 0.9;

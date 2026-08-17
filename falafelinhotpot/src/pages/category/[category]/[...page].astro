@@ -53,11 +53,13 @@ const metadata = {
         prevText="Newer editions"
         nextText="Older editions"
       />
-      {track === 'Learn' && (
-        <div class="learn-archive-cta">
-          <LearnCourseCTA />
-        </div>
-      )}
+      {
+        track === 'Learn' && (
+          <div class="learn-archive-cta">
+            <LearnCourseCTA />
+          </div>
+        )
+      }
     </div>
   </section>
 </FihLayout>

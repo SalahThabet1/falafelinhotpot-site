@@ -26,11 +26,7 @@ const authorName = 'Falafel';
 ---
 
 <article class:list={['single-post', { 'single-post--has-hero': hasHero }]}>
-  {
-    hasHero && post.image && (
-      <EditionHero src={post.image} alt={post.title} />
-    )
-  }
+  {hasHero && post.image && <EditionHero src={post.image} alt={post.title} />}
 
   <header class="single-post__header">
     <div class="single-post__intro">
@@ -93,8 +89,7 @@ const authorName = 'Falafel';
   }
 
   .single-post__header {
-    padding: clamp(2rem, 5vw, 3.25rem) var(--container-x, 1.25rem)
-      clamp(2.5rem, 6vw, 4rem);
+    padding: clamp(2rem, 5vw, 3.25rem) var(--container-x, 1.25rem) clamp(2.5rem, 6vw, 4rem);
   }
 
   .single-post--has-hero .single-post__header {
