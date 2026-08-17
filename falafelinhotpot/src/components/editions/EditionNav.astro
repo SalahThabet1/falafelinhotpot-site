@@ -13,8 +13,8 @@ export interface Props {
 
 const { prevPost, nextPost, currentIndex, totalPosts, currentSeries } = Astro.props;
 
-const prevHref = prevPost ? getPermalink(prevPost.permalink, 'post') : undefined;
-const nextHref = nextPost ? getPermalink(nextPost.permalink, 'post') : undefined;
+const prevHref = prevPost ? getPermalink(prevPost.permalink) : undefined;
+const nextHref = nextPost ? getPermalink(nextPost.permalink) : undefined;
 const pageNumber = currentIndex + 1;
 const editionsHref = getBlogPermalink();
 

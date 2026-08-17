@@ -1,6 +1,7 @@
 ---
 import FihLayout from '~/layouts/FihLayout.astro';
 import VideoCard from '~/components/fih/VideoCard.astro';
+import NewsletterForm from '~/components/islands/NewsletterForm';
 
 const metadata = {
   title: 'Falafel in Hotpot — A bridge between worlds',
@@ -29,7 +30,6 @@ const videos = [
 ---
 
 <FihLayout metadata={metadata}>
-
   <!-- ④ COURSE CALLOUT ────────────────────────────────────────── -->
   <section class="course-section">
     <div class="container">
@@ -52,9 +52,9 @@ const videos = [
           <h3 class="course-card__h3">Chinese that finally makes sense.</h3>
 
           <p class="course-card__body">
-            Learn the Mandarin people actually use, with pronunciation, pinyin,
-            everyday phrases, worksheets, and cultural context explained clearly for
-            Arabic speakers. Not a course you finish. A resource you keep.
+            Learn the Mandarin people actually use, with pronunciation, pinyin, everyday phrases,
+            worksheets, and cultural context explained clearly for Arabic speakers. Not a course you
+            finish. A resource you keep.
           </p>
 
           <a href="/mandarin-starterkit-course/#pricing" class="btn btn--primary">
@@ -68,7 +68,6 @@ const videos = [
   <!-- ① HERO ──────────────────────────────────────────────────── -->
   <section class="hero">
     <div class="container hero__inner">
-
       <div class="hero__visual">
         <img
           src="/images/falafel.jpeg"
@@ -90,21 +89,19 @@ const videos = [
           <span class="hero__greeting-zh" lang="zh">你好</span>
         </h1>
         <p class="hero__intro">
-          I'm Falafel — a polyglot, content creator, and entrepreneur bridging
-          China and the Arab world.
+          I'm Falafel — a polyglot, content creator, and entrepreneur bridging China and the Arab
+          world.
         </p>
         <p class="hero__tagline">
-          I built Falafel in Hotpot — the only China-Arab cultural intelligence
-          brand in the Arab world. We teach Mandarin to Arabs, help Gulf
-          businesses navigate China, and create content that connects two
-          civilisations most people never thought had anything in common.
+          I built Falafel in Hotpot — the only China-Arab cultural intelligence brand in the Arab
+          world. We teach Mandarin to Arabs, help Gulf businesses navigate China, and create content
+          that connects two civilisations most people never thought had anything in common.
         </p>
         <div class="hero__ctas">
           <a href="/editions" class="btn btn--primary">Read the latest →</a>
           <a href="#subscribe" class="btn btn--ghost">Subscribe ↓</a>
         </div>
       </div>
-
     </div>
   </section>
 
@@ -113,7 +110,6 @@ const videos = [
     <div class="nl-container">
       <div class="nl-box">
         <div class="nl-cols">
-
           <!-- LEFT 40%: Brand title + social proof (Ali Abdaal pattern) -->
           <div class="nl-col nl-col--left">
             <div class="nl-brand">
@@ -129,79 +125,22 @@ const videos = [
           <!-- RIGHT 60%: Description + inline form + disclaimer -->
           <div class="nl-col nl-col--right">
             <p class="nl-desc">
-              Each week, one story from the intersection of the Arab world and China —
-              language, food, business, history. One tradition is not the exotic other.
-              It's free to join, and always will be.
+              Each week, one story from the intersection of the Arab world and China — language,
+              food, business, history. One tradition is not the exotic other. It's free to join, and
+              always will be.
             </p>
 
-            <form id="dispatch-form" class="flex w-full items-stretch mt-6 mb-4" novalidate>
-              <!--
-                flex-1: Tells input to take remaining space.
-                min-w-0: CRITICAL FIX to prevent the input from blowing out flex bounds.
-              -->
-              <input
-                id="dispatch-email"
-                type="email"
-                placeholder="Your email"
-                class="flex-1 min-w-0 bg-transparent border border-[#E3D1B8] border-r-0 px-4 py-3 text-[#2C2C2A] focus:outline-none focus:border-[#9B1B15] focus:ring-1 focus:ring-[#9B1B15] transition-all"
-                name="email"
-                required
-                autocomplete="email"
-              />
-              <!--
-                shrink-0: Protects the button from being squished or causing overflow.
-              -->
-              <button
-                type="submit"
-                class="shrink-0 bg-[#9B1B15] text-white font-medium px-6 py-3 hover:bg-[#7A1510] transition-colors shadow-sm"
-              >
-                Subscribe
-              </button>
-            </form>
-            <p id="dispatch-status" class="nl-form__status" aria-live="polite" hidden></p>
+            <NewsletterForm client:visible variant="inline" />
 
             <p class="nl-disclaimer">
-              By subscribing you'll receive weekly dispatches from the bridge.
-              No spam. Unsubscribe anytime.
+              By subscribing you'll receive weekly dispatches from the bridge. No spam. Unsubscribe
+              anytime.
             </p>
           </div>
-
         </div>
       </div>
     </div>
   </section>
-
-  <script>
-    const form = document.getElementById('dispatch-form') as HTMLFormElement | null;
-    const status = document.getElementById('dispatch-status') as HTMLElement | null;
-    const btn = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
-
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
-      if (!email) return;
-
-      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
-      if (status) { status.hidden = true; }
-
-      try {
-        await fetch('https://falafelinhotpot.activehosted.com/proc.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({
-            u: '6A149D8923A83', f: '9', s: '', c: '0', m: '0',
-            act: 'sub', v: '2', or: 'b7a553f1-5419-4666-9786-87adb9281338',
-            email,
-          }),
-          mode: 'no-cors',
-        });
-      } catch { /* no-cors swallows errors — treat any response as success */ }
-
-      if (status) { status.textContent = "You're on the list. Welcome to the bridge."; status.hidden = false; }
-      if (btn) { btn.disabled = false; btn.textContent = 'Subscribe'; }
-      form.reset();
-    });
-  </script>
 
   <!-- ③ BRAND MANIFESTO — Magazine Split ─────────────────────── -->
   <section class="manifesto-section">
@@ -221,16 +160,15 @@ const videos = [
           <span class="eyebrow">Where East Meets East</span>
           <h2 class="manifesto-headline">Falafel<br />in Hotpot.</h2>
           <p class="manifesto-body manifesto-body--lead">
-            Falafel in Hotpot is a China-Arab cultural intelligence brand based in Riyadh.
-            We sit at the intersection of two of the world's oldest civilisations, and we
-            make that intersection useful.
+            Falafel in Hotpot is a China-Arab cultural intelligence brand based in Riyadh. We sit at
+            the intersection of two of the world's oldest civilisations, and we make that
+            intersection useful.
           </p>
           <div class="manifesto-rule" aria-hidden="true"></div>
           <p class="manifesto-body manifesto-body--secondary">
-            Whether you're a Gulf business navigating a Chinese partnership, a professional
-            learning Mandarin for the first time, or simply someone curious about what these
-            two worlds have in common, we built this for you. Language, culture, and
-            connection, all in one place.
+            Whether you're a Gulf business navigating a Chinese partnership, a professional learning
+            Mandarin for the first time, or simply someone curious about what these two worlds have
+            in common, we built this for you. Language, culture, and connection, all in one place.
           </p>
         </div>
       </div>
@@ -246,11 +184,13 @@ const videos = [
       </div>
 
       <ul class="video-grid" role="list">
-        {videos.map((v, i) => (
-          <li class="video-grid__item">
-            <VideoCard id={v.id} title={v.title} views={v.views} index={i} />
-          </li>
-        ))}
+        {
+          videos.map((v, i) => (
+            <li class="video-grid__item">
+              <VideoCard id={v.id} title={v.title} views={v.views} index={i} />
+            </li>
+          ))
+        }
       </ul>
 
       <div class="videos-section__footer reveal" style="--stagger: 3">
@@ -265,21 +205,30 @@ const videos = [
       </div>
     </div>
   </section>
-
 </FihLayout>
 
 <style>
   /* ── Shared animations ───────────────────────────────────────── */
   @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   /* Visible by default — JS only hides below-fold sections (via
      .reveal-pending, added just before they're observed) to animate them in.
      If JS never runs, nothing is ever hidden in the first place. */
-  .reveal { opacity: 1; }
-  .reveal.reveal-pending { opacity: 0; }
+  .reveal {
+    opacity: 1;
+  }
+  .reveal.reveal-pending {
+    opacity: 0;
+  }
 
   .reveal.visible {
     animation: fadeInUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -287,8 +236,12 @@ const videos = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reveal.reveal-pending { opacity: 1; }
-    .reveal.visible { animation: none; }
+    .reveal.reveal-pending {
+      opacity: 1;
+    }
+    .reveal.visible {
+      animation: none;
+    }
   }
 
   /* ── Shared tokens ───────────────────────────────────────────── */
@@ -316,7 +269,10 @@ const videos = [
     text-decoration: none;
     border: 1.5px solid transparent;
     cursor: pointer;
-    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease;
   }
 
   .btn--primary {
@@ -325,7 +281,10 @@ const videos = [
     border-color: var(--color-cinnabar, #9b1b15);
   }
 
-  .btn--primary:hover { background: #7a1510; border-color: #7a1510; }
+  .btn--primary:hover {
+    background: #7a1510;
+    border-color: #7a1510;
+  }
 
   .btn--ghost {
     background: transparent;
@@ -778,7 +737,6 @@ const videos = [
       grid-template-columns: minmax(0, 58%) minmax(0, 42%);
       align-items: center;
     }
-
   }
 
   /* ── ⑤ Video Grid ────────────────────────────────────────────── */
@@ -803,7 +761,9 @@ const videos = [
     z-index: 1;
   }
 
-  .section-heading { margin-bottom: 2.5rem; }
+  .section-heading {
+    margin-bottom: 2.5rem;
+  }
 
   .videos-section__h2 {
     margin: 0;
@@ -856,7 +816,6 @@ const videos = [
     .video-grid {
       grid-template-columns: 1fr;
     }
-
   }
 
   @media (min-width: 480px) and (max-width: 768px) {

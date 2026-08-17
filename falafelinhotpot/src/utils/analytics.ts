@@ -49,14 +49,3 @@ export function trackEvent(event: GtagEvent, params?: EventParams): void {
   if (typeof window === 'undefined' || !window.gtag) return;
   window.gtag('event', event, params ?? {});
 }
-
-/**
- * Track a page view manually (useful for SPA navigation or custom page titles).
- */
-export function trackPageView(pageTitle?: string, pageLocation?: string): void {
-  if (typeof window === 'undefined' || !window.gtag) return;
-  window.gtag('event', 'page_view', {
-    page_title: pageTitle ?? document.title,
-    page_location: pageLocation ?? window.location.href,
-  });
-}

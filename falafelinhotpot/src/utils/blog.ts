@@ -7,8 +7,6 @@ import { cleanSlug } from './permalinks';
 export const blogPostsPerPage = 9;
 export const blogPostRobots = { index: true, follow: true };
 export const blogCategoryRobots = { index: true, follow: true };
-export const blogTagRobots = { index: false, follow: true };
-export const isRelatedPostsEnabled = true;
 
 const generatePermalink = (slug: string) => `/editions/${slug}`;
 
@@ -62,9 +60,6 @@ export const fetchPosts = async (): Promise<Post[]> => {
   return cachedPosts;
 };
 
-export const findLatestPosts = async ({ count = 4 }: { count?: number } = {}) =>
-  (await fetchPosts()).slice(0, count);
-
 export const getStaticPathsBlogPost = async () =>
   (await fetchPosts()).map((post) => ({
     params: { slug: post.slug },
@@ -85,23 +80,6 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
         params: { category: category.slug },
         pageSize: blogPostsPerPage,
         props: { category },
-      }
-    )
-  );
-};
-
-export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFunction }) => {
-  const posts = await fetchPosts();
-  const tags = new Map<string, { slug: string; title: string }>();
-  posts.forEach((post) => post.tags?.forEach((tag) => tags.set(tag.slug, tag)));
-
-  return Array.from(tags.values()).flatMap((tag) =>
-    paginate(
-      posts.filter((post) => post.tags?.some((postTag) => postTag.slug === tag.slug)),
-      {
-        params: { tag: tag.slug },
-        pageSize: blogPostsPerPage,
-        props: { tag },
       }
     )
   );
