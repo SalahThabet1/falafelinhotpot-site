@@ -5,12 +5,6 @@
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
-      "@sections/*": ["src/components/sections/*"],
-      "@ui/*": ["src/components/ui/*"],
-      "@forms/*": ["src/components/forms/*"],
-      "@layout/*": ["src/components/layout/*"],
-      "@dashboard/*": ["src/components/dashboard/*"],
-      "@dashboard-ui/*": ["src/components/dashboard-ui/*"],
       "~/*": ["src/*"]
     },
     "jsx": "react-jsx",

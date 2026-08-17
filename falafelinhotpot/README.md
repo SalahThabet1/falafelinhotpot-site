@@ -1,120 +1,106 @@
-# Template - SaaS UI Theme for Astro
+# Falafel in Hotpot
 
-[![Built with Astro](https://astro.badg.es/v2/built-with-astro/tiny.svg)](https://astro.build)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+China–Arab cultural intelligence journal and Mandarin learning site. Astro + React islands + MDX content, deployed on Vercel.
 
-A production-ready SaaS theme for Astro. Designed to help you move from idea to launch quickly, Template includes marketing pages, documentation, and a dashboard UI. Built with a strong focus on performance, simplicity, and easy customization.
+Live site: <https://falafelinhotpot.com>
 
-## Why Template?
+## Stack
 
-Unlike many Astro themes that focus only on marketing pages, Template also includes a production-ready dashboard UI. You get more than landing pages, but a structured dashboard layout with reusable components and example pages for common SaaS workflows.
-
-This allows you to move faster—from an initial landing page to an MVP dashboard UI—while keeping a consistent design system, theming, and code quality across your entire project.
-
-## Demo
-
-<div align="center">
-
-[![View Demo](https://img.shields.io/badge/View_Demo-→-0077FF?style=for-the-badge&logo=astro&logoColor=white)](https://template.erland.me)
-
-<table>
-  <tr>
-    <td width="50%">
-      <img src="./screenshots/light-mode.webp" loading="lazy" alt="Template Light Mode">
-      <p align="center"><em>Light Mode</em></p>
-    </td>
-    <td width="50%">
-      <img src="./screenshots/dark-mode.webp" loading="lazy" alt="Template Dark Mode">
-      <p align="center"><em>Dark Mode</em></p>
-    </td>
-  </tr>
-</table>
-
-</div>
-
-## Features
-
-### Performance & Developer Experience
-
-Modern tech stack with **Astro**, **TypeScript**, and **Tailwind CSS v4**.
-
-- Path aliases (`@dashboard/*`, `@ui/*`, etc.) for cleaner imports
-- ESLint and Prettier configured for code quality
-- Design tokens with OKLCH color system for easy theming
-- Dark mode support with localStorage persistence
-- 200,000+ icons via astro-icon (Lucide + Simple Icons)
-
-### Marketing & Conversion
-
-A complete set of landing pages optimized for SaaS marketing.
-
-- Hero sections, feature grids, pricing tables, testimonials
-- Contact forms with validation and multiple backend support
-- Team pages, case studies, integrations showcases
-- SEO-optimized with meta tags, Open Graph, and JSON-LD
-- Accessible with WCAG compliance and semantic HTML
-- Legal pages (privacy policy, terms of service)
-
-### Dashboard UI
-
-Flexible dashboard layout with sidebar navigation and reusable components.
-
-- **Components**: StatCard, DataTable, Chart, Modal, Toast, and more
-- **Example Pages**: Overview, Settings (Profile, Team, Billing), Projects
-- **Routes**: `/dashboard`, `/dashboard/settings/*`, `/dashboard/projects`
-- Full light/dark mode support with consistent theming
-
-**Important**: Dashboard pages use starter templates with sample data. Authentication is intentionally left to the user. See [Dashboard docs](./docs/07-dashboard.md) for guidance.
-
-### Content Management
-
-Built-in content collections with full Markdown and MDX support.
-
-- **Blog**: Paginated posts with tag filtering and reading time
-- **Documentation**: Auto-generated sidebar with section grouping
-- **Changelog**: Version history with release timeline
-- **Testimonials**: Customer quotes with featured/ordering support
+- **Astro 5** static site with React islands (`@astrojs/react`)
+- **Tailwind CSS v4** via `@tailwindcss/vite`, custom design tokens in `src/styles/global.css`
+- **MDX** content collections (`src/content/editions`) for the newsletter archive
+- **astro-icon** (Lucide, Simple Icons, Tabler) — no raw inline SVGs
+- **Vercel Blob** for the business-Chinese PDF download (JWT-gated)
 
 ## Quick Start
 
-### 1. Create a new project
-
 ```bash
-npm create astro@latest -- --template erlandv/template
+npm install
+npm run dev        # http://localhost:4321
 ```
 
-### 2. Start development
+Requires `public/mandarin-starterkit-course/` for `npm run build` — see
+`sync:mandarin-landing` below, or run the sync first:
 
 ```bash
-cd your-project-name
-npm run dev
+npm run sync:mandarin-landing
 ```
 
-Your site is now running at [http://localhost:4321](http://localhost:4321)
+## npm Scripts
 
-## What's Next?
+| Script | Purpose |
+| --- | --- |
+| `npm run dev` | Astro dev server |
+| `npm run build` | Production build (requires the vendored landing course) |
+| `npm run preview` | Preview the production build |
+| `npm run check` | Quality gate: ESLint + Prettier + `astro check` |
+| `npm run import:editions` | Import newsletter MDX from ActiveCampaign exports (`CULTURAL_SRC`/`EDU_SRC`) |
+| `npm run sync:edu-images` | `import:editions` with image sync |
+| `npm run sync:mandarin-landing` | Rebuild `../../landing-main` and copy its dist into `public/mandarin-starterkit-course/` |
+| `npm run upload:business-chinese-pdf` | Upload the business-Chinese PDF to Vercel Blob |
+| `npm run generate:download-token` | Mint a one-time download JWT |
 
-Once your project is running, here's what you should do:
+## Environment Variables
 
-1. **Configure Your Site** - Update site metadata in `src/config/site.ts`
-2. **Customize Design** - Edit design tokens in `src/styles/global.css`
-3. **Add Content** - Create blog posts, docs, and changelog entries
-4. **Build Dashboard** - Implement authentication and connect your API
+Copy `.env.example` to `.env`. See it for per-variable comments.
 
-## Documentation
+| Variable | Used by |
+| --- | --- |
+| `SITE_URL` | SEO / sitemap / canonical URLs |
+| `SITE_NAME`, `SITE_DESCRIPTION`, `SITE_AUTHOR` | Global site metadata (`src/config/site.ts`) |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob access for the PDF |
+| `BLOB_BUSINESS_CHINESE_PATHNAME` | Blob pathname of the PDF |
+| `DOWNLOAD_JWT_SECRET` | JWT signing for `/api/download/issue-token` |
+| `DOWNLOAD_WEBHOOK_SECRET` | Shared secret for the ActiveCampaign token-minting webhook |
+| `CULTURAL_SRC`, `EDU_SRC`, `OUT_DIR` | `import:editions` script paths |
 
-Full documentation is available in the [`docs/`](./docs/) folder:
+## Routes
 
-1. **[Getting Started](./docs/01-getting-started.md)** - Installation and project structure
-2. **[Configuration](./docs/02-configuration.md)** - Site settings and feature flags
-3. **[Customization](./docs/03-customization.md)** - Design tokens, branding, and theming
-4. **[Content Guide](./docs/04-content-guide.md)** - Managing blog, docs, changelog, and testimonials
-5. **[Components](./docs/05-components.md)** - Icons, forms, and UI components
-6. **[Pages](./docs/06-pages.md)** - Available pages and routing
-7. **[Dashboard](./docs/07-dashboard.md)** - Dashboard layouts and components
-8. **[Authentication](./docs/08-authentication.md)** - Authentication guidance
-9. **[Deployment](./docs/09-deployment.md)** - Deploying to Vercel, Netlify, or Cloudflare
+| Route | Page |
+| --- | --- |
+| `/` | Home |
+| `/editions` · `/editions/[slug]` | Newsletter archive + article pages |
+| `/pinyin-chart` | Interactive Pinyin chart (React island) |
+| `/get-your-chinese-business-guide` | Business-Chinese guide download (JWT-gated PDF) |
+| `/subscribe` | Newsletter signup |
+| `/category/[category]/[...page]` | Edition category pagination |
+| `/403` `/404` `/500` | Error pages |
+| `/mandarin-starterkit-course/` | Vendored landing page (built from `landing-main`) |
+| `/api/download/business-chinese.ts` | PDF download endpoint (serverless) |
+| `/api/download/issue-token.ts` | JWT issue endpoint (serverless) |
 
-## License
+## Directory Guide
 
-Template Theme is free for personal and commercial use under the [MIT License](./LICENSE). Attribution is not required, but a link back to this repository is always appreciated.
+```
+src/
+  components/     Astro + React components (fih/, editions/, common/)
+  config/         Site metadata (site.ts)
+  content/        MDX content collections (editions/)
+  layouts/        Page layouts
+  pages/          Route definitions (see map above)
+  styles/         global.css — design tokens & base styles
+  utils/          Shared helpers (analytics, permalinks, ...)
+api/              Vercel serverless functions (outside src/)
+public/           Static assets incl. mandarin-starterkit-course/ build
+scripts/          Node/tsx tooling (edition import, PDF upload, token mint)
+docs/             Brand + design documentation (BRAND-HANDOFF.md, design.md)
+```
+
+## External Services
+
+- **ActiveCampaign** — newsletter signups (`/subscribe`) and edition exports; the `import:editions` script consumes its HTML exports
+- **Vercel Blob** — hosts the business-Chinese guide PDF
+- **Google Analytics 4** — via `src/utils/analytics.ts`
+- **YouTube** — embedded via `VideoCard`
+- **Sibling `landing-main`** — the Mandarin Starter Kit landing page lives in `../../landing-main`; `sync:mandarin-landing` builds it and vendors `dist/` into `public/mandarin-starterkit-course/`
+
+## Deploy
+
+Vercel. Push to `main` → Vercel builds with `npm run build`. Set the env vars
+above in the Vercel project settings. GitHub Actions is configured but only
+deploys — run `npm run check` locally before pushing.
+
+## Docs
+
+Brand, design system, and content guidance: `docs/` (`BRAND-HANDOFF.md`,
+`design.md`). Product decisions: `PRODUCT.md` in the repo root.

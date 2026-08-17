@@ -43,17 +43,6 @@
   --text-xl: clamp(2rem, 4vw, 3rem);
   --text-3xl: clamp(2.75rem, 6vw, 5rem);
   --text-hero: clamp(3rem, 7vw, 6rem);
-  --primary: var(--color-accent);
-  --primary-foreground: var(--color-text-inverse);
-  --secondary: var(--color-clay);
-  --secondary-foreground: var(--color-dark);
-  --background: var(--color-parchment);
-  --foreground: var(--color-text);
-  --muted: var(--color-clay);
-  --muted-foreground: var(--color-text-muted);
-  --destructive: var(--color-accent);
-  --ring: var(--color-gold);
-  --input: var(--color-border);
   --radius-md: 0;
 }
 
