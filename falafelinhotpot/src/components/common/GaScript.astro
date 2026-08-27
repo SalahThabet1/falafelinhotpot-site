@@ -1,0 +1,30 @@
+---
+/**
+ * GA4 loader — injects gtag.js and seeds window.dataLayer.
+ *
+ * Rendered as a single inline <script> that dynamically appends the gtag.js
+ * script element (kept to one tag: prettier-plugin-astro mis-parses inline
+ * scripts wrapped in a JSX conditional, so the conditional lives in the
+ * layout around this component instead).
+ */
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<script is:inline define:vars={{ id }}>
+  (function () {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(...args) {
+      window.dataLayer.push(args);
+    }
+    gtag('js', new Date());
+    gtag('config', id);
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+    document.head.appendChild(s);
+  })();
+</script>

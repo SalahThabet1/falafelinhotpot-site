@@ -729,7 +729,7 @@ function buildMdx(edition, imageGaps) {
     tags,
     bodyMd,
     extraImports = [],
-    heroPath,
+    image,
     heroSourceUrl = '',
   } = edition;
 
@@ -738,12 +738,12 @@ function buildMdx(edition, imageGaps) {
   const label = track === 'cultural' ? 'Bridge' : 'Learn';
   const canonical = `https://falafelinhotpot.com/editions/${slug}`;
 
-  if (!fileExists(heroPath)) {
+  if (!fileExists(image)) {
     imageGaps.push({
       slug,
       fig: 'hero',
       alt: title,
-      publicPath: heroPath,
+      publicPath: image,
       sourceUrl: heroSourceUrl,
     });
   }
@@ -775,7 +775,7 @@ issueNumber: ${issueNumber}
 subjectLine: ${yamlString(subjectLine)}
 ${track === 'cultural' ? 'bilingual: true\n' : 'bilingual: false\n'}tags: ${yamlArray(tags)}
 author: ${yamlString('Falafel')}
-image: ${yamlString(heroPath)}
+image: ${yamlString(image)}
 draft: false
 metadata:
   title: ${yamlString(`${label} #${issueNumber}: ${subjectLine} | Falafel in Hotpot`)}
@@ -836,6 +836,15 @@ function processEdition(folder, track, imageGaps) {
   const trackFolder = track === 'cultural' ? 'cultural' : 'thursday-lesson';
   const heroPath = `/images/newsletters/${trackFolder}/issue-${String(issueNumber).padStart(2, '0')}.jpg`;
 
+  // Committed convention: the card `image` points at the first inline figure
+  // (`{slug}-fig-1.*`), not the issue-NN hero (which only exists for a couple
+  // of issues). Prefer the figure so re-imports never break image references.
+  const figDir = path.join(PUBLIC_DIR, 'images', 'newsletters', trackFolder);
+  const figOne = fs.existsSync(figDir)
+    ? fs.readdirSync(figDir).find((f) => f.startsWith(`${slug}-fig-1.`))
+    : undefined;
+  const cardImage = figOne ? `/images/newsletters/${trackFolder}/${figOne}` : heroPath;
+
   let bodyMd;
   let extraImports = [];
   let heroSourceUrl = '';
@@ -889,7 +898,7 @@ function processEdition(folder, track, imageGaps) {
       tags: extractTags(subjectLine, bodyMd, track),
       bodyMd,
       extraImports,
-      heroPath,
+      image: cardImage,
       heroSourceUrl,
     },
     imageGaps

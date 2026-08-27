@@ -7,6 +7,10 @@
  * and JSON-LD structured data. Automatically generates canonical URLs,
  * breadcrumbs, and organization schema from site config.
  *
+ * The page <title> is resolved here: site name is appended once, unless the
+ * title already contains it or `ignoreTitleTemplate` is set (callers may
+ * hand in a fully-formatted title, e.g. edition `metadata.title`).
+ *
  * @example
  * ```astro
  * <SEO
@@ -14,37 +18,22 @@
  *   description="Explore all the powerful features of our platform."
  * />
  * ```
- *
- * @example Blog article with full metadata
- * ```astro
- * <SEO
- *   title={post.title}
- *   description={post.excerpt}
- *   image={post.coverImage}
- *   type="article"
- *   publishedDate={post.publishedAt}
- *   author={post.author}
- *   tags={post.tags}
- * />
- * ```
  */
 import { siteConfig } from '@/config/site';
 
 interface Props {
-  /** Page title (will be appended with site name) */
+  /** Page title (site name is appended once unless already present) */
   title: string;
   /** Page description for meta tags */
   description: string;
   /** Custom Open Graph image URL (defaults to site ogImage) */
   image?: string;
+  /** Canonical URL; defaults to the current route path */
+  canonical?: string;
+  /** Emit the title verbatim, without the site-name template */
+  ignoreTitleTemplate?: boolean;
   /** Content type for Open Graph */
   type?: 'website' | 'article';
-  /** Article publish date (enables article schema) */
-  publishedDate?: Date;
-  /** Article last modified date */
-  modifiedDate?: Date;
-  /** Article author name */
-  author?: string;
   /** Article tags/keywords */
   tags?: string[];
 }
@@ -53,15 +42,15 @@ const {
   title,
   description,
   image,
+  canonical,
+  ignoreTitleTemplate = false,
   type = 'website',
-  publishedDate,
-  modifiedDate,
-  author,
   tags = [],
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, siteConfig.url);
-const fullTitle = `${title} | ${siteConfig.name}`;
+const canonicalHref = canonical || new URL(Astro.url.pathname, siteConfig.url).href;
+const fullTitle =
+  ignoreTitleTemplate || title.includes(siteConfig.name) ? title : `${title} | ${siteConfig.name}`;
 const imageUrl = image || siteConfig.ogImage;
 const ogImage = imageUrl ? new URL(imageUrl, siteConfig.url).href : undefined;
 
@@ -72,11 +61,6 @@ const websiteSchema = {
   name: siteConfig.name,
   description: siteConfig.description,
   url: siteConfig.url,
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: `${siteConfig.url}/search?q={search_term_string}`,
-    'query-input': 'required name=search_term_string',
-  },
 };
 
 const organizationSchema = {
@@ -89,36 +73,6 @@ const organizationSchema = {
     Boolean
   ),
 };
-
-const articleSchema =
-  type === 'article' && publishedDate
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        headline: title,
-        description: description,
-        image: ogImage,
-        datePublished: publishedDate.toISOString(),
-        dateModified: (modifiedDate || publishedDate).toISOString(),
-        author: {
-          '@type': 'Person',
-          name: author || siteConfig.author,
-        },
-        publisher: {
-          '@type': 'Organization',
-          name: siteConfig.name,
-          logo: {
-            '@type': 'ImageObject',
-            url: new URL(siteConfig.logo, siteConfig.url).href,
-          },
-        },
-        mainEntityOfPage: {
-          '@type': 'WebPage',
-          '@id': canonicalURL.href,
-        },
-        keywords: tags.join(', '),
-      }
-    : null;
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -136,7 +90,7 @@ const breadcrumbSchema = {
             '@type': 'ListItem',
             position: 2,
             name: title,
-            item: canonicalURL.href,
+            item: canonicalHref,
           },
         ]
       : []),
@@ -152,25 +106,19 @@ const breadcrumbSchema = {
 {tags.length > 0 && <meta name="keywords" content={tags.join(', ')} />}
 
 <!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
+<link rel="canonical" href={canonicalHref} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={type} />
-<meta property="og:url" content={canonicalURL} />
+<meta property="og:url" content={canonicalHref} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:site_name" content={siteConfig.name} />
 {ogImage && <meta property="og:image" content={ogImage} />}
-{
-  type === 'article' && publishedDate && (
-    <meta property="article:published_time" content={publishedDate.toISOString()} />
-  )
-}
-{type === 'article' && author && <meta property="article:author" content={author} />}
 
 <!-- Twitter -->
 <meta property="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
-<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:url" content={canonicalHref} />
 <meta property="twitter:title" content={fullTitle} />
 <meta property="twitter:description" content={description} />
 {ogImage && <meta property="twitter:image" content={ogImage} />}
@@ -179,8 +127,3 @@ const breadcrumbSchema = {
 <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
 <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
-{
-  articleSchema && (
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
-  )
-}

@@ -48,7 +48,7 @@ const getNormalizedPost = async (entry: CollectionEntry<'editions'>): Promise<Po
     image: data.image,
     category,
     tags: (data.tags ?? []).map((tag: string) => ({ slug: cleanSlug(tag), title: tag })),
-    author: 'Falafel',
+    author: data.author,
     issueNumber: data.issueNumber,
     series: data.series,
     subjectLine: data.subjectLine,

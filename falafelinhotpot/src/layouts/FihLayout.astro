@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import '../styles/fonts.css';
 import SEO from '~/components/common/SEO.astro';
+import GaScript from '~/components/common/GaScript.astro';
 import Nav from '~/components/fih/Nav.astro';
 import Footer from '~/components/fih/Footer.astro';
 import ParchmentGrain from '~/components/brand/ParchmentGrain.astro';
@@ -21,6 +22,7 @@ const description =
   'A cultural journal at the confluence of the Arab world and China. Language, food, poetry, business, history — explored as equals.';
 const image = metadata.openGraph?.images?.[0]?.url;
 const type = metadata.openGraph?.type === 'article' ? 'article' : 'website';
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 ---
 
 <!doctype html>
@@ -39,9 +41,16 @@ const type = metadata.openGraph?.type === 'article' ? 'article' : 'website';
     <link rel="icon" href="/brand/favicon-192.png" type="image/png" sizes="192x192" />
     <link rel="icon" href="/brand/favicon-512.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <SEO title={title} description={description} image={image} type={type} />
-    {metadata.canonical && <link rel="canonical" href={metadata.canonical} />}
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      canonical={metadata.canonical}
+      ignoreTitleTemplate={metadata.ignoreTitleTemplate}
+    />
     {metadata.robots?.index === false && <meta name="robots" content="noindex,follow" />}
+    {gaId && <GaScript id={gaId} />}
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
