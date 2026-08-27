@@ -13,7 +13,6 @@
   --color-border: rgba(28, 28, 28, 0.12);
   --color-divider: rgba(28, 28, 28, 0.16);
   --color-accent: #c0392b;
-  --color-forbidden-red: #c0392b;
   /* Legacy Template leftover previously redeclared this to #c0392b, which sits
      after (and so wins over) the real brand value from the @theme block
      below — every var(--color-cinnabar) consumer site-wide (buttons,

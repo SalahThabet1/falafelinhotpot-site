@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { toast } from 'sonner';
+import { toast, Toaster } from 'sonner';
 import { trackEvent } from '~/utils/analytics';
 
 type Props = {
@@ -89,26 +89,38 @@ export default function NewsletterForm({ variant = 'editorial' }: Props) {
         <p role="status" aria-live="polite" className="nl-form__status">
           {status}
         </p>
+        <Toaster
+          theme="light"
+          position="bottom-center"
+          toastOptions={{ classNames: { toast: 'font-[family-name:var(--font-body)]' } }}
+        />
       </>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="editorial-form" noValidate>
-      <div className="editorial-form__field">
-        <label htmlFor="editorial-firstname">First name</label>
-        <input id="editorial-firstname" name="firstname" type="text" autoComplete="given-name" />
-      </div>
-      <div className="editorial-form__field">
-        <label htmlFor="editorial-email">Email address</label>
-        <input id="editorial-email" name="email" type="email" autoComplete="email" required />
-      </div>
-      <button type="submit" disabled={submitting}>
-        {submitting ? 'Sending…' : 'Subscribe'}
-      </button>
-      <p role="status" aria-live="polite" className="editorial-form__status">
-        {status}
-      </p>
-    </form>
+    <>
+      <form onSubmit={handleSubmit} className="editorial-form" noValidate>
+        <div className="editorial-form__field">
+          <label htmlFor="editorial-firstname">First name</label>
+          <input id="editorial-firstname" name="firstname" type="text" autoComplete="given-name" />
+        </div>
+        <div className="editorial-form__field">
+          <label htmlFor="editorial-email">Email address</label>
+          <input id="editorial-email" name="email" type="email" autoComplete="email" required />
+        </div>
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Sending…' : 'Subscribe'}
+        </button>
+        <p role="status" aria-live="polite" className="editorial-form__status">
+          {status}
+        </p>
+      </form>
+      <Toaster
+        theme="light"
+        position="bottom-center"
+        toastOptions={{ classNames: { toast: 'font-[family-name:var(--font-body)]' } }}
+      />
+    </>
   );
 }
