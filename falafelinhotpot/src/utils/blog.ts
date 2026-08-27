@@ -26,9 +26,11 @@ const estimateReadingTime = (body = '') =>
     )
   );
 
-const getNormalizedPost = async (entry: CollectionEntry<'editions'>): Promise<Post> => {
+// Listing pages (archive, category, related) only need metadata — rendering
+// every MDX body there is wasted build work. `fetchPosts` returns lightweight
+// metas; only [slug] builds render content via `getStaticPathsBlogPost`.
+const getPostMeta = async (entry: CollectionEntry<'editions'>): Promise<Post> => {
   const { id, data, body } = entry;
-  const { Content } = await render(entry);
   const slug = cleanSlug(id.replace(/\.(md|mdx)$/, ''));
   const category = {
     slug: cleanSlug(data.category),
@@ -56,7 +58,6 @@ const getNormalizedPost = async (entry: CollectionEntry<'editions'>): Promise<Po
     bilingual: data.bilingual,
     metadata: data.metadata,
     draft: data.draft,
-    Content,
     readingTime: estimateReadingTime(body),
   };
 };
@@ -66,18 +67,24 @@ let cachedPosts: Post[] | undefined;
 export const fetchPosts = async (): Promise<Post[]> => {
   if (!cachedPosts) {
     const entries = await getCollection('editions');
-    cachedPosts = (await Promise.all(entries.map(getNormalizedPost)))
+    cachedPosts = (await Promise.all(entries.map(getPostMeta)))
       .filter((post) => !post.draft)
       .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf());
   }
   return cachedPosts;
 };
 
-export const getStaticPathsBlogPost = async () =>
-  (await fetchPosts()).map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+export const getStaticPathsBlogPost = async () => {
+  const entries: CollectionEntry<'editions'>[] = await getCollection('editions');
+  const paths: Array<{ params: { slug: string }; props: { post: Post } }> = [];
+  for (const entry of entries) {
+    if (entry.data.draft) continue;
+    const post = await getPostMeta(entry);
+    const { Content } = await render(entry);
+    paths.push({ params: { slug: post.slug }, props: { post: { ...post, Content } } });
+  }
+  return paths;
+};
 
 export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: PaginateFunction }) => {
   const posts = await fetchPosts();

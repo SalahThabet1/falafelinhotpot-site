@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import falafelImg from '~/assets/images/falafel.jpeg';
+import courseImg from '~/assets/images/course-chinese-foundation.jpg';
 import FihLayout from '~/layouts/FihLayout.astro';
 import VideoCard from '~/components/fih/VideoCard.astro';
 import NewsletterForm from '~/components/islands/NewsletterForm';
@@ -35,12 +38,12 @@ const videos = [
     <div class="container">
       <div class="course-card">
         <div class="course-card__media">
-          <img
-            src="/course-chinese-foundation.jpg"
+          <Image
+            src={courseImg}
             alt="The Mandarin Starter Kit"
             class="course-card__img"
-            width="1600"
-            height="893"
+            width={1600}
+            height={893}
             loading="lazy"
             decoding="async"
           />
@@ -69,12 +72,12 @@ const videos = [
   <section class="hero">
     <div class="container hero__inner">
       <div class="hero__visual">
-        <img
-          src="/images/falafel.jpeg"
+        <Image
+          src={falafelImg}
           alt="Falafel — founder of Falafel in Hotpot"
           class="hero__img"
-          width="1200"
-          height="1600"
+          width={1200}
+          height={1600}
           loading="eager"
           fetchpriority="high"
           decoding="async"

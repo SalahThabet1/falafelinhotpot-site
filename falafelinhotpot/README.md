@@ -37,7 +37,7 @@ npm run sync:mandarin-landing
 | `npm run lint` / `lint:fix` | ESLint over the repo (no autofix / with) |
 | `npm run format` / `format:check` | Prettier write / verify |
 | `npm run import:editions` | Import newsletter MDX from ActiveCampaign exports (`CULTURAL_SRC`/`EDU_SRC`) |
-| `npm run sync:edu-images` | `import:editions` with image sync |
+| `npm run sync:edu-images` | Sync Thursday-lesson edition images from `EDU_SRC` exports |
 | `npm run sync:mandarin-landing` | Rebuild `../../landing-main` and copy its dist into `public/mandarin-starterkit-course/` |
 | `npm run upload:business-chinese-pdf` | Upload the business-Chinese PDF to Vercel Blob |
 | `npm run generate:download-token` | Mint a one-time download JWT |
