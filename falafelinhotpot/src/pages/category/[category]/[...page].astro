@@ -3,10 +3,10 @@ import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 import { blogCategoryRobots, getStaticPathsBlogCategory } from '~/utils/blog';
 
 import FihLayout from '~/layouts/FihLayout.astro';
-import EditionsArchiveHeader from '~/components/blog/EditionsArchiveHeader.astro';
-import EditionFilter from '~/components/blog/EditionFilter.astro';
-import EditionsList from '~/components/blog/List.astro';
-import FihPagination from '~/components/blog/FihPagination.astro';
+import EditionsArchiveHeader from '~/components/editions/EditionsArchiveHeader.astro';
+import EditionFilter from '~/components/editions/EditionFilter.astro';
+import EditionsList from '~/components/editions/List.astro';
+import FihPagination from '~/components/editions/FihPagination.astro';
 import LearnCourseCTA from '~/components/editions/LearnCourseCTA.astro';
 
 export const prerender = true;

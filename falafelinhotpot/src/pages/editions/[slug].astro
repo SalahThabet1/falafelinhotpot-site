@@ -2,10 +2,10 @@
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 
 import FihLayout from '~/layouts/FihLayout.astro';
-import SinglePost from '~/components/blog/SinglePost.astro';
+import SinglePost from '~/components/editions/SinglePost.astro';
 import ArticleSchema from '~/components/common/ArticleSchema.astro';
 import EditionNav from '~/components/editions/EditionNav.astro';
-import RelatedPosts from '~/components/blog/RelatedPosts.astro';
+import RelatedPosts from '~/components/editions/RelatedPosts.astro';
 import { fetchPosts, getStaticPathsBlogPost, blogPostRobots } from '~/utils/blog';
 import { getCanonical } from '~/utils/permalinks';
 import type { MetaData } from '~/types';
