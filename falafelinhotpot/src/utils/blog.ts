@@ -10,8 +10,21 @@ export const blogCategoryRobots = { index: true, follow: true };
 
 const generatePermalink = (slug: string) => `/editions/${slug}`;
 
+// Strip MDX imports and HTML/JSX tags before counting so markup (e.g. <span
+// class="zh"> vs <Zh>, or an added component import) never inflates or shifts
+// the estimate — only real prose counts.
 const estimateReadingTime = (body = '') =>
-  Math.max(1, Math.ceil(body.trim().split(/\s+/).filter(Boolean).length / 220));
+  Math.max(
+    1,
+    Math.ceil(
+      body
+        .replace(/^import .+$/gm, ' ')
+        .replace(/<[^>]*>/g, ' ')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean).length / 220
+    )
+  );
 
 const getNormalizedPost = async (entry: CollectionEntry<'editions'>): Promise<Post> => {
   const { id, data, body } = entry;

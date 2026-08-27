@@ -1,8 +1,10 @@
 import { issueSignedToken, presignUrl } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-
-const BLOB_PRESIGN_TTL_SECONDS = 10 * 60;
-const DEFAULT_BLOB_PATHNAME = 'business-chinese.pdf';
+import {
+  BLOB_PRESIGN_TTL_SECONDS,
+  getBusinessChineseBlobPathname,
+  verifyBusinessChineseDownloadToken,
+} from '../../lib/business-chinese-download.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET' && req.method !== 'HEAD') {
@@ -10,12 +12,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    console.error('BLOB_READ_WRITE_TOKEN is not configured');
+  // Checked before the token so an unconfigured deploy fails loudly rather than
+  // rejecting every legitimate link as unauthorized.
+  if (!process.env.DOWNLOAD_JWT_SECRET || !process.env.BLOB_READ_WRITE_TOKEN) {
+    console.error('Download service is missing DOWNLOAD_JWT_SECRET or BLOB_READ_WRITE_TOKEN');
     return res.status(503).json({ error: 'Download service is temporarily unavailable.' });
   }
 
-  const pathname = process.env.BLOB_BUSINESS_CHINESE_PATHNAME || DEFAULT_BLOB_PATHNAME;
+  const token = typeof req.query.token === 'string' ? req.query.token : undefined;
+  if (!token) {
+    return res.status(401).json({ error: 'A download token is required.' });
+  }
+
+  try {
+    await verifyBusinessChineseDownloadToken(token);
+  } catch {
+    // Expired, forged, or issued for a different resource — all the same to the caller.
+    return res.status(401).json({ error: 'This download link is invalid or has expired.' });
+  }
+
+  const pathname = getBusinessChineseBlobPathname();
   const validUntil = Date.now() + BLOB_PRESIGN_TTL_SECONDS * 1000;
 
   try {

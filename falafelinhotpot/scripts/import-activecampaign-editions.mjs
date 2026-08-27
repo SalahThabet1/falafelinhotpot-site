@@ -10,7 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getEduOrderedImages, parseEduNewsletterHtml } from './parse-edu-newsletter-html.mjs';
-import { getOrderedImages, parseNewsletterHtml } from './parse-newsletter-html.mjs';
+import { getOrderedImages, parseNewsletterHtml, formatInline } from './parse-newsletter-html.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -296,43 +296,6 @@ function isPullQuote(line) {
   );
 }
 
-function formatInline(text) {
-  if (text.includes('<span class=')) return text;
-
-  let out = text;
-
-  // Character — pinyin — meaning
-  out = out.replace(
-    /([\u4e00-\u9fff]+)\s*—\s*([a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü\s]+?)\s*—\s*([^—.]+?)(?=[.—]|$)/g,
-    '<span class="zh">$1</span> — <span class="py">$2</span> — $3'
-  );
-
-  // Split by existing tags, wrap bare CJK/Arabic segments only
-  out = out.replace(
-    /([\u4e00-\u9fff\u3400-\u4dbf]+(?:[，。！？、]?[\u4e00-\u9fff\u3400-\u4dbf]+)*)/g,
-    (m, _g, offset) => {
-      const before = out.slice(Math.max(0, offset - 20), offset);
-      if (before.includes('class="zh"') || before.includes('character="')) return m;
-      return `<span class="zh">${m}</span>`;
-    }
-  );
-
-  out = out.replace(
-    /([\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+(?:\s+[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+)*)/g,
-    (m, _g, offset) => {
-      const before = out.slice(Math.max(0, offset - 20), offset);
-      if (before.includes('class="ar"')) return m;
-      return `<span class="ar">${m}</span>`;
-    }
-  );
-
-  out = out.replace(/<span class="zh"><span class="zh">/g, '<span class="zh">');
-  out = out.replace(/<span class="ar"><span class="ar">/g, '<span class="ar">');
-  out = out.replace(/<\/span><\/span>/g, '</span>');
-
-  return out;
-}
-
 function parseLanguageBlock(lines, startIdx) {
   const label = lines[startIdx].trim();
   // Language blocks are standalone labels, not "In Chinese, when someone says..."
@@ -481,7 +444,7 @@ function buildLearn01Body(text) {
   let body = introOnly.map((p) => `${formatInline(p)}\n`).join('\n') + '\n';
 
   if (natural.length) {
-    body += `## Characters from the natural world (<span class="zh">日</span>, <span class="zh">月</span>, <span class="zh">山</span>, <span class="zh">水</span>, <span class="zh">木</span>)\n\n`;
+    body += `## Characters from the natural world (<Zh>日</Zh>, <Zh>月</Zh>, <Zh>山</Zh>, <Zh>水</Zh>, <Zh>木</Zh>)\n\n`;
     body += `The characters for sun, moon, mountain, water, and tree each started as a simple sketch — a child's drawing of what they saw. Once you see the picture, you will never unsee it.\n\n`;
     for (const c of natural) {
       body += `<CharacterCard\n  character="${c.character}"\n  pinyin="${c.pinyin}"\n  tone="${c.tone || 'Tone 4'}"\n  meaning="${c.meaning.replace(/"/g, '\\"')}"\n  description="${c.description.replace(/"/g, '\\"')}"\n/>\n\n`;
@@ -489,7 +452,7 @@ function buildLearn01Body(text) {
   }
 
   if (animals.length) {
-    body += `## Animals too (<span class="zh">马</span>)\n\n`;
+    body += `## Animals too (<Zh>马</Zh>)\n\n`;
     for (const c of animals) {
       body += `<CharacterCard\n  character="${c.character}"\n  pinyin="${c.pinyin}"\n  tone="${c.tone || 'Tone 3'}"\n  meaning="${c.meaning.replace(/"/g, '\\"')}"\n  description="${c.description.replace(/"/g, '\\"')}"\n/>\n\n`;
     }
@@ -785,6 +748,11 @@ function buildMdx(edition, imageGaps) {
     });
   }
 
+  for (const comp of ['Zh', 'Py', 'Ar']) {
+    if (new RegExp(`<${comp}>`).test(bodyMd)) {
+      extraImports.push(`import ${comp} from '~/components/editions/${comp}.astro';`);
+    }
+  }
   const imports = [
     ...new Set([
       ...extraImports,

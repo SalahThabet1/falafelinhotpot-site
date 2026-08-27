@@ -56,35 +56,75 @@ function imageScore(src) {
   return 1;
 }
 
+function normalizeSourceSpans(text) {
+  // Convert HTML spans carried over from the source into components, pairing
+  // opens/closes with a stack so nesting stays correct.
+  const comps = { zh: 'Zh', py: 'Py', ar: 'Ar' };
+  const re = /<span class="(zh|py|ar)">|<\/span>/g;
+  let out = '';
+  let last = 0;
+  const stack = [];
+  let m;
+  while ((m = re.exec(text))) {
+    out += text.slice(last, m.index);
+    if (m[1]) {
+      stack.push(comps[m[1]]);
+      out += `<${comps[m[1]]}>`;
+    } else {
+      const comp = stack.pop();
+      out += comp ? `</${comp}>` : '</span>';
+    }
+    last = m.index + m[0].length;
+  }
+  out += text.slice(last);
+  return out;
+}
+
 export function formatInline(text) {
   let out = decodeEntities(text);
   if (!out.trim()) return '';
 
   out = out.replace(/\.([A-Z])/g, '. $1');
 
+  // Character — pinyin — meaning
   out = out.replace(
     /([\u4e00-\u9fff]+)\s*—\s*([a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü\s]+?)\s*—\s*([^—.]+?)(?=[.—]|$)/g,
-    '<span class="zh">$1</span> — <span class="py">$2</span> — $3'
+    '<Zh>$1</Zh> — <Py>$2</Py> — $3'
   );
 
+  // Wrap bare CJK segments only (skip text already wrapped or in a prop)
   out = out.replace(
     /([\u4e00-\u9fff\u3400-\u4dbf]+(?:[，。！？、]?[\u4e00-\u9fff\u3400-\u4dbf]+)*)/g,
-    (m) => {
-      if (m.includes('class=')) return m;
-      return `<span class="zh">${m}</span>`;
+    (m, _g, offset) => {
+      const before = out.slice(Math.max(0, offset - 20), offset);
+      if (
+        before.includes('<Zh>') ||
+        before.includes('character="') ||
+        before.includes('<span class="zh">')
+      )
+        return m;
+      return `<Zh>${m}</Zh>`;
     }
   );
 
+  // Wrap bare Arabic segments only
   out = out.replace(
     /([\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+(?:\s+[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]+)*)/g,
-    (m) => {
-      if (m.includes('class=')) return m;
-      return `<span class="ar">${m}</span>`;
+    (m, _g, offset) => {
+      const before = out.slice(Math.max(0, offset - 20), offset);
+      if (before.includes('<Ar>') || before.includes('<span class="ar">')) return m;
+      return `<Ar>${m}</Ar>`;
     }
   );
 
-  out = out.replace(/<span class="zh"><span class="zh">/g, '<span class="zh">');
-  out = out.replace(/<\/span><\/span>/g, '</span>');
+  // Normalize any HTML spans left over from the source into components
+  out = normalizeSourceSpans(out);
+
+  // De-duplicate nested wraps
+  out = out.replace(/<Zh><Zh>/g, '<Zh>');
+  out = out.replace(/<Ar><Ar>/g, '<Ar>');
+  out = out.replace(/<\/Zh><\/Zh>/g, '</Zh>');
+  out = out.replace(/<\/Ar><\/Ar>/g, '</Ar>');
 
   return out.trim();
 }
@@ -393,7 +433,10 @@ export function parseNewsletterHtml(html, options = {}) {
         mdxParts.push(`\n## ${block.text}\n`);
         break;
       case 'pullquote':
-        mdxParts.push(`\n<div class="pullquote">${block.text}</div>\n`);
+        imports.add("import PullQuote from '~/components/editions/PullQuote.astro';");
+        mdxParts.push(`
+<PullQuote>${block.text}</PullQuote>
+`);
         break;
       case 'paragraph':
         mdxParts.push(`\n${block.text}\n`);
@@ -410,17 +453,15 @@ export function parseNewsletterHtml(html, options = {}) {
         break;
       }
       case 'vocab': {
-        imports.add("import VocabularyCard from '~/components/editions/VocabularyCard.astro';");
         const section = block.title.split('—')[0].trim();
         const sectionTitle = section.charAt(0) + section.slice(1).toLowerCase();
         mdxParts.push(`\n## ${sectionTitle}\n`);
-        const attrs = [mdxProp('title', block.title), mdxProp('description', block.description)];
-        if (block.pinyin) attrs.push(mdxProp('pinyin', block.pinyin));
-        if (block.tone) attrs.push(`tone="${block.tone}"`);
-        if (block.exampleZh) attrs.push(mdxProp('exampleZh', block.exampleZh));
-        if (block.examplePy) attrs.push(mdxProp('examplePy', block.examplePy));
-        if (block.exampleEn) attrs.push(mdxProp('exampleEn', block.exampleEn));
-        mdxParts.push(`\n<VocabularyCard ${attrs.filter(Boolean).join(' ')} />\n`);
+        if (block.description) mdxParts.push(`${block.description}\n`);
+        const example = [block.exampleZh, block.examplePy, block.exampleEn]
+          .filter(Boolean)
+          .map((part, i) => (i === 0 ? `<Zh>${part}</Zh>` : i === 1 ? `<Py>${part}</Py>` : part))
+          .join(' — ');
+        if (example) mdxParts.push(`${example}\n`);
         break;
       }
       case 'image': {
@@ -459,8 +500,15 @@ export function parseNewsletterHtml(html, options = {}) {
     }
   }
 
+  const bodyMd = mdxParts.join('\n').trim();
+  for (const comp of ['Zh', 'Py', 'Ar']) {
+    if (new RegExp(`<${comp}>`).test(bodyMd)) {
+      imports.add(`import ${comp} from '~/components/editions/${comp}.astro';`);
+    }
+  }
+
   return {
-    bodyMd: mdxParts.join('\n').trim(),
+    bodyMd,
     imports: [...imports],
     coverSrc,
     imageGaps,

@@ -71,6 +71,8 @@ export default defineConfig({
           (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
         );
       },
+      // Static public/ routes are invisible to @astrojs/sitemap; add them explicitly.
+      customPages: [`${siteUrl}/mandarin-starterkit-course/`],
     }),
   ],
   vite: {

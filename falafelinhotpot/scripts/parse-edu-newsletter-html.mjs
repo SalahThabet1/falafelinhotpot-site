@@ -441,7 +441,10 @@ export function parseEduNewsletterHtml(html, options = {}) {
         mdxParts.push(`\n## ${block.text}\n`);
         break;
       case 'pullquote':
-        mdxParts.push(`\n<div class="pullquote">${block.text}</div>\n`);
+        imports.add("import PullQuote from '~/components/editions/PullQuote.astro';");
+        mdxParts.push(`
+<PullQuote>${block.text}</PullQuote>
+`);
         break;
       case 'paragraph':
         mdxParts.push(`\n${block.text}\n`);
@@ -509,8 +512,15 @@ export function parseEduNewsletterHtml(html, options = {}) {
     }
   }
 
+  const bodyMd = mdxParts.join('\n').trim();
+  for (const comp of ['Zh', 'Py', 'Ar']) {
+    if (new RegExp(`<${comp}>`).test(bodyMd)) {
+      imports.add(`import ${comp} from '~/components/editions/${comp}.astro';`);
+    }
+  }
+
   return {
-    bodyMd: mdxParts.join('\n').trim(),
+    bodyMd,
     imports: [...imports],
     coverSrc: cover?.src || null,
     imageGaps,
