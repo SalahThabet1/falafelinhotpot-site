@@ -10,7 +10,7 @@ import LearnSection from './LearnSection';
 import { FINAL_GROUPS, INITIAL_GROUPS } from './finalsGroups';
 import irregulars from './irregulars.json';
 import { IconTable, IconSoundMap, IconBook } from './icons';
-import { initAudio, unlockAudio, playAudio, stopAudio, preloadBatch, pinyinAudioSrc, foldPinyinKey } from './audioEngine';
+import { unlockAudio, playAudio, stopAudio, preloadBatch, pinyinAudioSrc, foldPinyinKey } from './audioEngine';
 import ShimmerBorder from './components/ShimmerBorder';
 import './App.css';
 import './components/SoundCell.css';
@@ -137,15 +137,22 @@ export default function App() {
     return () => el.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Create the AudioContext and start preloading common sounds as soon as the
-  // page loads, decoupled from the user gesture — decoding doesn't need one,
-  // only playback does (handled separately via unlockAudio on first tap).
+  // Create the AudioContext and start preloading common sounds on the FIRST
+  // user gesture, not on page load. Autoplay policies keep an AudioContext
+  // created outside a gesture permanently suspended in some browsers, so
+  // playback would silently do nothing; creating it inside the gesture
+  // guarantees it starts in the running state. Decoding doesn't need a
+  // running context, so preload kicks off here too.
   useEffect(() => {
-    initAudio();
-    const common = Object.values(CELLS).slice(0, 50).flatMap(c =>
-      c.pins.filter(Boolean).map(pinyinAudioSrc)
-    );
-    preloadBatch([...new Set(common)]);
+    const startAudio = () => {
+      unlockAudio();
+      const common = Object.values(CELLS).slice(0, 50).flatMap(c =>
+        c.pins.filter(Boolean).map(pinyinAudioSrc)
+      );
+      preloadBatch([...new Set(common)]);
+    };
+    window.addEventListener('pointerdown', startAudio, { once: true, passive: true });
+    return () => window.removeEventListener('pointerdown', startAudio);
   }, []);
 
   const ensureAudioInit = useCallback(() => {

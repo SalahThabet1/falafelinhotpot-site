@@ -20,6 +20,7 @@ export default function ShimmerBorder({
         style={{
           position: 'absolute',
           inset: 0,
+          pointerEvents: 'none',
           borderRadius: 'inherit',
           padding: borderWidth,
           background: `conic-gradient(from var(--shimmer-angle, 0deg), transparent 60%, ${color} 80%, transparent 100%)`,
