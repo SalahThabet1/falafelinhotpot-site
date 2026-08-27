@@ -21,12 +21,15 @@ metadata:
     cardType: summary_large_image
 ---
 
-import LessonEntry from '~/components/editions/LessonEntry.astro';
-import LessonCompare from '~/components/editions/LessonCompare.astro';
-import EditionFigure from '~/components/editions/EditionFigure.astro';
 import EditionCTA from '~/components/editions/EditionCTA.astro';
+import EditionFigure from '~/components/editions/EditionFigure.astro';
+import LessonCompare from '~/components/editions/LessonCompare.astro';
+import LessonEntry from '~/components/editions/LessonEntry.astro';
+import PullQuote from '~/components/editions/PullQuote.astro';
+import Py from '~/components/editions/Py.astro';
+import Zh from '~/components/editions/Zh.astro';
 
-That la — and the words like it — are called <span class="zh">语气词</span> — <span class="py">yǔqì cí</span> — mood particles. They sit at the end of a sentence and carry something no dictionary word can carry. The feeling behind what was just said.
+That la — and the words like it — are called <Zh>语气词</Zh> — <Py>yǔqì cí</Py> — mood particles. They sit at the end of a sentence and carry something no dictionary word can carry. The feeling behind what was just said.
 
 
 No translation. No direct equivalent. Just pure emotional colour added to whatever you just said. The four you need to know are these:
@@ -52,10 +55,10 @@ No translation. No direct equivalent. Just pure emotional colour added to whatev
 <LessonEntry heading={"啦 — la · Done & Announcing"} description={"<span class=\"zh\">了</span> and <span class=\"zh\">啊</span> combined. Announces that something has happened or changed — with feeling. Carries a sense of finality, relief, or excitement about something new."} character={"啦"} pinyin={"la"} tone={"NEUTRAL TONE"} label={"VIBE — DONE · CHANGED · RELIEVED · FINAL"} examples={[{"zh":"好啦，我知道了。","py":"Hǎo la, wǒ zhīdào le.","en":"Okay okay, I get it — slightly exasperated"},{"zh":"到了啦！","py":"Dào le la!","en":"We're here! — excited announcement"},{"zh":"不用担心啦。","py":"Bú yòng dānxīn la.","en":"Don't worry about it — relaxed, reassuring"}]}  />
 
 
-<div class="pullquote">Same word. Four completely different moods.</div>
+<PullQuote>Same word. Four completely different moods.</PullQuote>
 
 
-Take <span class="zh">好</span> — and watch what happens when you add each particle:
+Take <Zh>好</Zh> — and watch what happens when you add each particle:
 
 
 <LessonCompare rows={[{"zh":"好","py":"Hǎo","en":"Okay.","note":"Neutral. A little flat."},{"zh":"好呀","py":"Hǎo ya","en":"Sure!","note":"Warm, friendly, excited."},{"zh":"好吧","py":"Hǎo ba","en":"Fine, I guess.","note":"Reluctant agreement."},{"zh":"好啊","py":"Hǎo a","en":"Great!","note":"Genuine enthusiasm."},{"zh":"好啦","py":"Hǎo la","en":"Okay okay!","note":"Slightly impatient, done discussing."}]} title={"THE SAME WORD  —  FIVE COMPLETELY DIFFERENT PEOPLE"} />
@@ -67,7 +70,7 @@ This is what makes Chinese feel alive. And this is what textbooks almost never t
 Say this sentence four times — once with each particle. Feel how the mood shifts each time.
 
 
-<span class="zh">我们走</span> + <span class="zh">呀</span> / <span class="zh">吧</span> / <span class="zh">啊</span> / <span class="zh">啦</span>
+<Zh>我们走</Zh> + <Zh>呀</Zh> / <Zh>吧</Zh> / <Zh>啊</Zh> / <Zh>啦</Zh>
 
 
 Wǒmen zǒu ya / ba / a / la

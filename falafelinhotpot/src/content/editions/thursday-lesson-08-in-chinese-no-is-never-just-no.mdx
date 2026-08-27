@@ -21,9 +21,12 @@ metadata:
     cardType: summary_large_image
 ---
 
+import EditionCTA from '~/components/editions/EditionCTA.astro';
 import EditionFigure from '~/components/editions/EditionFigure.astro';
 import LanguageExample from '~/components/editions/LanguageExample.astro';
-import EditionCTA from '~/components/editions/EditionCTA.astro';
+import PullQuote from '~/components/editions/PullQuote.astro';
+import Py from '~/components/editions/Py.astro';
+import Zh from '~/components/editions/Zh.astro';
 
 Here is how to read it.
 
@@ -34,9 +37,9 @@ Here is how to read it.
 
 <LanguageExample lang="chinese" phrase={"不太方便"} transliteration={"bù tài fāngbiàn"} gloss={"Not very convenient"} />
 
-This is the most used indirect no in the Chinese language. It sounds like a scheduling problem. It is not. When someone says <span class="zh">不太方便</span> they are telling you they are not interested, they will not be coming, and the answer is no. But they are wrapping it in something practical so nobody has to say it out loud.
+This is the most used indirect no in the Chinese language. It sounds like a scheduling problem. It is not. When someone says <Zh>不太方便</Zh> they are telling you they are not interested, they will not be coming, and the answer is no. But they are wrapping it in something practical so nobody has to say it out loud.
 
-<div class="pullquote"><span class="zh">这周不太方便，下次吧。</span><br /><span class="py">Zhè zhōu bù tài fāngbiàn, xià cì ba. — This week is not very convenient — maybe next time.</span></div>
+<PullQuote><Zh>这周不太方便，下次吧。</Zh><br /><Py>Zhè zhōu bù tài fāngbiàn, xià cì ba. — This week is not very convenient — maybe next time.</Py></PullQuote>
 
 
 ## The delay
@@ -45,9 +48,9 @@ This is the most used indirect no in the Chinese language. It sounds like a sche
 
 <LanguageExample lang="chinese" phrase={"我再想想"} transliteration={"wǒ zài xiǎng xiǎng"} gloss={"Let me think about it some more"} />
 
-This gives the appearance of consideration. The door seems open. But in Chinese communication, if someone wanted to say yes, they would have said yes already. <span class="zh">我再想想</span> is the polite way of ending a conversation without closing it — because closing it would require saying no, and no one wants to do that.
+This gives the appearance of consideration. The door seems open. But in Chinese communication, if someone wanted to say yes, they would have said yes already. <Zh>我再想想</Zh> is the polite way of ending a conversation without closing it — because closing it would require saying no, and no one wants to do that.
 
-<div class="pullquote"><span class="zh">这个提议我再想想。</span><br /><span class="py">Zhège tíyì wǒ zài xiǎng xiǎng. — Let me think about this proposal some more.</span></div>
+<PullQuote><Zh>这个提议我再想想。</Zh><br /><Py>Zhège tíyì wǒ zài xiǎng xiǎng. — Let me think about this proposal some more.</Py></PullQuote>
 
 
 ## The honest no disguised as a problem
@@ -58,7 +61,7 @@ This gives the appearance of consideration. The door seems open. But in Chinese 
 
 This one is clever. It does not say no — it says the circumstances are against it. The problem is external, not personal. This protects everyone's face because nobody is refusing anybody. The situation is simply difficult. The situation, not the person, is saying no.
 
-<div class="pullquote"><span class="zh">这个要求可能有点难实现。</span><br /><span class="py">Zhège yāoqiú kěnéng yǒudiǎn nán shíxiàn. — This request might be a little difficult to fulfil.</span></div>
+<PullQuote><Zh>这个要求可能有点难实现。</Zh><br /><Py>Zhège yāoqiú kěnéng yǒudiǎn nán shíxiàn. — This request might be a little difficult to fulfil.</Py></PullQuote>
 
 
 ## The business no
@@ -69,7 +72,7 @@ This one is clever. It does not say no — it says the circumstances are against
 
 The most commonly misread phrase in Chinese business culture. Western counterparts hear this and think: good, they are interested, they are going to review it. Chinese speakers hear this and think: the meeting is over. This is the polite exit from a proposal that is not going forward. No further study will happen.
 
-<div class="pullquote"><span class="zh">这个方案我们内部研究一下。</span><br /><span class="py">Zhège fāng'àn wǒmen nèibù yánjiū yīxià. — We will study this proposal internally.</span></div>
+<PullQuote><Zh>这个方案我们内部研究一下。</Zh><br /><Py>Zhège fāng'àn wǒmen nèibù yánjiū yīxià. — We will study this proposal internally.</Py></PullQuote>
 
 
 ## The maybe that means no
@@ -78,9 +81,9 @@ The most commonly misread phrase in Chinese business culture. Western counterpar
 
 <LanguageExample lang="chinese" phrase={"看情况吧"} transliteration={"kàn qíngkuàng ba"} gloss={"It depends on the situation"} />
 
-Technically this means maybe. In practice it means no but with the comfort of uncertainty left in place. <span class="zh">看情况吧</span> gives everyone a graceful exit — the asker does not have to feel rejected and the responder does not have to feel rude. The answer is no. The situation will never align.
+Technically this means maybe. In practice it means no but with the comfort of uncertainty left in place. <Zh>看情况吧</Zh> gives everyone a graceful exit — the asker does not have to feel rejected and the responder does not have to feel rude. The answer is no. The situation will never align.
 
-<div class="pullquote"><span class="zh">周末能来吗？ 看情况吧。</span><br /><span class="py">Zhōumò néng lái ma? Kàn qíngkuàng ba. — Can you come this weekend? — It depends on the situation.</span></div>
+<PullQuote><Zh>周末能来吗？ 看情况吧。</Zh><br /><Py>Zhōumò néng lái ma? Kàn qíngkuàng ba. — Can you come this weekend? — It depends on the situation.</Py></PullQuote>
 
 
 ## The withdrawal of support
@@ -89,11 +92,11 @@ Technically this means maybe. In practice it means no but with the comfort of un
 
 <LanguageExample lang="chinese" phrase={"你看着办吧"} transliteration={"nǐ kàn zhe bàn ba"} gloss={"You decide — handle it yourself"} />
 
-This one sounds like freedom. It is not. When a Chinese parent or superior says <span class="zh">你看着办吧</span> they are expressing disapproval by removing themselves from the decision. They disagree with what you are about to do. But instead of saying no, they are saying: this is on you. And the tone carries everything the words do not.
+This one sounds like freedom. It is not. When a Chinese parent or superior says <Zh>你看着办吧</Zh> they are expressing disapproval by removing themselves from the decision. They disagree with what you are about to do. But instead of saying no, they are saying: this is on you. And the tone carries everything the words do not.
 
-<div class="pullquote"><span class="zh">你决定吧，你看着办。</span><br /><span class="py">Nǐ juédìng ba, nǐ kàn zhe bàn. — You decide — do whatever you think is best.</span></div>
+<PullQuote><Zh>你决定吧，你看着办。</Zh><br /><Py>Nǐ juédìng ba, nǐ kàn zhe bàn. — You decide — do whatever you think is best.</Py></PullQuote>
 
 
-<div class="pullquote">The pattern across all of these is the same. The no is real. But it is wrapped in something soft enough that both people can move on without anyone losing face.</div>
+<PullQuote>The pattern across all of these is the same. The no is real. But it is wrapped in something soft enough that both people can move on without anyone losing face.</PullQuote>
 
 <EditionCTA text="Keep learning — one Thursday lesson at a time." />
