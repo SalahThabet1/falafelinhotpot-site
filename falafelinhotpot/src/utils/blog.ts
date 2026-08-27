@@ -86,6 +86,11 @@ export const getStaticPathsBlogPost = async () => {
   return paths;
 };
 
+export const getStaticPathsBlog = async ({ paginate }: { paginate: PaginateFunction }) => {
+  const posts = await fetchPosts();
+  return paginate(posts, { pageSize: blogPostsPerPage });
+};
+
 export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: PaginateFunction }) => {
   const posts = await fetchPosts();
   const categories = new Map<string, { slug: string; title: string }>();

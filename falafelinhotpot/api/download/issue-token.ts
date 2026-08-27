@@ -1,5 +1,13 @@
+import { timingSafeEqual } from 'node:crypto';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createBusinessChineseDownloadToken } from '../../lib/business-chinese-download.js';
+
+function secretsEqual(a: string, b: string): boolean {
+  const aBuf = Buffer.from(a);
+  const bBuf = Buffer.from(b);
+  if (aBuf.length !== bBuf.length) return false;
+  return timingSafeEqual(aBuf, bBuf);
+}
 
 function getWebhookSecret(req: VercelRequest): string | undefined {
   const headerSecret = req.headers['x-download-webhook-secret'];
@@ -27,7 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(503).json({ error: 'Token service is temporarily unavailable.' });
   }
 
-  if (getWebhookSecret(req) !== configuredSecret) {
+  if (!configuredSecret || !secretsEqual(getWebhookSecret(req) ?? '', configuredSecret)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 

@@ -57,7 +57,6 @@ coverage/
 .idea/
 *.swp
 *.swo
-*~
 .project
 .classpath
 .settings/
@@ -67,4 +66,3 @@ coverage/
 # Local Netlify folder
 .netlify
 .vercel
-.env*

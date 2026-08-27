@@ -1,0 +1,170 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import FihLayout from '~/layouts/FihLayout.astro';
+import EditionFilter from '~/components/editions/EditionFilter.astro';
+import EditionsList from '~/components/editions/List.astro';
+import FihPagination from '~/components/editions/FihPagination.astro';
+import { getStaticPathsBlog } from '~/utils/blog';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  return await getStaticPathsBlog({ paginate });
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { page } = Astro.props as Props;
+const currentPage = page.currentPage ?? 1;
+
+const metadata = {
+  title: currentPage > 1 ? `Editions — Page ${currentPage}` : 'Editions — Falafel in Hotpot',
+  description:
+    'A cultural journal at the confluence of the Arab world and China. Language, food, poetry, business, history — explored as equals.',
+};
+---
+
+<FihLayout metadata={metadata}>
+  <!-- Cinematic banner: image fills top, text anchored to bottom -->
+  <section class="editions-hero">
+    <div class="editions-hero__scrim" aria-hidden="true"></div>
+    <div class="container editions-hero__content">
+      <span class="editions-hero__label">Archive</span>
+      <h1 class="editions-hero__title">Editions</h1>
+      <p class="editions-hero__desc">
+        A cultural journal at the confluence of the Arab world and China. Language, food, poetry,
+        business, history — explored as equals.
+      </p>
+    </div>
+  </section>
+
+  <!-- Body: track filter + server-rendered list + pagination (no client JS) -->
+  <section class="editions-body">
+    <div class="container editions-body__inner">
+      <EditionFilter active="All" />
+      <EditionsList posts={page.data} />
+      <FihPagination
+        prevUrl={page.url.prev}
+        nextUrl={page.url.next}
+        prevText="Newer editions"
+        nextText="Older editions"
+      />
+    </div>
+  </section>
+</FihLayout>
+
+<style>
+  /* ── Cinematic hero ─────────────────────────────── */
+  .editions-hero {
+    position: relative;
+    height: 70vh;
+    min-height: 400px;
+    max-height: 720px;
+    background-image: url('/background.png');
+    background-size: cover;
+    background-position: center 25%;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  /* Warm gradient scrim: barely-there at top, full xuan-200 at bottom —
+     text sits on the opaque zone and blends into the body seamlessly */
+  .editions-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(238, 219, 182, 0.08) 35%,
+      rgba(238, 219, 182, 0.55) 62%,
+      rgba(238, 219, 182, 0.88) 80%,
+      rgba(238, 219, 182, 0.92) 90%,
+      #eedbb6 100%
+    );
+    z-index: 1;
+  }
+
+  .editions-hero__content {
+    position: relative;
+    z-index: 2;
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  @media (min-width: 900px) {
+    .editions-hero__content,
+    .editions-body__inner {
+      max-width: 840px;
+      margin-inline: auto;
+    }
+  }
+
+  .editions-hero__label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-cinnabar, #9b1b15);
+    mix-blend-mode: multiply;
+  }
+
+  .editions-hero__title {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6.5vw, 5.5rem);
+    font-weight: 600;
+    line-height: 1;
+    color: #2c2c2a;
+    mix-blend-mode: multiply;
+  }
+
+  .editions-hero__desc {
+    margin: 0;
+    max-width: 58ch;
+    font-size: clamp(0.95rem, 1.25vw, 1.1rem);
+    line-height: 1.75;
+    color: #4a4a48;
+    mix-blend-mode: multiply;
+  }
+
+  /* ── Body ───────────────────────────────────────── */
+  .editions-body {
+    position: relative;
+    background-color: #eedbb6;
+    padding-top: 2.75rem;
+    padding-bottom: 5rem;
+  }
+
+  .editions-body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url('/texture.webp');
+    background-repeat: repeat;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .editions-body__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Mobile ─────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .editions-hero {
+      height: 58vh;
+      min-height: 320px;
+    }
+
+    .editions-hero__title {
+      font-size: clamp(2.4rem, 10vw, 3.2rem);
+    }
+
+    .editions-hero__desc {
+      font-size: 0.9375rem;
+    }
+  }
+</style>
