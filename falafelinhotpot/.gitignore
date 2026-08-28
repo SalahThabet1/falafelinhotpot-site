@@ -66,3 +66,6 @@ coverage/
 # Local Netlify folder
 .netlify
 .vercel
+
+# graphify knowledge graph (generated)
+graphify-out/

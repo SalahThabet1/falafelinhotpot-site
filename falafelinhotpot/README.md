@@ -114,3 +114,13 @@ Vercel. GitHub Actions (`.github/workflows/vercel-deploy.yml` at the **repo root
 ## Docs
 
 Brand + design system: `docs/BRAND-HANDOFF.md` and `DESIGN.md`. Product context: `PRODUCT.md`. Agent instructions: `AGENTS.md`.
+
+## Knowledge graph (graphify)
+
+`graphify-out/` (gitignored) holds a queryable knowledge graph of the project, built with the `graphify` skill.
+
+**Scope**: 115 first-party files — `src/`, `scripts/`, `api/`, `lib/`, root docs/config. Excluded by design (no edge loss; they are referenced via URLs, not imports): `public/audio/` (2,020 clips), `public/mandarin-starterkit-course/` (vendored build), `node_modules/`, `dist/`.
+
+**Health**: `graph.json` ships clean — dangling external-import edges and CSS self-import loops are pruned at build (expected per graphify). `.astro` files are partially parsed (graphify has no Astro grammar); frontmatter component imports are recovered, inline-script symbols are best-effort.
+
+**Rebuild**: `/graphify .` then narrow to `src/ + scripts/ + api/ + lib/ + root + docs` when prompted (or `graphify update .` for code-only re-extraction).
