@@ -18,7 +18,7 @@ const CULTURAL_SRC =
   process.env.CULTURAL_SRC || path.join(process.env.HOME, 'Downloads/ac_cultural_newsletters');
 const EDU_SRC = process.env.EDU_SRC || path.join(process.env.HOME, 'Downloads/ac_edu_newsletters');
 const OUT_DIR = path.join(ROOT, process.env.OUT_DIR || 'src/content/editions');
-const PUBLIC_DIR = path.join(ROOT, 'public');
+const ASSETS_DIR = path.join(ROOT, 'src', 'assets');
 const SLUGS_PATH = path.join(__dirname, 'edition-slugs.json');
 const MANIFEST_PATH = path.join(ROOT, 'MISSING_IMAGES.md');
 
@@ -142,7 +142,9 @@ function extFromUrl(url) {
 }
 
 function fileExists(publicPath) {
-  return fs.existsSync(path.join(PUBLIC_DIR, publicPath.replace(/^\//, '')));
+  // Frontmatter `image:` is relative to the collection dir (src/content/editions)
+  // for the Astro `image()` schema helper.
+  return fs.existsSync(path.join(OUT_DIR, publicPath));
 }
 
 // ---------------------------------------------------------------------------
@@ -611,7 +613,7 @@ function findLocalImage(searchDirs, url, html, alt) {
 }
 
 function copyImageToPublic(localPath, publicPath) {
-  const dest = path.join(PUBLIC_DIR, publicPath.replace(/^\//, ''));
+  const dest = path.join(ASSETS_DIR, publicPath.replace(/^\//, ''));
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.copyFileSync(localPath, dest);
   return dest;
@@ -834,17 +836,18 @@ function processEdition(folder, track, imageGaps) {
   const publishDate = folder.sdate ? folder.sdate.slice(0, 10) : '2026-01-01';
 
   const trackFolder = track === 'cultural' ? 'cultural' : 'thursday-lesson';
-  const heroPath = `/images/newsletters/${trackFolder}/issue-${String(issueNumber).padStart(2, '0')}.jpg`;
-
   // Committed convention: the card `image` points at the first inline figure
   // (`{slug}-fig-1.*`), not the issue-NN hero (which only exists for a couple
   // of issues). Prefer the figure so re-imports never break image references.
-  const figDir = path.join(PUBLIC_DIR, 'images', 'newsletters', trackFolder);
+  const figDir = path.join(ASSETS_DIR, 'images', 'newsletters', trackFolder);
   const figOne = fs.existsSync(figDir)
     ? fs.readdirSync(figDir).find((f) => f.startsWith(`${slug}-fig-1.`))
     : undefined;
-  const cardImage = figOne ? `/images/newsletters/${trackFolder}/${figOne}` : heroPath;
-
+  // Relative to the collection dir (src/content/editions) — the Astro
+  // `image()` schema helper resolves paths against the collection folder.
+  const cardImage = figOne
+    ? `../../assets/images/newsletters/${trackFolder}/${figOne}`
+    : `../../assets/images/newsletters/${trackFolder}/issue-${String(issueNumber).padStart(2, '0')}.jpg`;
   let bodyMd;
   let extraImports = [];
   let heroSourceUrl = '';
@@ -853,7 +856,7 @@ function processEdition(folder, track, imageGaps) {
     const parsed = parseEduNewsletterHtml(html, {
       slug,
       trackFolder,
-      publicDir: PUBLIC_DIR,
+      publicDir: ASSETS_DIR,
     });
     bodyMd = parsed.bodyMd;
     extraImports = parsed.imports;
@@ -863,7 +866,7 @@ function processEdition(folder, track, imageGaps) {
     const parsed = parseNewsletterHtml(html, {
       slug,
       trackFolder,
-      publicDir: PUBLIC_DIR,
+      publicDir: ASSETS_DIR,
       track,
     });
     bodyMd = parsed.bodyMd;

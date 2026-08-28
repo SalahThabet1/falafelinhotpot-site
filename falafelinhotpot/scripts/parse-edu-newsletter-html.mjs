@@ -483,7 +483,8 @@ export function parseEduNewsletterHtml(html, options = {}) {
           const exists =
             publicDir && fs.existsSync(path.join(publicDir, resolved.replace(/^\//, '')));
           if (exists) {
-            attrs.push(mdxProp('image', resolved));
+            imports.add(`import Fig${figNum} from '~/assets${resolved}';`);
+            attrs.push(`image={Fig${figNum}}`);
           } else {
             const alt = block.imageAlt || block.label || block.character || `Figure ${figNum}`;
             imageGaps.push({ slug, fig: figNum, alt, publicPath, sourceUrl: block.imageSrc });

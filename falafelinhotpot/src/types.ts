@@ -1,4 +1,5 @@
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import type { ImageMetadata } from 'astro';
 
 export interface Taxonomy {
   slug: string;
@@ -50,7 +51,7 @@ export interface Post {
   titleZh?: string;
   titleAr?: string;
   excerpt?: string;
-  image?: string;
+  image?: ImageMetadata;
   category?: Taxonomy;
   tags?: Taxonomy[];
   author?: string;

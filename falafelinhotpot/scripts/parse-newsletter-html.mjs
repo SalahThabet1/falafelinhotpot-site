@@ -484,8 +484,9 @@ export function parseNewsletterHtml(html, options = {}) {
           publicDir && fs.existsSync(path.join(publicDir, resolvedPath.replace(/^\//, '')));
 
         if (exists) {
+          imports.add(`import Fig${figNum} from '~/assets${resolvedPath}';`);
           mdxParts.push(
-            `\n<EditionFigure src="${resolvedPath}" alt="${alt.replace(/"/g, '\\"')}" />\n`
+            `\n<EditionFigure src={Fig${figNum}} alt="${alt.replace(/"/g, '\\"')}" />\n`
           );
         } else {
           imageGaps.push({ slug, fig: figNum, alt, publicPath, sourceUrl: block.src });

@@ -45,29 +45,30 @@ const editionCategories = z.enum(['Bridge', 'Learn']);
 
 const editions = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/editions' }),
-  schema: z.object({
-    publishDate: z.coerce.date(),
-    updateDate: z.coerce.date().optional(),
-    draft: z.boolean().optional(),
+  schema: ({ image }) =>
+    z.object({
+      publishDate: z.coerce.date(),
+      updateDate: z.coerce.date().optional(),
+      draft: z.boolean().optional(),
 
-    title: z.string(),
-    titleZh: z.string().optional(),
-    titleAr: z.string().optional(),
-    excerpt: z.string(),
-    image: z.string().optional(),
+      title: z.string(),
+      titleZh: z.string().optional(),
+      titleAr: z.string().optional(),
+      excerpt: z.string(),
+      image: image().optional(),
 
-    category: editionCategories,
-    tags: z.array(z.string()).optional(),
-    author: z.string().default('Falafel in Hotpot'),
+      category: editionCategories,
+      tags: z.array(z.string()).optional(),
+      author: z.string().default('Falafel in Hotpot'),
 
-    issueNumber: z.number().optional(),
-    series: z.enum(['cultural', 'learn']).optional(),
-    subjectLine: z.string().optional(),
-    subtitleArabic: z.string().optional(),
-    bilingual: z.boolean().optional(),
+      issueNumber: z.number().optional(),
+      series: z.enum(['cultural', 'learn']).optional(),
+      subjectLine: z.string().optional(),
+      subtitleArabic: z.string().optional(),
+      bilingual: z.boolean().optional(),
 
-    metadata: metadataDefinition(),
-  }),
+      metadata: metadataDefinition(),
+    }),
 });
 
 export const collections = { editions };

@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import LessonPhrase from '~/components/editions/LessonPhrase.astro';
 
 export interface Example {
@@ -17,7 +19,7 @@ export interface Props {
   description: string;
   badge?: string;
   examples?: Example[];
-  image?: string;
+  image?: ImageMetadata | string;
   hidePhrase?: boolean;
   layout?: 'default' | 'pictograph';
 }
@@ -84,17 +86,28 @@ if (label && heading) {
   }
 
   {
-    isPictograph ? (
+    isPictograph && image ? (
       <div class="lesson-entry__pictograph">
         <figure class="lesson-entry__pictograph-cell lesson-entry__pictograph-photo">
-          <img
-            src={image}
-            alt={imageAlt}
-            loading="lazy"
-            decoding="async"
-            width="480"
-            height="480"
-          />
+          {typeof image === 'string' ? (
+            <img
+              src={image}
+              alt={imageAlt}
+              loading="lazy"
+              decoding="async"
+              width="480"
+              height="480"
+            />
+          ) : (
+            <Image
+              src={image}
+              alt={imageAlt}
+              loading="lazy"
+              decoding="async"
+              width={480}
+              height={480}
+            />
+          )}
         </figure>
         <div class="lesson-entry__pictograph-cell lesson-entry__pictograph-glyph">
           <span class="zh">{character}</span>
@@ -103,14 +116,25 @@ if (label && heading) {
     ) : (
       image && (
         <figure class="lesson-entry__figure">
-          <img
-            src={image}
-            alt={imageAlt}
-            loading="lazy"
-            decoding="async"
-            width="720"
-            height="405"
-          />
+          {typeof image === 'string' ? (
+            <img
+              src={image}
+              alt={imageAlt}
+              loading="lazy"
+              decoding="async"
+              width="720"
+              height="405"
+            />
+          ) : (
+            <Image
+              src={image}
+              alt={imageAlt}
+              loading="lazy"
+              decoding="async"
+              width={720}
+              height={405}
+            />
+          )}
         </figure>
       )
     )

@@ -37,7 +37,7 @@ const nextPost =
     : undefined;
 
 const url = getCanonical(post.permalink);
-const imageUrl = post.image ? getCanonical(post.image) : undefined;
+const imageUrl = post.image ? getCanonical(post.image.src) : undefined;
 
 const metadata = {
   title: post.metadata?.title ?? post.title,
@@ -49,7 +49,7 @@ const metadata = {
   },
   openGraph: {
     type: 'article',
-    ...(post.image ? { images: [{ url: post.image }] } : {}),
+    ...(post.image ? { images: [{ url: post.image.src }] } : {}),
     ...post.metadata?.openGraph,
   },
   twitter: post.metadata?.twitter,
