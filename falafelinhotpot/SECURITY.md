@@ -69,10 +69,12 @@ Hashed assets (`/_astro/`, `/audio/`) are cached immutable; HTML is
 - Tokens are HS256 JWTs (24h TTL) verified on every download request; the blob
   presigned URL is short-lived and never cached (`Cache-Control: no-store`).
 - The token-minting webhook compares the shared secret with
-  `crypto.timingSafeEqual` (constant-time).
-- **Open items:** no rate limit on the mint webhook; the ActiveCampaign embed
-  on `/get-your-chinese-business-guide` uses `eval()` (JSONP) — treat AC as a
-  trusted-third-party boundary until replaced.
+  `crypto.timingSafeEqual` (constant-time), validates the email format, and
+  rate-limits per IP + per email (10/min, in-memory per serverless instance).
+- **Open items:** the ActiveCampaign embed on `/get-your-chinese-business-guide`
+  uses `eval()` (JSONP) — treat AC as a trusted-third-party boundary until
+  replaced. Blob upload keeps `allowOverwrite: true` deliberately (the download
+  gate reads a fixed pathname; versioned suffixes would break it).
 
 ## Reporting
 

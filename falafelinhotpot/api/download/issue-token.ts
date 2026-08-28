@@ -2,6 +2,33 @@ import { timingSafeEqual } from 'node:crypto';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createBusinessChineseDownloadToken } from '../../lib/business-chinese-download.js';
 
+// Simple in-memory rate limit for the token-minting webhook. Serverless
+// instances reset the map on cold start, so this is a per-instance throttle,
+// not a global quota — still enough to blunt brute-force of the shared secret
+// and spam minting without adding a dependency.
+const WINDOW_MS = 60_000;
+const MAX_PER_WINDOW = 10;
+const hits = new Map<string, { count: number; resetAt: number }>();
+
+function rateLimited(key: string): boolean {
+  const now = Date.now();
+  const entry = hits.get(key);
+  if (!entry || entry.resetAt < now) {
+    hits.set(key, { count: 1, resetAt: now + WINDOW_MS });
+    return false;
+  }
+  entry.count += 1;
+  return entry.count > MAX_PER_WINDOW;
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function clientIp(req: VercelRequest): string {
+  const fwd = req.headers['x-forwarded-for'];
+  if (typeof fwd === 'string' && fwd) return fwd.split(',')[0].trim();
+  return req.socket.remoteAddress ?? 'unknown';
+}
+
 function secretsEqual(a: string, b: string): boolean {
   const aBuf = Buffer.from(a);
   const bBuf = Buffer.from(b);
@@ -35,6 +62,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(503).json({ error: 'Token service is temporarily unavailable.' });
   }
 
+  if (rateLimited(`ip:${clientIp(req)}`)) {
+    return res.status(429).json({ error: 'Too many requests.' });
+  }
+
   if (!configuredSecret || !secretsEqual(getWebhookSecret(req) ?? '', configuredSecret)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
@@ -48,6 +79,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!email) {
     return res.status(400).json({ error: 'Missing email in request body.' });
+  }
+
+  if (!EMAIL_RE.test(email)) {
+    return res.status(400).json({ error: 'Invalid email address.' });
+  }
+
+  if (rateLimited(`email:${email.toLowerCase()}`)) {
+    return res.status(429).json({ error: 'Too many requests.' });
   }
 
   try {
