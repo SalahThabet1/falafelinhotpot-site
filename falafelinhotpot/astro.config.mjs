@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
@@ -7,6 +10,21 @@ import tailwindcss from '@tailwindcss/vite';
 
 // Site URL from environment variable with production fallback for stable canonical URLs.
 const siteUrl = process.env.SITE_URL || 'https://falafelinhotpot.com';
+
+// Lastmod map for edition pages, read from frontmatter publishDate/updateDate (ISO dates).
+const editionsDir = path.join(process.cwd(), 'src/content/editions');
+const editionLastmod = new Map();
+for (const file of fs.readdirSync(editionsDir)) {
+  if (!file.endsWith('.mdx')) continue;
+  const source = fs.readFileSync(path.join(editionsDir, file), 'utf8');
+  const updateDate = source.match(/^updateDate:\s*(\d{4}-\d{2}-\d{2})/m)?.[1];
+  const publishDate = source.match(/^publishDate:\s*(\d{4}-\d{2}-\d{2})/m)?.[1];
+  const lastmod = updateDate ?? publishDate;
+  if (lastmod) {
+    const slug = file.replace(/\.mdx$/, '');
+    editionLastmod.set(`${siteUrl}/editions/${slug}/`, lastmod);
+  }
+}
 const publicRoutePrefixes = [
   '/',
   '/subscribe',
@@ -73,6 +91,11 @@ export default defineConfig({
       },
       // Static public/ routes are invisible to @astrojs/sitemap; add them explicitly.
       customPages: [`${siteUrl}/mandarin-starterkit-course/`],
+      namespaces: { news: false, video: false, image: false, xhtml: false },
+      serialize: (item) => {
+        if (editionLastmod.has(item.url)) item.lastmod = editionLastmod.get(item.url);
+        return item;
+      },
     }),
   ],
   vite: {

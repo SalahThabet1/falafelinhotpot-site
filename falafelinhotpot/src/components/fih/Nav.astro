@@ -45,7 +45,13 @@ const {
         >
       </li>
     </ul>
-    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+    <button
+      class="nav__toggle"
+      id="navToggle"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="drawer"
+    >
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -133,6 +139,7 @@ const {
       toggle.classList.remove('open');
       toggle.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
+      toggle.focus();
     };
 
     toggle.addEventListener('click', (e) => {

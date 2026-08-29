@@ -20,6 +20,7 @@
      design.md-documented value instead of duplicating it. */
   --color-cinnabar: #9b1b15;
   --color-gold: #c39a3c;
+  --color-gold-ink: #8a6d1f;
   --color-dark: #261b1c;
   --color-plum: #4b2639;
   --bg: var(--color-parchment);

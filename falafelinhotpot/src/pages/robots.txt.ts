@@ -8,10 +8,9 @@ export const GET: APIRoute = () => {
 User-agent: *
 Allow: /
 
-# Disallow admin and API routes (if any)
+# Serverless API and the JWT-gated download redirect are not content
 Disallow: /api/
 Disallow: /download/
-Disallow: /_astro/
 
 # Sitemap location
 Sitemap: ${siteConfig.url}/sitemap-index.xml
