@@ -34,23 +34,6 @@ const authorName = 'Falafel';
 
       <h1 class="single-post__title">{post.title}</h1>
 
-      {
-        (post.excerpt || post.titleAr) && (
-          <div class="single-post__subtitle">
-            {post.excerpt && (
-              <p class="single-post__excerpt" dir="auto">
-                {post.excerpt}
-              </p>
-            )}
-            {post.titleAr && (
-              <p class="single-post__subtitle-ar" dir="rtl" lang="ar">
-                {post.titleAr}
-              </p>
-            )}
-          </div>
-        )
-      }
-
       <div class="single-post__meta">
         <span class="single-post__meta-item">
           <span class="single-post__meta-label">Published</span>
@@ -69,6 +52,23 @@ const authorName = 'Falafel';
           <span>{authorName}</span>
         </span>
       </div>
+
+      {
+        (post.excerpt || post.titleAr) && (
+          <div class="single-post__subtitle">
+            {post.excerpt && (
+              <p class="single-post__excerpt" dir="auto">
+                {post.excerpt}
+              </p>
+            )}
+            {post.titleAr && (
+              <p class="single-post__subtitle-ar" dir="rtl" lang="ar">
+                {post.titleAr}
+              </p>
+            )}
+          </div>
+        )
+      }
     </div>
   </header>
 
@@ -86,6 +86,10 @@ const authorName = 'Falafel';
 <style>
   .single-post {
     width: 100%;
+  }
+
+  .single-post--has-hero {
+    padding-top: var(--nav-height, 60px);
   }
 
   .single-post__header {
@@ -155,7 +159,7 @@ const authorName = 'Falafel';
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-top: 1.75rem;
+    margin-top: 1.25rem;
     font-family: var(--font-body);
     color: #5c534f;
   }
@@ -169,6 +173,10 @@ const authorName = 'Falafel';
     background: rgba(253, 251, 247, 0.52);
     font-size: 0.8125rem;
     line-height: 1.2;
+  }
+
+  .single-post__meta-item--tag {
+    color: #5c534f;
   }
 
   .single-post__meta-label {
