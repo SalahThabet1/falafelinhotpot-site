@@ -10,7 +10,7 @@ Falafel in Hotpot serves readers learning across Arabic, Chinese, and English co
 
 ## Product Purpose
 
-The public site presents Falafel in Hotpot as an editorial and learning brand. Success means visitors can understand the voice quickly, read current and past editions, subscribe through the existing newsletter provider, and find core pages without encountering Template demo material.
+The public site presents Falafel in Hotpot as an editorial and learning brand. Success means visitors can understand the voice quickly, read current and past editions, subscribe through the existing newsletter provider, and find core pages without encountering leftover demo material.
 
 ## Brand Personality
 
@@ -18,11 +18,11 @@ Textured, hospitable, scholarly.
 
 ## Anti-references
 
-The site should not look like a generic SaaS theme, a Template demo, a dashboard, or a templated startup landing page. It should also avoid hiding the multilingual editorial identity behind generic cards, generic gradients, or placeholder marketing copy.
+The site should not look like a generic SaaS theme, a stock template demo, a dashboard, or a templated startup landing page. It should also avoid hiding the multilingual editorial identity behind generic cards, generic gradients, or placeholder marketing copy.
 
 ## Design Principles
 
-- Preserve the FIH identity over the inherited Template visual system.
+- Preserve the FIH identity over the inherited template visual system.
 - Let editorial content and multilingual typography carry the experience.
 - Keep public pages direct, warm, and readable before adding ornament.
 - Use Astro-native pages and components for durable static publishing.

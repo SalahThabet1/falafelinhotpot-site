@@ -13,7 +13,7 @@
   --color-border: rgba(28, 28, 28, 0.12);
   --color-divider: rgba(28, 28, 28, 0.16);
   --color-accent: #c0392b;
-  /* Legacy Template leftover previously redeclared this to #c0392b, which sits
+  /* Legacy template leftover previously redeclared this to #c0392b, which sits
      after (and so wins over) the real brand value from the @theme block
      below — every var(--color-cinnabar) consumer site-wide (buttons,
      eyebrows, hovers) was silently rendering the wrong red. Align to the
@@ -68,7 +68,7 @@
 
   /* Semantic Colors — aliased to the Neo-Chinese Editorial palette above.
      These previously held generic grayscale/blue placeholders left over
-     from the inherited Template theme (including a pure #fff background,
+     from the inherited template theme (including a pure #fff background,
      which design.md explicitly forbids); every page's true background
      was only ever the parchment set by section-level styles, so any gap
      between sections (404/403/500, thin viewports) leaked pure white. */
