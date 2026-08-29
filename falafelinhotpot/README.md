@@ -61,8 +61,7 @@ Copy `.env.example` to `.env`. See it for per-variable comments.
 | `PUBLIC_GA_MEASUREMENT_ID` | Google Analytics 4 (no-ops when unset) |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob access for the PDF |
 | `BLOB_BUSINESS_CHINESE_PATHNAME` | Blob pathname of the PDF |
-| `DOWNLOAD_JWT_SECRET` | JWT signing for `/api/download/issue-token` |
-| `DOWNLOAD_WEBHOOK_SECRET` | Shared secret for the ActiveCampaign token-minting webhook |
+| `DOWNLOAD_JWT_SECRET` | JWT signing for manual download links |
 
 ## Routes
 
@@ -78,7 +77,6 @@ Copy `.env.example` to `.env`. See it for per-variable comments.
 | `/403` `/404` `/500` | Error pages |
 | `/mandarin-starterkit-course/` | Vendored landing page |
 | `/api/download/business-chinese` | PDF download endpoint (serverless, `api/download/business-chinese.ts`) |
-| `/api/download/issue-token` | JWT issue endpoint (serverless, `api/download/issue-token.ts`) |
 
 ### Redirects (in `vercel.json`)
 
@@ -107,13 +105,13 @@ AGENTS.md         Agent instructions — read before UI/architecture/SEO changes
 ## Operations
 
 - **Rotating the business-Chinese PDF**: upload the new file to Vercel Blob (`BLOB_READ_WRITE_TOKEN`, pathname from `BLOB_BUSINESS_CHINESE_PATHNAME`). The download endpoint presigns a short-lived URL after JWT verification. Do this via the Vercel dashboard or `vercel blob put` (CLI), no code change needed.
-- **Minting download tokens**: the `/api/download/issue-token` webhook signs a JWT with `DOWNLOAD_JWT_SECRET` when called with the `DOWNLOAD_WEBHOOK_SECRET` (ActiveCampaign automation POSTs to it). Rate-limited in-memory (10/60s). To issue one manually, sign `{ sub, email }` with HS256 + `DOWNLOAD_JWT_SECRET` using any JWT tool.
-- **ActiveCampaign**: newsletter signups (`/subscribe`) and the token-minting webhook. Edition content is authored directly in `src/content/editions/` — there is no import pipeline.
+- **Issuing download links (manual)**: sign a HS256 JWT `{ sub: <email>, email: <email> }` with `DOWNLOAD_JWT_SECRET` (24h TTL, see `lib/business-chinese-download.ts`) using any JWT tool, then send the recipient `/download/business-chinese?token=<jwt>`.
+- **ActiveCampaign**: newsletter signups (`/subscribe`) only. Edition content is authored directly in `src/content/editions/` — there is no import pipeline and no webhook.
 
 ## External Services
 
 - **Vercel** — hosting + Blob storage
-- **ActiveCampaign** — newsletter signups and the download-token webhook
+- **ActiveCampaign** — newsletter signups
 - **YouTube** — embedded via `VideoCard`
 - **Google Analytics** — optional, gated on `PUBLIC_GA_MEASUREMENT_ID`
 

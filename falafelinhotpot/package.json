@@ -12,7 +12,7 @@
   "author": "Falafel in Hotpot",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SalahThabet1/falafelinhotpot-site.git"
+    "url": "https://github.com/your-org/falafelinhotpot-site.git"
   },
   "homepage": "https://falafelinhotpot.com",
   "scripts": {
