@@ -25,12 +25,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run lint && npm run format:check && astro check",
-    "import:editions": "node scripts/import-activecampaign-editions.mjs",
-    "sync:edu-images": "node scripts/import-activecampaign-editions.mjs --sync-edu-images",
-    "sync:mandarin-landing": "npm run build --prefix ../../landing-main -- --base=/mandarin-starterkit-course/ && rm -rf public/mandarin-starterkit-course && mkdir -p public/mandarin-starterkit-course && cp -r ../../landing-main/dist/* public/mandarin-starterkit-course/",
-    "upload:business-chinese-pdf": "tsx scripts/upload-business-chinese-pdf.ts",
-    "generate:download-token": "tsx scripts/generate-download-token.ts"
+    "check": "npm run lint && npm run format:check && astro check"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
@@ -75,7 +70,6 @@
     "prettier": "^3.7.4",
     "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "^4.0.0",
-    "tsx": "^4.23.1",
     "typescript": "^5.7.0"
   }
 }

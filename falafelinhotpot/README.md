@@ -19,12 +19,7 @@ npm install
 npm run dev        # http://localhost:4321
 ```
 
-Requires `public/mandarin-starterkit-course/` for `npm run build` — see
-`sync:mandarin-landing` below, or run the sync first:
-
-```bash
-npm run sync:mandarin-landing
-```
+`npm run build` requires `public/mandarin-starterkit-course/` — a vendored build of the Mandarin Starter Kit landing page, committed to the repo. No rebuild step needed; treat it as read-only.
 
 ## npm Scripts
 
@@ -36,13 +31,24 @@ npm run sync:mandarin-landing
 | `npm run check` | Quality gate: ESLint + Prettier + `astro check` |
 | `npm run lint` / `lint:fix` | ESLint over the repo (no autofix / with) |
 | `npm run format` / `format:check` | Prettier write / verify |
-| `npm run import:editions` | Import newsletter MDX from ActiveCampaign exports (`CULTURAL_SRC`/`EDU_SRC`) |
-| `npm run sync:edu-images` | Sync Thursday-lesson edition images from `EDU_SRC` exports |
-| `npm run sync:mandarin-landing` | Rebuild `../../landing-main` and copy its dist into `public/mandarin-starterkit-course/` |
-| `npm run upload:business-chinese-pdf` | Upload the business-Chinese PDF to Vercel Blob |
-| `npm run generate:download-token` | Mint a one-time download JWT |
 
 (`prebuild` runs `test -f public/mandarin-starterkit-course/index.html` implicitly before every build.)
+
+## Content Model — Editions
+
+The newsletter archive lives in `src/content/editions/*.mdx`, one file per edition. Two tracks:
+
+| Track | `category` | `series` | Current range |
+| --- | --- | --- | --- |
+| Bridge (cultural) | `Bridge` | `cultural` | `cultural-01` … `cultural-18` |
+| Learn (学 Series) | `Learn` | `learn` | `thursday-lesson-01` … `thursday-lesson-14` |
+
+**To add an edition:**
+1. Copy an existing `.mdx` as a template. Filename = the URL slug, e.g. `cultural-19-your-slug-here.mdx` → `/editions/cultural-19-your-slug-here`.
+2. Set frontmatter fields: `publishDate`, `title`, `titleAr` (Bridge only), `excerpt` (first substantive line, ≤160 chars), `category`, `series`, `issueNumber` (next in the track), `subjectLine`, `bilingual` (Bridge: `true`), `tags`, `metadata.title` (`Bridge #N: … | Falafel in Hotpot`), `metadata.canonical`.
+3. Add a card/hero image: `src/assets/images/newsletters/{cultural|thursday-lesson}/<slug>-default.jpg` (16:9, ~1200×675), referenced by frontmatter `image:`. Any size works — `object-fit: cover` crops it.
+4. Body: `##` headings for sections; phrase cards use `<LanguageExample lang="chinese" phrase={…} transliteration={…} gloss={…} />`; inline CJK → `<Zh>…</Zh>`, pinyin → `<Py>…</Py>`; standalone quotes → `<PullQuote>…</PullQuote>`; in-article images → `<EditionFigure src={Fig1} alt="…"/>` with a `~/assets/…` import; end Bridge editions with `<EditionCTA …/>`. Learn pages get the course CTA automatically.
+5. `npm run check && npm run build`, then commit.
 
 ## Environment Variables
 
@@ -52,11 +58,11 @@ Copy `.env.example` to `.env`. See it for per-variable comments.
 | --- | --- |
 | `SITE_URL` | SEO / sitemap / canonical URLs |
 | `SITE_NAME`, `SITE_DESCRIPTION`, `SITE_AUTHOR` | Global site metadata (`src/config/site.ts`) |
+| `PUBLIC_GA_MEASUREMENT_ID` | Google Analytics 4 (no-ops when unset) |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob access for the PDF |
 | `BLOB_BUSINESS_CHINESE_PATHNAME` | Blob pathname of the PDF |
 | `DOWNLOAD_JWT_SECRET` | JWT signing for `/api/download/issue-token` |
 | `DOWNLOAD_WEBHOOK_SECRET` | Shared secret for the ActiveCampaign token-minting webhook |
-| `CULTURAL_SRC`, `EDU_SRC`, `OUT_DIR` | `import:editions` script paths |
 
 ## Routes
 
@@ -70,7 +76,7 @@ Copy `.env.example` to `.env`. See it for per-variable comments.
 | `/download/business-chinese` | JWT-gated PDF download endpoint (rewritten to the API) |
 | `/subscribe` | Newsletter signup |
 | `/403` `/404` `/500` | Error pages |
-| `/mandarin-starterkit-course/` | Vendored landing page (built from `landing-main`) |
+| `/mandarin-starterkit-course/` | Vendored landing page |
 | `/api/download/business-chinese` | PDF download endpoint (serverless, `api/download/business-chinese.ts`) |
 | `/api/download/issue-token` | JWT issue endpoint (serverless, `api/download/issue-token.ts`) |
 
@@ -92,18 +98,24 @@ src/
 api/              Vercel serverless functions (outside src/)
 lib/              Shared server code (business-chinese-download JWT lib)
 public/           Static assets incl. audio/, images/, mandarin-starterkit-course/ build
-scripts/          Node/tsx tooling (edition import, PDF upload, token mint)
 docs/             Brand handoff (BRAND-HANDOFF.md)
 DESIGN.md         Machine-readable design system (Stitch format)
 PRODUCT.md        Product context & principles
+AGENTS.md         Agent instructions — read before UI/architecture/SEO changes
 ```
+
+## Operations
+
+- **Rotating the business-Chinese PDF**: upload the new file to Vercel Blob (`BLOB_READ_WRITE_TOKEN`, pathname from `BLOB_BUSINESS_CHINESE_PATHNAME`). The download endpoint presigns a short-lived URL after JWT verification. Do this via the Vercel dashboard or `vercel blob put` (CLI), no code change needed.
+- **Minting download tokens**: the `/api/download/issue-token` webhook signs a JWT with `DOWNLOAD_JWT_SECRET` when called with the `DOWNLOAD_WEBHOOK_SECRET` (ActiveCampaign automation POSTs to it). Rate-limited in-memory (10/60s). To issue one manually, sign `{ sub, email }` with HS256 + `DOWNLOAD_JWT_SECRET` using any JWT tool.
+- **ActiveCampaign**: newsletter signups (`/subscribe`) and the token-minting webhook. Edition content is authored directly in `src/content/editions/` — there is no import pipeline.
 
 ## External Services
 
-- **ActiveCampaign** — newsletter signups (`/subscribe`) and edition exports; the `import:editions` script consumes its HTML exports
-- **Vercel Blob** — hosts the business-Chinese guide PDF
+- **Vercel** — hosting + Blob storage
+- **ActiveCampaign** — newsletter signups and the download-token webhook
 - **YouTube** — embedded via `VideoCard`
-- **Sibling `landing-main`** — the Mandarin Starter Kit landing page lives in `../../landing-main`; `sync:mandarin-landing` builds it and vendors `dist/` into `public/mandarin-starterkit-course/`
+- **Google Analytics** — optional, gated on `PUBLIC_GA_MEASUREMENT_ID`
 
 Note: `src/pages/get-your-chinese-business-guide.astro` contains ~1450 lines of vendored ActiveCampaign embed code (a live conversion page) — treat it as read-only.
 
@@ -113,14 +125,4 @@ Vercel. GitHub Actions (`.github/workflows/vercel-deploy.yml` at the **repo root
 
 ## Docs
 
-Brand + design system: `docs/BRAND-HANDOFF.md` and `DESIGN.md`. Product context: `PRODUCT.md`. Agent instructions: `AGENTS.md`.
-
-## Knowledge graph (graphify)
-
-`graphify-out/` (gitignored) holds a queryable knowledge graph of the project, built with the `graphify` skill.
-
-**Scope**: 115 first-party files — `src/`, `scripts/`, `api/`, `lib/`, root docs/config. Excluded by design (no edge loss; they are referenced via URLs, not imports): `public/audio/` (2,020 clips), `public/mandarin-starterkit-course/` (vendored build), `node_modules/`, `dist/`.
-
-**Health**: `graph.json` ships clean — dangling external-import edges and CSS self-import loops are pruned at build (expected per graphify). `.astro` files are partially parsed (graphify has no Astro grammar); frontmatter component imports are recovered, inline-script symbols are best-effort.
-
-**Rebuild**: `/graphify .` then narrow to `src/ + scripts/ + api/ + lib/ + root + docs` when prompted (or `graphify update .` for code-only re-extraction).
+Brand + design system: `docs/BRAND-HANDOFF.md` and `DESIGN.md`. Product context: `PRODUCT.md`. Security posture: `SECURITY.md`. Agent instructions (read before UI/architecture/SEO changes): `AGENTS.md`.
