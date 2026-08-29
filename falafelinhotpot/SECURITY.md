@@ -51,7 +51,7 @@ Remaining `npm audit` findings are transitive **build-time** tooling
 
 - No secrets are committed. `.env.local` is gitignored and untracked.
 - Serverless functions read secrets exclusively from `process.env`
-  (`BLOB_READ_WRITE_TOKEN`, `DOWNLOAD_JWT_SECRET`, `SITE_URL`). Only
+  (`BLOB_READ_WRITE_TOKEN`, `SITE_URL`). Only
   `PUBLIC_*` env vars reach the client bundle.
 - `.env.example` documents every variable with placeholders.
 
@@ -64,16 +64,16 @@ Applied site-wide: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`,
 Hashed assets (`/_astro/`, `/audio/`) are cached immutable; HTML is
 `max-age=0, must-revalidate`.
 
-## Download gate (`api/download/*`)
+## Download endpoint (`api/download/business-chinese`)
 
-- Tokens are HS256 JWTs (24h TTL) verified on every download request; the blob
-  presigned URL is short-lived and never cached (`Cache-Control: no-store`).
-  Links are issued manually — signed with `DOWNLOAD_JWT_SECRET` and sent to
-  the recipient directly (no public minting endpoint).
+- The PDF is served openly: the endpoint presigns a short-lived Vercel Blob
+  URL and 302-redirects. No token required, never cached
+  (`Cache-Control: no-store`). The blob itself stays private — only the
+  presigned URL grants access, and only for 10 minutes.
 - **Open items:** the ActiveCampaign embed on `/get-your-chinese-business-guide`
   uses `eval()` (JSONP) — treat AC as a trusted-third-party boundary until
   replaced. Blob upload keeps `allowOverwrite: true` deliberately (the download
-  gate reads a fixed pathname; versioned suffixes would break it).
+  endpoint reads a fixed pathname; versioned suffixes would break it).
 
 ## Reporting
 

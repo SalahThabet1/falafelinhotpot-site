@@ -10,7 +10,7 @@ Live site: <https://falafelinhotpot.com>
 - **Tailwind CSS v4** via `@tailwindcss/vite`, custom design tokens in `src/styles/global.css` (`@theme` is the canonical token source)
 - **MDX** content collections (`src/content/editions`) for the newsletter archive
 - **astro-icon** (Lucide, Simple Icons, Tabler) — no raw inline SVGs
-- **Vercel Blob** for the business-Chinese PDF download (JWT-gated)
+- **Vercel Blob** for the business-Chinese PDF download
 
 ## Quick Start
 
@@ -61,7 +61,6 @@ Copy `.env.example` to `.env`. See it for per-variable comments.
 | `PUBLIC_GA_MEASUREMENT_ID` | Google Analytics 4 (no-ops when unset) |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob access for the PDF |
 | `BLOB_BUSINESS_CHINESE_PATHNAME` | Blob pathname of the PDF |
-| `DOWNLOAD_JWT_SECRET` | JWT signing for manual download links |
 
 ## Routes
 
@@ -72,7 +71,7 @@ Copy `.env.example` to `.env`. See it for per-variable comments.
 | `/category/[category]/[...page]` | Edition category pagination |
 | `/pinyin-chart` | Interactive Pinyin chart (React island) |
 | `/get-your-chinese-business-guide` | Business-Chinese guide download page |
-| `/download/business-chinese` | JWT-gated PDF download endpoint (rewritten to the API) |
+| `/download/business-chinese` | Open PDF download endpoint (rewritten to the API) |
 | `/subscribe` | Newsletter signup |
 | `/403` `/404` `/500` | Error pages |
 | `/mandarin-starterkit-course/` | Vendored landing page |
@@ -94,7 +93,7 @@ src/
   styles/         global.css — design tokens & base styles; fonts.css — @fontsource imports
   utils/          Shared helpers (analytics, permalinks, blog, ...)
 api/              Vercel serverless functions (outside src/)
-lib/              Shared server code (business-chinese-download JWT lib)
+lib/              Shared server code (business-chinese-download lib)
 public/           Static assets incl. audio/, images/, mandarin-starterkit-course/ build
 docs/             Brand handoff (BRAND-HANDOFF.md)
 DESIGN.md         Machine-readable design system (Stitch format)
@@ -104,8 +103,8 @@ AGENTS.md         Agent instructions — read before UI/architecture/SEO changes
 
 ## Operations
 
-- **Rotating the business-Chinese PDF**: upload the new file to Vercel Blob (`BLOB_READ_WRITE_TOKEN`, pathname from `BLOB_BUSINESS_CHINESE_PATHNAME`). The download endpoint presigns a short-lived URL after JWT verification. Do this via the Vercel dashboard or `vercel blob put` (CLI), no code change needed.
-- **Issuing download links (manual)**: sign a HS256 JWT `{ sub: <email>, email: <email> }` with `DOWNLOAD_JWT_SECRET` (24h TTL, see `lib/business-chinese-download.ts`) using any JWT tool, then send the recipient `/download/business-chinese?token=<jwt>`.
+- **Rotating the business-Chinese PDF**: upload the new file to Vercel Blob (`BLOB_READ_WRITE_TOKEN`, pathname from `BLOB_BUSINESS_CHINESE_PATHNAME`). The download endpoint presigns a short-lived URL. Do this via the Vercel dashboard or `vercel blob put` (CLI), no code change needed.
+- **Download link**: the PDF is served openly at `/download/business-chinese` — link to it anywhere.
 - **ActiveCampaign**: newsletter signups (`/subscribe`) only. Edition content is authored directly in `src/content/editions/` — there is no import pipeline and no webhook.
 
 ## External Services
